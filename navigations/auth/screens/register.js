@@ -1,0 +1,149 @@
+import { useTheme } from '@react-navigation/native';
+import React, {useState} from 'react';
+import { View, StyleSheet, Image, KeyboardAvoidingView, Text, ScrollView } from 'react-native';
+import {Ionicons, MaterialIcons} from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Solidbutton } from '../../../components/button';
+import { OutlinedInput, OutlinedInputWithIcon } from '../../../components/input';
+
+import FocusAwareStatusBar from '../../../components/statusBar';
+
+
+export const Register = ({navigation}) => {
+    
+    const {top, bottom, right, left} = useSafeAreaInsets();
+    const {colors, dark} = useTheme();
+    const {navigate} = navigation;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [fullname, setFullname] = useState('');
+
+    return (
+        <View 
+            style={[styles.container, 
+                    {paddingBottom: bottom+ 20, paddingTop: top}]}>   
+            <ScrollView contentContainerStyle={{flex: 1}}>
+                <View style={styles.view}>
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios'? "padding": "position"}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+                    >
+                        <View style={styles.header}>
+                            <Image source={require('../../../assets/logo.png')} />
+                            <Text style={[styles.headerText, {color: colors['primary-dark']}]}>Create Account</Text>
+                        </View>
+
+                        <OutlinedInputWithIcon 
+                            icon={<MaterialIcons name="person-outline" color={colors.primary} size={24} />}
+                            placeholder="Full name"
+                            contProps={styles.textInput}
+                            value={fullname} 
+                            onChangeText={({nativeEvent}) =>setFullname(nativeEvent.text)} 
+                            style={styles.textInput}
+                            textContentType="name"
+                        />
+
+                        <OutlinedInputWithIcon 
+                            icon={<MaterialIcons name="mail-outline" color={colors.primary} size={24} />}
+                            placeholder="Email"
+                            contProps={styles.textInput}
+                            value={email} 
+                            onChangeText={({nativeEvent}) => setEmail(nativeEvent.text)}
+                            style={styles.textInput}
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
+                        />
+
+                        <OutlinedInputWithIcon 
+                            icon={<MaterialIcons name="phone" color={colors.primary} size={24} />}
+                            placeholder="Phone" 
+                            value={phone} 
+                            onChangeText={({nativeEvent}) => setPhone(nativeEvent.text)}
+                            style={styles.textInput}
+                            keyboardType='phone-pad'
+                            textContentType='telephoneNumber'
+                            contProps={styles.textInput}
+                        />
+
+                        <OutlinedInputWithIcon 
+                            icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
+                            placeholder="Password"
+                            contProps={styles.textInput}
+                            value={password} 
+                            onChangeText={({nativeEvent}) => setPassword(nativeEvent.text)}
+                            style={styles.textInput}
+                            secureTextEntry={true}
+                            textContentType="newPassword"
+                        />
+                        
+                        <Solidbutton
+                            text="Register"
+                            style={styles.button}
+                            onPress={_ => navigate('Verify', {phone: phone})}
+                        />
+                    
+                    </KeyboardAvoidingView>
+                    <View style={styles.bottom}>
+                        <Text style={styles.link}>
+                           Already have an account? 
+                            <Text style={styles.inner} onPress={() => navigate('Login')}> Login</Text>
+                        </Text>
+                    </View>
+                </View>
+            </ScrollView>
+            <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content'} backgroundColor={colors.background} />
+        </View>
+    )
+}
+
+export default Register;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+    },
+    avoidingView: {
+        flex: 1,
+        height: '100%',
+    },
+    view: {
+        flex: 1,
+        width: '100%',
+        justifyContent: "space-between",
+    },
+    header: {
+        flexDirection: 'column',
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 50,
+    },
+    headerText: {
+        fontFamily: 'Montserrat_700Bold',
+        fontSize: 24,
+        marginTop: 10,
+    },
+    link: {
+        fontFamily: 'OpenSans_400Regular',
+        fontSize: 14,
+    },
+    inner: {
+        fontFamily: 'OpenSans_700Bold',
+        textDecorationLine: 'underline',
+    },
+    button: {
+        width: '100%',
+        marginVertical: 10,
+    },
+    textInput: {
+        marginVertical: 15,
+    },
+    bottom: {
+        justifyContent: 'center',
+        alignItems: "center",
+    },
+    texticon: {
+        fontFamily: 'Montserrat_400Regular'
+    }
+})
