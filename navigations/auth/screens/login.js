@@ -1,22 +1,25 @@
 import { useTheme } from '@react-navigation/native';
-import React from 'react';
-import { View, StyleSheet, Image, KeyboardAvoidingView, Text, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, Image, KeyboardAvoidingView, Text, Alert, Modal, ActivityIndicator } from 'react-native';
 import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 import { Solidbutton } from '../../../components/button';
 import { OutlinedInput, OutlinedInputWithIcon } from '../../../components/input';
 import FocusAwareStatusBar from '../../../components/statusBar';
+import {signIn} from '../../../store/reducers/auth';
 
 
 export const Login = ({navigation}) => {
     const {top, bottom, right, left} = useSafeAreaInsets();
     const {colors, dark} = useTheme();
     const {navigate} = navigation;
-
+    const dispatch = useDispatch();
+    const {isLoading} = useSelector(state => state.auth);
     const biometric = async _ => {
         const hasHardware = await LocalAuthentication.hasHardwareAsync();
         let supported;
@@ -45,6 +48,13 @@ export const Login = ({navigation}) => {
         
     }
 
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const onPress = _ => {
+        dispatch(signIn({username,password}));
+    }
+
     return (
         <View 
             style={[styles.container, 
@@ -62,17 +72,28 @@ export const Login = ({navigation}) => {
                             icon={<MaterialIcons name="mail-outline" color={colors.primary} size={24} />}
                             placeholder="Email"
                             contProps={styles.textInput}
+                            value={username} 
+                            onChangeText={({nativeEvent}) => setUsername(nativeEvent.text)}
+                            style={styles.textInput}
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
                         />
 
                         <OutlinedInputWithIcon 
                             icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
                             placeholder="Password"
                             contProps={styles.textInput}
+                            value={password} 
+                            onChangeText={({nativeEvent}) => setPassword(nativeEvent.text)}
+                            style={styles.textInput}
+                            secureTextEntry={true}
+                            textContentType="newPassword"
                         />
                         
                         <Solidbutton
                             text="Login"
                             style={styles.button}
+                            onPress={onPress}
                         />
                         <View style={styles.forgotCont}>
                             <Text style={styles.forgot} onPress={_ => navigate('Reset')}>Forgot password?</Text>
@@ -88,6 +109,15 @@ export const Login = ({navigation}) => {
                     </View>
                 </View>
             </ScrollView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isLoading}
+            >
+                <View style={styles.modal}>
+                    <View style={styles.indicator}><ActivityIndicator size="large" color={colors.info} /></View>
+                </View>
+            </Modal>
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content'} backgroundColor={colors.background} />
         </View>
     )
@@ -142,5 +172,22 @@ const styles = StyleSheet.create({
     forgot: {
         fontFamily: 'Montserrat_400Regular',
         marginVertical: 10,
+    },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    indicator: {
+        width: 100,
+        height: 100,
+        padding: 5,
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 5,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: '#fff'
     },
 })

@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 
 import {loadFonts} from '../styles/fonts';
 import { restore } from '../store/reducers/auth';
-import {bootstrap} from '../store/reducers/app';
+import {terms} from '../store/reducers/app';
 import FocusAwareStatusBar from '../components/statusBar';
 
 
@@ -17,13 +17,17 @@ export function SplashScreen({theme}){
 
     const fontLoaded = loadFonts();
 
+    const setup = async () => {
+        const user = await AsyncStorage.getItem('user');
+        const app = await AsyncStorage.getItem('apps')
+        
+        dispatch(terms(JSON.parse(app)));
+        dispatch(restore({user: JSON.parse(user)}));
+    }
+
     useEffect(() => {
-        setTimeout( async () => {
-            const user = await AsyncStorage.getItem('user');
-            dispatch(bootstrap({terms: null}));
-            dispatch(restore({user: JSON.parse(user)}));
-        }, 3000);
-    })
+        setup();
+    },[])
 
     return (
         fontLoaded && (<View style={{...styles.container, backgroundColor: colors['primary']}}>

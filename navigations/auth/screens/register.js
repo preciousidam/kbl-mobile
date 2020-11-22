@@ -1,12 +1,14 @@
 import { useTheme } from '@react-navigation/native';
 import React, {useState} from 'react';
-import { View, StyleSheet, Image, KeyboardAvoidingView, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, Text, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Solidbutton } from '../../../components/button';
 import { OutlinedInput, OutlinedInputWithIcon } from '../../../components/input';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FocusAwareStatusBar from '../../../components/statusBar';
+import { signUp } from '../../../store/reducers/auth';
 
 
 export const Register = ({navigation}) => {
@@ -18,6 +20,19 @@ export const Register = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [fullname, setFullname] = useState('');
+    const dispatch = useDispatch();
+    const {isLoading} = useSelector(state => state.auth);
+    
+
+    const onPress = _ => {
+        dispatch(signUp({
+            email,
+            password, 
+            phone, 
+            last_name: fullname.split(' ')[0],
+            first_name: fullname.split(' ')[1],
+        }));
+    }
 
     return (
         <View 
@@ -80,7 +95,7 @@ export const Register = ({navigation}) => {
                         <Solidbutton
                             text="Register"
                             style={styles.button}
-                            onPress={_ => navigate('Verify', {phone: phone})}
+                            onPress={onPress}
                         />
                     
                     </KeyboardAvoidingView>
@@ -92,6 +107,15 @@ export const Register = ({navigation}) => {
                     </View>
                 </View>
             </ScrollView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isLoading}
+            >
+                <View style={styles.modal}>
+                    <View style={styles.indicator}><ActivityIndicator size="large" color={colors.info} /></View>
+                </View>
+            </Modal>
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content'} backgroundColor={colors.background} />
         </View>
     )
@@ -145,5 +169,22 @@ const styles = StyleSheet.create({
     },
     texticon: {
         fontFamily: 'Montserrat_400Regular'
-    }
+    },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    indicator: {
+        width: 100,
+        height: 100,
+        padding: 5,
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 5,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: '#fff'
+    },
 })

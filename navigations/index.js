@@ -8,6 +8,7 @@ import SplashScreen from './splash';
 import {loadFonts} from '../styles/fonts';
 import AuthFlow from './auth';
 import Privacy from './policy';
+import { AppNavigator } from './app';
 
 
 const Stack = createStackNavigator();
@@ -16,15 +17,15 @@ export function MainNavigation(props){
   
     const {Navigator, Screen} = Stack;
     const fontLoaded = loadFonts();
-    const {isLoading, user} = useSelector(state => state.auth);
+    const {isRestoring, user} = useSelector(state => state.auth);
     const {terms} = useSelector(state => state.app);
     
     return(
         fontLoaded && <Navigator>
-            {isLoading && <Screen name='Splash' component={SplashScreen} options={{headerShown: false}} />}
+            {isRestoring && <Screen name='Splash' component={SplashScreen} options={{headerShown: false}} />}
             {terms === null &&<Screen name='Privacy' component={Privacy} options={{headerShown: false}} />}
             {user === null && <Screen name="Auth" component={AuthFlow} options={{headerShown: false}} />}
-            {user !== null && <Screen name="App" component={AppLoading} />}
+            {user !== null && <Screen name="App" component={AppNavigator} options={{headerShown: false}} />}
         </Navigator>
     )
       
