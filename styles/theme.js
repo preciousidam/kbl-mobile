@@ -1,7 +1,7 @@
 import customColors from './custom-theme';
 
-const secondary = '#009B9E';
-const secondaryDark = '#006c70';
+const secondary = '#004fb4';
+const secondaryDark = '#004fb4';
 const primaryLight = '#FF9D14';
 const primary = '#F5AF19'
 const primaryTint = '#F8C964';
