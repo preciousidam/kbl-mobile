@@ -10,3 +10,52 @@ export const notifications = [
     { id: 9, read: true, title: 'Claim processing', time: '2w', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
     { id: 10, read: true, title: 'Settlement Disbursed', time: '2w', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'},
 ]
+
+export const STATE = ['Abia','Abuja',
+'Adamawa','Akwa Ibom','Anambra','Bauchi',
+'Bayelsa','Benue','Borno','Cross River',
+'Delta','Ebonyi','Edo','Ekiti','Enugu',
+'Gombe','Imo','Jigawa','Kaduna','Kano',
+'Katsina','Kebbi','Kogi','Kwara','Lagos',
+'Nasarawa','Niger','Ogun','Ondo','Osun',
+'Oyo','Plateau','Rivers','Sokoto','Taraba',
+'Yobe','Zamfara']
+
+
+export const sector = [
+    'Agriculture',
+    'Co-operative', 'Association',
+    'Construction', 'Energy',
+    'Engineering',
+    'Estate',
+    'Financial Services',
+    'Foreign Mission/Diplomat',
+    'General Merchant',
+    'Government',
+    'Hotels / Hospitality',
+    'Information Technology',
+    'Insurance',
+    'Logistics',
+    'Manufacturing',
+    'Medical',
+    'NGO',
+    'Oil and Gas',
+    'Power',
+    'Real Estates',
+    'Religious Institutions',
+    'Schools',
+    'Ship Building / Maintenance',
+    'SME',
+    'Supermarkets / Stores',
+    'Telecoms',
+    'Transportation'
+]
+
+
+export const IDS = [
+    'International passport',
+    'Drivers License',
+    'National ID',
+    'Voters Card',
+    'Certificate of Incorporation',
+]

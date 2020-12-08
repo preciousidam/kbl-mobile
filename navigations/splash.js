@@ -22,7 +22,8 @@ export function SplashScreen({theme}){
         const app = await AsyncStorage.getItem('apps')
         
         dispatch(terms(JSON.parse(app)));
-        dispatch(restore({user: JSON.parse(user)}));
+        //dispatch(restore({user: JSON.parse(user)}));
+        dispatch(restore({user: null}));
     }
 
     useEffect(() => {

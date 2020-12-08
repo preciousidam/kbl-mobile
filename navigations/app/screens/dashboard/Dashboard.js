@@ -45,7 +45,7 @@ export const Dashboard = ({}) => {
                     </Text>
                     <Button buttonStyle={{width: 150}} title="Update" />
                 </View>
-                <View style={{marginVertical: 20, paddingHorizontal: 20,}}>
+                <View style={{marginVertical: 20, paddingHorizontal: 15,}}>
                     <Text 
                         style={[styles.headerText, {color: colors.text, paddingLeft: 0, marginBottom: 15}]}
                     >
@@ -81,8 +81,11 @@ export const Activity = ({type, summary, time}) => {
     return (
         <View style={styles.update}>
             <Text style={styles.updateText}>{type}</Text>
-            <Text style={[styles.updateText, {fontFamily: 'OpenSans_700Bold'}]}>{summary}</Text>
-            <Text style={{fontFamily: 'OpenSans_400Regular'}}>{time}</Text>
+            <View style={styles.apart}>
+                <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular'}]}>{summary}</Text>
+                <Text style={styles.icon}><MaterialCommunityIcons name="file-cabinet" size={24} color="#fff" /></Text>
+            </View>
+            <Text style={{fontFamily: 'OpenSans_400Regular'}}>{time} ago</Text>
         </View>
     )
 }
@@ -104,10 +107,10 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontFamily: 'Montserrat_700Bold',
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
     },
     quickAct: {
-        paddingHorizontal: 20, 
+        paddingHorizontal: 15, 
         marginVertical: 30,
         marginTop: 20,
         flexDirection: 'row',
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 10,
         padding: 20,
-        width: 110,
+        width: 115,
         elevation: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -149,6 +152,21 @@ const styles = StyleSheet.create({
     },
     updateText: {
         fontFamily: 'Montserrat_700Bold',
-       
+        marginVertical: 5,
+        flex: 9,
+    },
+    apart: {
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    icon: {
+        flex: 1.5,
+        width: 50,
+        height: 50,
+        backgroundColor: "#a5a5a5",
+        borderRadius: 25,
+        textAlign: "center",
+        textAlignVertical: "center",
     }
 });

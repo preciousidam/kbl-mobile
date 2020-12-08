@@ -2,6 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Dashboard from './screens/dashboard/Dashboard';
 import DrawerCustom from '../../components/drawer';
@@ -9,6 +10,7 @@ import NotificationNavigation from './screens/notifications';
 import {WithBadge} from '../../components/badge';
 import { colors } from 'react-native-elements';
 import { HomeNavigation } from './screens/dashboard';
+import { KYCNavigation } from './screens/kyc';
 
 
 const Drawer = createDrawerNavigator();
@@ -26,6 +28,14 @@ export const AppNavigator = ({}) => {
                 options={{
                     title: 'Dashboard',
                     drawerIcon: ({color, size}) => <Ionicon name='ios-home' color={color} size={size} />
+                }}
+            />
+            <Screen
+                name="KYC"
+                component={KYCNavigation}
+                options={{
+                    title: 'Update KYC',
+                    drawerIcon: ({color, size}) => <MaterialCommunityIcons name="file-document-box-plus-outline" size={size} color={color} />
                 }}
             />
             <Screen 

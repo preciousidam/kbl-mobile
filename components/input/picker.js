@@ -53,6 +53,29 @@ export const DynamicPicker = ({style, contProps, pickerStyle, onValueChange, opt
     )
 }
 
+export const DynamicPickerInline = ({pickerStyle, onValueChange, options, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    
+    return (
+        <Picker 
+            selectedValue={value}
+            style={{
+                ...styles.input, 
+                ...pickerStyle, 
+                color: colors.text, 
+                width: '100%',
+                borderWidth: 1,
+                borderBottomColor: '#000000',
+            }} 
+            onValueChange={onValueChange}
+            {...rest}
+        >
+            {options.map((x,i) => <Item label={x} key={i} value={x} />)}
+        </Picker>
+    )
+}
+
 export const DynamicPickerIOS = ({style, contProps, pickerStyle, onValueChange, options, value, ...rest}) => {
     
     const {colors} = useTheme();
@@ -82,6 +105,34 @@ export const DynamicPickerIOS = ({style, contProps, pickerStyle, onValueChange, 
                     {value}
                 </Text>
             </View>
+        </TouchableWithoutFeedback>
+    )
+}
+
+export const DynamicPickerInlineIOS = ({pickerStyle, onValueChange, options, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    const sheetOptions = [...options, 'cancel'];
+    const { showActionSheetWithOptions } = useActionSheet();
+    const showSheet = _ => showActionSheetWithOptions(
+        {
+            options: sheetOptions,
+            cancelButtonIndex: sheetOptions.length - 1,
+        },
+        index => {
+            if(index === sheetOptions.length - 1) return
+            onValueChange(sheetOptions[index]);
+        }
+    );
+    
+    return (
+        <TouchableWithoutFeedback onPress={showSheet}>
+            <Text
+                style={{...styles.input, color: colors.text, ...pickerStyle, padding: 15}}  
+                {...rest} 
+            >
+                {value}
+            </Text>
         </TouchableWithoutFeedback>
     )
 }

@@ -3,6 +3,8 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+import { PolicyListView } from './list';
+import NewPolicy from './new';
 
 
 
@@ -15,15 +17,20 @@ export default function PolicyNavigator({navigation}){
     return (
         <Navigator>
             <Screen 
-                component={Some}
+                component={PolicyListView}
                 name="Policy-list"
                 options={{
-                    title: 'Notifications'
+                    headerShown: false,
+                }}
+            />
+            <Screen 
+                component={NewPolicy}
+                name="new"
+                options={{
+                    headerShown: false,
                 }}
             />
             
         </Navigator>
     )
 }
-
-export const Some = () => <Text>Policies</Text>
