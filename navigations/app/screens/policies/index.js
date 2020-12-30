@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { PolicyListView } from './list';
 import NewPolicy from './new';
+import { KYCForm } from './kyc';
 
 
 
@@ -30,7 +31,13 @@ export default function PolicyNavigator({navigation}){
                     headerShown: false,
                 }}
             />
-            
+            <Screen 
+                component={KYCForm}
+                name="confirmKYC"
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Navigator>
     )
 }

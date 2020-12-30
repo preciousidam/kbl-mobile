@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 export default function DrawerCustom(props){
     const {colors} = useTheme();
-    const {user: {name, email}} = useSelector(state => state.auth)
+    const {user: {first_name, email}} = useSelector(state => state.auth)
     //const {Item} = Picker;
     
     return (
@@ -19,16 +19,12 @@ export default function DrawerCustom(props){
                     <Avatar 
                         rounded 
                         size="medium" 
-                        icon={{name: 'person', type: 'ionicons', color: colors.secondary}} 
-                        containerStyle={{backgroundColor: colors.primary, marginTop: 10}} 
+                        icon={{name: 'person', type: 'ionicons', color: '#fff'}} 
+                        containerStyle={{backgroundColor: colors.primary, marginTop: 10, marginLeft: 20,}} 
                     />
                     <View style={{flexDirection: "column", padding: 10}}>
-                        <Text style={styles.h4}>{name}</Text>
+                        <Text style={styles.h4}>{first_name}</Text>
                         <Text>{email}</Text>
-                        {/*<Picker>
-                            <Item label="Corona School" value="Corona" />
-                            <Item label="Tokunbo" value="tokunbo" />
-                        </Picker>*/}
                     </View>
                 </View>
             </View>
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     headerprofile: {
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-evenly",
     },
     h4: {

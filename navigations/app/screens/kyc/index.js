@@ -12,7 +12,7 @@ export const KYCNavigation = ({navigation}) => {
     return (
         <Navigator>
             <Screen
-                name="update"
+                name="updateKYC"
                 component={UpdateKYC}
                 options={{
                     title: "KYC Form",
@@ -28,8 +28,7 @@ export const KYCNavigation = ({navigation}) => {
                                 <View style={{paddingLeft: 15}}>
                                     <Ionicons name="ios-menu" color="#fff" size={30}  />
                                 </View>
-                            </TouchableOpacity>
-                                
+                            </TouchableOpacity>       
                         )
                     }
                 }}

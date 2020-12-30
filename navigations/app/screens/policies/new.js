@@ -22,7 +22,7 @@ const products = [
 ]
 
 
-export const NewPolicy = ({route}) => {
+export const NewPolicy = ({ navigation,route}) => {
     const {id} = route?.params;
     const options = products.map(({name}) => name)
     const {colors, dark} = useTheme();
@@ -38,7 +38,8 @@ export const NewPolicy = ({route}) => {
         <View style={{flex: 1, backgroundColor: colors.card}}>
             <FormHeader 
                 name="New Application" 
-                Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />} 
+                Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />}
+                onPress={_ => navigation.navigate('confirmKYC')}
             />
             <ScrollView>
                 <View style={[styles.opt, {backgroundColor: colors.card}]}>

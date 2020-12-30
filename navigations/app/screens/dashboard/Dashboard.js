@@ -9,7 +9,7 @@ import FocusAwareStatusBar from '../../../../components/statusBar';
 import {Header} from '../../../../components/header';
 import ProductList from '../../../../components/list/quickLinks';
 
-export const Dashboard = ({}) => {
+export const Dashboard = ({navigation}) => {
     const {colors, dark} = useTheme();
 
     return (
@@ -43,7 +43,7 @@ export const Dashboard = ({}) => {
                         Please take a few moment to complete your KYC 
                         required from all our customers.
                     </Text>
-                    <Button buttonStyle={{width: 150}} title="Update" />
+                    <Button onPress={() => navigation.navigate('KYC')} buttonStyle={{width: 150}} title="Update" />
                 </View>
                 <View style={{marginVertical: 20, paddingHorizontal: 15,}}>
                     <Text 
