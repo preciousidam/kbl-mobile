@@ -52,7 +52,7 @@ export const Login = ({navigation}) => {
     const [password, setPassword] = useState('');
 
     const onPress = _ => {
-        dispatch(signIn({username,password}));
+        dispatch(signIn({username: username.toLowerCase(),password}));
     }
 
     return (

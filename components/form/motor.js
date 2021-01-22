@@ -1,29 +1,41 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import {getCameraRollPermissionsAsync, launchImageLibraryAsync,
-        requestCameraRollPermissionsAsync, MediaTypeOptions} from 'expo-image-picker';
+import {getMediaLibraryPermissionsAsync, launchImageLibraryAsync,
+        requestMediaLibraryPermissionsAsync, MediaTypeOptions, requestCameraPermissionsAsync} from 'expo-image-picker';
 import { useTheme } from '@react-navigation/native';
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
+import { carApi } from '../../apiAuth/carApi';
 
 
 export const MotorForm = ({}) => {
 
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
+    const [carMakes, setCarMakes] = useState([]);
     const [image, setImage] = useState(null);
     useEffect(() => {
         (async () => {
           if (Platform.OS !== 'web') {
-            const { status } = await requestCameraRollPermissionsAsync();
+            const { status } = await requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
               alert('Sorry, we need camera roll permissions to make this work!');
             }
           }
         })();
     }, []);
+
+    const cars = async _ => {
+        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=1000000');
+        let make_model = results.map(veh => `${veh.Make} ${veh.Model}(${veh.Year})`)
+        setCarMakes(make_model);
+    }
+
+    useEffect(() => {
+        cars();
+    },[])
 
     const pickImage = async _ => {
         let result = await launchImageLibraryAsync({
@@ -45,13 +57,33 @@ export const MotorForm = ({}) => {
         >
             <Picker
                 prompt="Select car model"
-                options={[]} 
+                options={carMakes} 
+                style={{padding: 0, marginVertical: 10,}}
+                value={null}
+                onValueChange={(item,i) => console.log(item)}
+            />
+            <Picker
+                prompt="Vehicle Class"
+                options={['Commercial', 'Company, Taxi, Car Hire', 
+                            'Stage Carriage 8 - 15 persons',
+                            'Stage Carriage over 15 persons',
+                            'Buses, Omnibus', 'Motorcycle/Tricycle',
+                            'Tractor & Equipment', 'Private Vehicle / Car',
+                        ]} 
                 style={{padding: 0, marginVertical: 10,}}
                 value={null}
                 onValueChange={(item,i) => console.log(item)}
             />
             <OutlinedInput 
                 placeholder="Vehicle Reg No."
+                style={styles.input}
+            />
+            <OutlinedInput 
+                placeholder="Engine No."
+                style={styles.input}
+            />
+            <OutlinedInput 
+                placeholder="Chassis No."
                 style={styles.input}
             />
             <OutlinedInput 

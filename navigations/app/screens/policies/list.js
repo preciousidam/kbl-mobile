@@ -12,7 +12,7 @@ export const PolicyListView = ({navigation}) => {
     return (
         <View style={{flex: 1}}>
             <ActionHeader name="Coverage" onPress={_ => navigate('new', {id: null})} />
-            <PolicyList />
+            <PolicyList onItemPress={id => navigate('polDet', {id})} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )

@@ -8,14 +8,14 @@ import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 
 
-export const KYCForm = ({}) => {
+export const KYCForm = ({navigation}) => {
     const {colors, dark} = useTheme();
     return (
         <View style={[styles.container, {backgroundColor: colors.card}]}>
             <FormHeader 
                 name="Confirm KYC" 
                 Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />}
-                onPress={_ => navigation.navigate('confirmKYC')}
+                onPress={_ => navigation.navigate('summary')}
             />
             <ScrollView>
                 <KYCIndividualForm />

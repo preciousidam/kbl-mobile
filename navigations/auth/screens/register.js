@@ -26,7 +26,8 @@ export const Register = ({navigation}) => {
 
     const onPress = _ => {
         dispatch(signUp({
-            email,
+            username: email,
+            email: email.toLowerCase(),
             password, 
             phone, 
             last_name: fullname.split(' ')[0],

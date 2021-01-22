@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 import Dashboard from './screens/dashboard/Dashboard';
 import DrawerCustom from '../../components/drawer';
@@ -35,7 +35,7 @@ export const AppNavigator = ({}) => {
                 component={KYCNavigation}
                 options={{
                     title: 'Update KYC',
-                    drawerIcon: ({color, size}) => <MaterialCommunityIcons name="file-document-box-plus-outline" size={size} color={color} />
+                    drawerIcon: ({color, size}) => <AntDesign name="form" size={size} color={color} />
                 }}
             />
             <Screen 

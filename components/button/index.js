@@ -2,6 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 
 export const Outlinedbutton = ({text, onPress, style, textStyle}) =>{
@@ -25,10 +26,10 @@ export const Solidbutton = ({text, onPress, style, textStyle}) =>{
     )
 }
 
-export const SolidbuttonWithIcon = ({text, onPress, style, textStyle, icon}) =>{
+export const SolidbuttonWithIcon = ({text, onPress, style, gradColors, textStyle, icon}) =>{
     return (
         <TouchableOpacity onPress={onPress} style={{...styles.container}} activeOpacity={0.8}>
-                <LinearGradient start={[0.7,0.2]} colors={['#f5af19', '#FF9D14',]} style={[{...styles.grad, borderRadius: 25},style]} >
+                <LinearGradient start={[0.7,0.2]} colors={gradColors || ['#f5af19', '#FF9D14']} style={[{...styles.grad, borderRadius: 25},style]} >
                     <Text style={{...styles.text, ...textStyle}}>{text}</Text>
                     <View style={styles.icon}>{icon}</View>
                 </LinearGradient>
@@ -36,12 +37,12 @@ export const SolidbuttonWithIcon = ({text, onPress, style, textStyle, icon}) =>{
     )
 }
 
-export const GradientButton = ({text, onPress, style, textStyle}) => {
+export const GradientButton = ({text, onPress, style, gradColors, textStyle}) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={{...styles.container, ...style}} activeOpacity={0.7}>
             <View style={styles.view}>
-                <LinearGradient start={[0.7,0.2]} colors={['#f5af19', '#FF9D14']} style={styles.grad} >
+                <LinearGradient start={[0.7,0.2]} colors={gradColors || ['#f5af19', '#FF9D14']} style={styles.grad} >
                     <Text style={{...styles.text, ...textStyle}}>{text}</Text>
                 </LinearGradient>
             </View>
@@ -62,6 +63,49 @@ export const FloatingActionButton = ({icon, onPress, style}) => {
             </View>
         </TouchableOpacity>
     )
+}
+
+Solidbutton.propTypes = {
+    text: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    textStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+}
+
+Outlinedbutton.propTypes = {
+    text: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    textStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+}
+
+FloatingActionButton.propTypes = {
+    icon: PropTypes.element.isRequired,
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+}
+
+FloatingActionButton.propTypes = {
+    icon: PropTypes.element.isRequired,
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+}
+
+SolidbuttonWithIcon.propTypes = {
+    icon: PropTypes.element.isRequired,
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    text: PropTypes.string.isRequired,
+    textStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    gradColors: PropTypes.array,
+}
+
+GradientButton.propTypes = {
+    onPress: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    text: PropTypes.string.isRequired,
+    textStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    gradColors: PropTypes.array,
 }
 
 const styles = StyleSheet.create({

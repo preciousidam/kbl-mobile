@@ -32,6 +32,7 @@ client.interceptors.request.use(
 // Intercept all responses
 client.interceptors.response.use(
     async response => {
+        
         return response;
     },
     error => {

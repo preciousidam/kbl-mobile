@@ -54,18 +54,23 @@ export const signIn = details => async dispatch => {
         dispatch(processing({loading: true}));
         const {data, status} = await client.post('auth/login/', {...details})
         
+        
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify({access_token: data.access_token, refresh_token: data.refresh_token}));
             dispatch(login({user: data.user}));
             AsyncStorage.setItem('user', JSON.stringify(data.user))
             return
         }
-        showMessage({
-            type: 'danger',
-            message: data.detail,
-            icon: 'auto',
-            duration: 3000,
-        })
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: "Something happened",
+                description: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
         dispatch(processing({loading: false}));
         return
     }catch (err){
@@ -73,9 +78,11 @@ export const signIn = details => async dispatch => {
         dispatch(processing({loading: false}));
         showMessage({
             type: 'danger',
-            message: err.message,
+            message: "Something happened",
+            description: err.message,
             icon: 'auto',
             duration: 3000,
+            hideStatusBar: true,
         })
     }
 }
@@ -85,28 +92,32 @@ export const signUp = details => async dispatch => {
     try{ 
         dispatch(processing({loading: true}));
         const {data, status} = await client.post('users/', {...details})
-        
+       
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify(data));
             dispatch(signIn({email: data.email, password: details.password, username: data.email}));
             return
         }
-        showMessage({
-            type: 'danger',
-            message: data.detail,
-            icon: 'auto',
-            duration: 3000,
-        })
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
         dispatch(processing({loading: false}));
         return
     }catch (err){
         console.log(err)
         dispatch(processing({loading: false}));
         showMessage({
-            type: 'danger',
-            message: err.message,
+            message: "Something happened",
+            description: err.message,
             icon: 'auto',
             duration: 3000,
+            hideStatusBar: true,
         })
     }
 }
@@ -127,6 +138,7 @@ export const getUserProfile = async (user_id, dispatch) => {
             message: data.detail,
             icon: 'auto',
             duration: 3000,
+            hideStatusBar: true
         });
         return
     }catch (err){
@@ -137,6 +149,7 @@ export const getUserProfile = async (user_id, dispatch) => {
             message: err.message,
             icon: 'auto',
             duration: 3000,
+            hideStatusBar: true
         })
     }
 }
