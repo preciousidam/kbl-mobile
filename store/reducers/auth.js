@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import jwtDecode from 'jwt-decode';
 import { createSlice } from "@reduxjs/toolkit";
 import client from '../../apiAuth/tokenClient';
-import getLoginClient from '../../apiAuth/loggedInClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 
@@ -64,7 +63,47 @@ export const signIn = details => async dispatch => {
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: "Something happened",
+                message: {item},
+                description: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+        dispatch(processing({loading: false}));
+        return
+    }catch (err){
+        console.log(err)
+        dispatch(processing({loading: false}));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
+    }
+}
+
+export const refreshToken = refresh => async dispatch => {
+    
+    try{ 
+        const {data, status} = await client.post('auth/token/refresh/', {refresh})
+        
+        
+        if (status === 201 || status === 200 ){
+            let token = await AsyncStorage.getItem('tokenData');
+            token = JSON.parse(token);
+            token.access_token = data.access;
+            await AsyncStorage.setItem('tokenData', JSON.stringify(token));
+        
+            return
+        }
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: {item},
                 description: data[item],
                 icon: 'auto',
                 duration: 3000,
@@ -101,7 +140,8 @@ export const signUp = details => async dispatch => {
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: data[item],
+                message: {item},
+                description: data[item],
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
@@ -123,7 +163,7 @@ export const signUp = details => async dispatch => {
 }
 
 
-export const getUserProfile = async (user_id, dispatch) => {
+/*export const getUserProfile = async (user_id, dispatch) => {
     try{
         const loginClient = await getLoginClient();
         const {data, status} = await loginClient.get(`profile/${user_id}`);
@@ -152,4 +192,4 @@ export const getUserProfile = async (user_id, dispatch) => {
             hideStatusBar: true
         })
     }
-}
+}*/

@@ -23,16 +23,47 @@ export function CommaFormatted(amount) {
 }
 
 export const checkExpiry = expiry => {
-	console.log(expiry.split('-').reverse().join('-'))
+	
 	const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 	const firstDate = new Date(expiry.split('-').reverse().join('-'));
 	const secondDate = new Date();
-	console.log(firstDate)
-	console.log(secondDate)
+	
 	const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
-	console.log(diffDays)
+	
 
 	if (diffDays < 30 && firstDate > secondDate) return 1;
 	else if (diffDays > 30 && firstDate > secondDate) return 2;
 	else if (diffDays > 0 && firstDate < secondDate) return 0
+}
+
+export const motorFormData = body => {
+	let formData = new FormData();
+    formData.append("back_image", 
+        {name: "one.jpg",
+        type: `${body.back_image?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: Platform.OS === "android" ? body.back_image?.uri : body.back_image?.uri.replace("file://", ""),
+    }, body.back_image?.uri?.split('/')[body.back_image?.uri?.split('.').length - 1]);
+    formData.append("front_image", 
+        {name: "one.jpg",
+        type: `${body.front_image?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: Platform.OS === "android" ? body.front_image?.uri : body.front_image?.uri.replace("file://", "")
+    }, body.front_image?.uri?.split('/')[body.front_image?.uri?.split('.').length - 1])
+    formData.append("vehicle_license", 
+        {name: "one.jpg",
+        type: `${body.vehicle_license?.type}/jpeg`, 
+        extension: 'jpg', ext: 'jpg',
+        uri: Platform.OS === "android" ? body.vehicle_license?.uri : body.vehicle_license?.uri.replace("file://", "")
+    }, body.vehicle_license?.uri?.split('/')[body.vehicle_license?.uri?.split('.').length - 1])
+    formData.append("proof_of_ownership", 
+        {name: "one.jpg",
+        type: `${body.proof_of_ownership?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: Platform.OS === "android" ? body.proof_of_ownership?.uri : body.proof_of_ownership?.uri.replace("file://", "")
+    },body.proof_of_ownership?.uri?.split('/')[body.proof_of_ownership?.uri?.split('.').length - 1])
+    console.log(formData)
+    for ( let key in body ) {
+        if (key != "back_image" && key != "proof_of_ownership" && key != "vehicle_license" && key != "front_image" )
+            formData.append(key, body[key]);
+	}
+	
+	return formData;
 }

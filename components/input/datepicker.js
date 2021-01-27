@@ -24,7 +24,7 @@ export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, on
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(currentDate);
+        onChangeText(moment(currentDate).format('YYYY-MM-DD'));
       };
     
     
@@ -47,12 +47,13 @@ export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, on
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                editable={false}
                 {...rest} 
             />
             
             {show && <DateTimePicker
                 testID="dateTimePicker"
-                value={value}
+                value={new Date(value)}
                 mode="date"
                 display="default"
                 onChange={onChange}

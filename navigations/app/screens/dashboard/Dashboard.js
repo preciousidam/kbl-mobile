@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import {Header} from '../../../../components/header';
-import ProductList from '../../../../components/list/quickLinks';
+import ProductList from '../../../../components/policy/quickLinks';
 
 export const Dashboard = ({navigation}) => {
     const {colors, dark} = useTheme();

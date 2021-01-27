@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+import {CliamListView} from './list';
 
 
 
@@ -15,15 +16,13 @@ export default function ClaimNavigator({navigation}){
     return (
         <Navigator>
             <Screen 
-                component={Some}
+                component={CliamListView}
                 name="Claim-list"
                 options={{
-                    title: 'Notifications'
+                    headerShown: false,
                 }}
             />
             
         </Navigator>
     )
 }
-
-export const Some = () => <Text>Policies</Text>

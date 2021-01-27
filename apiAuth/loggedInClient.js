@@ -2,6 +2,8 @@ import axios from 'axios';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {apiConfig} from '../settings/config';
+import {useDispatch} from 'react-redux';
+import {refreshToken} from '../store/reducers/auth';
 
 const getAccessToken = async () => {
     try {
@@ -45,6 +47,7 @@ function getUrl(config) {
 loginClient.interceptors.request.use(
     config => {
         //console.log(`%c ${config.method.toUpperCase()} - ${getUrl(config)}:`,'color: #0086b3; font-weight: bold',config,);
+        console.log(config)
         return config;
     },error => Promise.reject(error),
 );
@@ -55,25 +58,27 @@ loginClient.interceptors.response.use(
         if (response.status === 401) {
             try {
                 const value = await AsyncStorage.getItem('tokenData');
+                const dispatch = useDispatch();
                 if (value !== null) {
                     // We have data!!
-                    AsyncStorage.clear();
-                    NavigationService.navigate('AuthStackScreen');
+                    let token = JSON.parse(value);
+                    dispatch(refreshToken(token.refresh_token))
                 }
             } catch (error) {
                 // Error retrieving data
-                console.log(error, 'logged in client error');
+                console.log(error, 'User not logged in');
             }
         } 
-        //console.log(`%c ${response.status} - ${getUrl(response.config)}:`,'color: #008000; font-weight: bold',response,);
         return response;
     },
-    error => {console.log(error, 'error console');
-
+    error => {
+        //return Promise.reject(error);
+        console.log(error)
         if (error.response.status === 429) {
             Alert.alert('Too many requests. Please try again later.');
         } 
         //console.log(`%c ${error.response.status} - ${getUrl(error.response.config)}:`,'color: #a71d5d; font-weight: bold',error.response,);
-        return Promise.reject(error);
+       
+        return {data: error.response.data, status: error.response.status}
     },
 );

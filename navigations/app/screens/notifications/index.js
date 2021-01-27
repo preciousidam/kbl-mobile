@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-import List from '../../../../components/list';
+import List from '../../../../components/policy';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import ReadNotificationScreen from './read';
 

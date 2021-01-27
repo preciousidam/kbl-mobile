@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 
 import {loadFonts} from '../styles/fonts';
 import { restore } from '../store/reducers/auth';
-import {terms} from '../store/reducers/app';
+import {terms,bootstrap} from '../store/reducers/app';
 import FocusAwareStatusBar from '../components/statusBar';
 
 
@@ -21,7 +21,7 @@ export function SplashScreen({theme}){
         const user = await AsyncStorage.getItem('user');
         const app = await AsyncStorage.getItem('apps')
         
-        dispatch(terms(JSON.parse(app)));
+        dispatch(bootstrap(JSON.parse(app)));
         dispatch(restore({user: JSON.parse(user)}));
         //dispatch(restore({user: null}));
     }

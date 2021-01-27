@@ -9,6 +9,7 @@ export const appSlice = createSlice({
     },
     reducers: {
         terms(state, action){
+            
             const {terms} =  action.payload;
             return {
                 ...state,
@@ -23,6 +24,7 @@ export const {terms} = appSlice.actions;
 export default appSlice.reducer;
 
 export const bootstrap = payload => async dispatch => {
+    
     try{
         dispatch(terms({terms: payload.terms === undefined? null : true})),
         AsyncStorage.setItem('apps', JSON.stringify({terms: payload.terms === undefined? null : true}));

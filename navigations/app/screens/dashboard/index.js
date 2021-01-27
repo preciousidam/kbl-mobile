@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Avatar } from 'react-native-elements';
 import { View, TouchableOpacity, Text } from 'react-native';
 
@@ -9,12 +10,15 @@ import Dashboard from './Dashboard';
 import { useTheme } from '@react-navigation/native';
 import PolicyNavigator from '../policies';
 import ClaimNavigator from '../claims';
+import { PolicyListView } from '../policies/list';
+import { CliamListView } from '../claims/list';
 
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export function HomeNavigation({navigation}){
+export function HomeTabNavigation({navigation}){
     const {colors} = useTheme();
     const {Navigator, Screen} = Tab;
 
@@ -64,20 +68,45 @@ export function HomeNavigation({navigation}){
             />
             <Screen
                 name="Coverage"
-                component={PolicyNavigator}
+                component={PolicyListView}
             />
             <Screen
                 name="Claims"
-                component={ClaimNavigator}
+                component={CliamListView}
             />
             <Screen
                 name="Profile"
-                component={ClaimNavigator}
+                component={Blank}
             />
             <Screen
                 name="More"
-                component={ClaimNavigator}
+                component={Blank}
             />
         </Navigator>
     );
+}
+
+export const Blank = () => <View />
+
+export const MainNavigator = ({navigation}) => {
+    const {colors} = useTheme();
+    const {Navigator, Screen} = Stack;
+    return (
+        <Navigator>
+            <Screen 
+                name="TabNav"
+                component={HomeTabNavigation}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Screen
+                name="new_policy"
+                component={PolicyNavigator}
+                options={{
+                    headerShown: false,
+                }}
+            />
+        </Navigator>
+    )
 }

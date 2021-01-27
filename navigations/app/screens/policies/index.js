@@ -12,8 +12,6 @@ import PolicyDetails from './policy_detail';
 
 
 
-
-
 const Stack = createStackNavigator();
 
 export default function PolicyNavigator({navigation}){
@@ -21,13 +19,6 @@ export default function PolicyNavigator({navigation}){
     const {colors} = useTheme();
     return (
         <Navigator>
-            <Screen 
-                component={PolicyListView}
-                name="Policy-list"
-                options={{
-                    headerShown: false,
-                }}
-            />
             <Screen 
                 component={NewPolicy}
                 name="new"
@@ -78,6 +69,7 @@ export default function PolicyNavigator({navigation}){
                     }
                 }}
             />
+            
         </Navigator>
     )
 }
