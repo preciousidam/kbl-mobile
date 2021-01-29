@@ -4,7 +4,7 @@ import {Text, StyleSheet, View, ScrollView, Platform, Modal, ActivityIndicator }
 import { Ionicons } from '@expo/vector-icons';
 import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
 import { useDispatch, useSelector } from 'react-redux';
-import {savePolicyAsync} from '../../../../store/reducers/policy'
+import {savePolicyAsync, selected} from '../../../../store/reducers/policy'
 
 import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
@@ -43,11 +43,18 @@ export const NewPolicy = ({ navigation,route}) => {
     const {user}  = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    const onNextClick = _ => {
+    const onNextClick = async _ => {
+        dispatch(selected(products[selectedProduct].name));
         dispatch(savePolicyAsync(products[selectedProduct].link,{...form, user: user.pk}));
-        if(error == false && !processing){
-            navigation.navigate('confirmKYC');
+        if(error == false && processing == false){
+            //navigation.navigate('confirmKYC');
+            navigation.navigate('summary');
         }
+    }
+
+    const onSelect = (item,i) => {
+        dispatch(selected(item));
+        setSelectedProduct(i);
     }
 
 
@@ -66,7 +73,7 @@ export const NewPolicy = ({ navigation,route}) => {
                         options={options} 
                         style={{padding: 0, width: '50%'}}
                         value={options[selectedProduct]}
-                        onValueChange={(item,i) => setSelectedProduct(i)}
+                        onValueChange={onSelect}
                     />
                 </View>
                 <View style={styles.form}>

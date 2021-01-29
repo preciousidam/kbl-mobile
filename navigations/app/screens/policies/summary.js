@@ -2,6 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 import { Solidbutton } from '../../../../components/button';
 import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
@@ -19,22 +20,25 @@ const vInfo = {
 export const SummaryView = ({navigation}) => {
     const {colors, dark} = useTheme();
     const {navigate} = navigation;
+    const {form, product} = useSelector(state => state.policies);
+
     return (
         <View style={{flex: 1}}>
             <ScrollView>
-                <Header premium={'100000'} />
+                <Header premium={form?.premium?.toFixed(2)} />
                 <View style={[styles.product, {backgroundColor: colors.card}]}>
                     <Text style={[styles.pHeader, {color: colors.text}]}>Product</Text>
-                    <Text style={[styles.pTitle, {color: colors.text}]}>Third-Party Motor Insurance</Text>
+                    <Text style={[styles.pTitle, {color: colors.text}]}>{product}</Text>
                 </View>
                 <View style={[styles.product, {backgroundColor: colors.card}]}>
                     <Text style={[styles.pHeader, {color: colors.text}]}>Vehicle Information</Text>
-                    {Object.entries(vInfo).map(info => (
-                        <View style={[styles.infoView]}>
+                    {Object.entries(form).map(info => {
+
+                        return (typeof info[1] !== 'object' && <View style={[styles.infoView]}>
                             <Text style={[styles.info1]}>{info[0]}</Text>
                             <Text style={[styles.info]}>{info[1]}</Text>
-                        </View>
-                    ))}
+                        </View>)
+                    })}
                 </View>
             </ScrollView>
             <View style={{padding: 15}}><Solidbutton text="Continue" onPress={e => navigate('payOpt')} /></View>

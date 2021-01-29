@@ -18,6 +18,7 @@ export const KYCIndividualForm = ({}) => {
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     
     const {kyc} = useSelector(state => state.kyc);
+    const {user} = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     return (
@@ -26,13 +27,13 @@ export const KYCIndividualForm = ({}) => {
                 <OutlinedInput
                     placeholder="Full Name"
                     style={styles.input}
-                    value={kyc.name}
+                    value={ kyc.name|| `${user.first_name} ${user.last_name}`}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, name: nativeEvent.text}))}
                 />
                 <OutlinedInput
                     placeholder="Email"
                     style={styles.input}
-                    value={kyc.email}
+                    value={kyc.email || user.email}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, email: nativeEvent.text}))}
                     keyboardType="email-address"
                     textContentType="emailAddress"

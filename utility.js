@@ -35,35 +35,69 @@ export const checkExpiry = expiry => {
 	else if (diffDays > 30 && firstDate > secondDate) return 2;
 	else if (diffDays > 0 && firstDate < secondDate) return 0
 }
-
+const validUri = image => {
+	return typeof image !== 'object'? image : Platform.OS === "android" ? image?.uri : image?.uri.replace("file://", ""); 
+}
 export const motorFormData = body => {
 	let formData = new FormData();
+
     formData.append("back_image", 
         {name: "one.jpg",
-        type: `${body.back_image?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: Platform.OS === "android" ? body.back_image?.uri : body.back_image?.uri.replace("file://", ""),
-    }, body.back_image?.uri?.split('/')[body.back_image?.uri?.split('.').length - 1]);
+        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: validUri(body.back_image),
+	});
+	
     formData.append("front_image", 
         {name: "one.jpg",
-        type: `${body.front_image?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: Platform.OS === "android" ? body.front_image?.uri : body.front_image?.uri.replace("file://", "")
-    }, body.front_image?.uri?.split('/')[body.front_image?.uri?.split('.').length - 1])
+        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: validUri(body.front_image)
+	})
+
     formData.append("vehicle_license", 
         {name: "one.jpg",
-        type: `${body.vehicle_license?.type}/jpeg`, 
+        type: `image/jpeg`, 
         extension: 'jpg', ext: 'jpg',
-        uri: Platform.OS === "android" ? body.vehicle_license?.uri : body.vehicle_license?.uri.replace("file://", "")
-    }, body.vehicle_license?.uri?.split('/')[body.vehicle_license?.uri?.split('.').length - 1])
+        uri: validUri(body.vehicle_license)
+	})
+	
     formData.append("proof_of_ownership", 
         {name: "one.jpg",
-        type: `${body.proof_of_ownership?.type}/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: Platform.OS === "android" ? body.proof_of_ownership?.uri : body.proof_of_ownership?.uri.replace("file://", "")
-    },body.proof_of_ownership?.uri?.split('/')[body.proof_of_ownership?.uri?.split('.').length - 1])
-    console.log(formData)
+        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+        uri: validUri(body.proof_of_ownership)
+    })
+    
     for ( let key in body ) {
         if (key != "back_image" && key != "proof_of_ownership" && key != "vehicle_license" && key != "front_image" )
             formData.append(key, body[key]);
 	}
 	
 	return formData;
+}
+
+export const kycFormData = body => {
+	let formData = new FormData();
+	let id_image = {name: "one.jpg",
+						type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+						uri: validUri(body.id_image),
+					};
+	let signature = {name: "one.jpg",
+						type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+						uri: validUri(body.signature)
+					};
+
+
+    formData.append("id_image", id_image);
+    formData.append("signature",signature);
+    
+    
+    for ( let key in body ) {
+        if (key != "id_image" && key != "signature")
+            formData.append(key, body[key]);
+	}
+	console.log(formData)
+	return formData;
+}
+
+export const validateCard = ({cardno,cvv,pin,expiryyear, expirymonth}) => {
+	return (cardno && cvv && pin && expiryyear && expirymonth);
 }

@@ -5,27 +5,35 @@ import {  CardInputWithIcon, CardNumberInputWithIcon } from '../input/card';
 import { Ionicons } from '@expo/vector-icons';
 import { Money } from '../money';
 import { useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 
-export const CardForm = ({platform}) => {
+export const CardForm = ({platform, amount, onPress, processing, msg}) => {
     const {colors, dark} = useTheme();
     const [isEnabled, setIsEnabled] = useState(false);
     const [cNumber, setCNumber] = useState('')
+    const [cvv, setCVV] = useState('');
+    const [valid_till, setValid_till] = useState('')
+    const [pin, setPin] = useState('')
 
     return (
         <View style={[styles.container, {backgroundColor: colors.card}]}>
-            <View>
-                <Text style={styles.header}>Checkout</Text>
-                <Text style={styles.subHeader}>With {platform}</Text>
-            </View>
+            
             
 
             <View style={styles.form}>
+                <View>
+                    <Text style={styles.header}>Checkout</Text>
+                    <Text style={styles.subHeader}>With {platform}</Text>
+                    {msg != 0 && <Text style={styles.subHeader}>{msg}</Text>}
+                </View>
                 <Text style={styles.label}>Card Number</Text>
                 <CardNumberInputWithIcon 
                     style={styles.input}
                     placeholder="0000 0000 0000 0000"
                     value={cNumber}
                     onChangeText={({nativeEvent}) => setCNumber(nativeEvent.text)}
+                    keyboardType="numeric"
+                    textContentType="creditCardNumber"
                 />
                 <View style={styles.cvv}>
                     <View style={{flex: 1, marginRight: 5}}>
@@ -33,6 +41,8 @@ export const CardForm = ({platform}) => {
                         <CardInputWithIcon 
                             style={styles.input}
                             placeholder="12/23"
+                            value={valid_till}
+                            onChangeText={({nativeEvent}) => setValid_till(nativeEvent.text)}
                             
                         />
                     </View>
@@ -41,10 +51,24 @@ export const CardForm = ({platform}) => {
                         <CardInputWithIcon 
                             style={styles.input}
                             placeholder="2341"
+                            value={cvv}
+                            onChangeText={({nativeEvent}) => setCVV(nativeEvent.text)}
+                            keyboardType="numeric"
                         />
                     </View>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+               
+                <Text style={styles.label}>Card Pin</Text>
+                <CardInputWithIcon 
+                    style={styles.input}
+                    placeholder="0000"
+                    value={pin}
+                    onChangeText={({nativeEvent}) => setPin(nativeEvent.text)}
+                    keyboardType="numeric"
+                    
+                />
+                
+                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 15,}}>
                     <Switch
                         trackColor={{ false: "#767577", true: "#767577" }}
                         thumbColor={isEnabled ? colors.success : "#f4f3f4"}
@@ -61,9 +85,13 @@ export const CardForm = ({platform}) => {
                         you current premium rate at upon expiration of this payment.
                 </Text>
             </View>
-            <TouchableOpacity style={{position: 'absolute', bottom: 0, width: '100%'}}>
+            <TouchableOpacity 
+                style={{ bottom: 0, width: '100%', zIndex: 1000}}
+                onPress={() => !processing && onPress({cNumber, cvv, valid_till, pin})}
+            >
                 <View style={[styles.action, {backgroundColor: colors.success}]}>
-                    <Text style={styles.actionText}>Pay <Money amount='100000.00' /></Text>
+                    <Text style={styles.actionText}>Pay <Money amount={amount} /></Text>
+                    {processing && <ActivityIndicator size="large" color={colors.card}/>}
                 </View>
             </TouchableOpacity>
         </View>
@@ -73,7 +101,7 @@ export const CardForm = ({platform}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         position: 'relative',
         height: '100%'
@@ -94,6 +122,8 @@ const styles = StyleSheet.create({
     form: {
         width: '100%',
         padding: 15,
+        justifyContent: 'center',
+        flex: 4,
     },
     input: {
         paddingHorizontal: 10,
@@ -112,7 +142,6 @@ const styles = StyleSheet.create({
         marginVertical: 15,
     },
     action: {
-        position: 'absolute',
         padding: 15,
         bottom: 0,
         width: '100%'

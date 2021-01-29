@@ -9,6 +9,7 @@ export const policySlice = createSlice({
     name: 'policy',
     initialState: {
         form: {},
+        product: null,
         processing: false,
         error: false,
     },
@@ -26,6 +27,7 @@ export const policySlice = createSlice({
                 ...state,
                 form,
                 processing: false,
+                error: false
             }
         },
         processing(state, action){
@@ -42,15 +44,23 @@ export const policySlice = createSlice({
                 error, 
                 processing: false,
             }
+        },
+        selected(state, action){
+            const selected = action.payload;
+            return {
+                ...state,
+                product: selected,
+            }
         }
     }
 });
 
-export const {edit, create, processing, error} = policySlice.actions;
+export const {edit, create, processing, error, selected} = policySlice.actions;
 
 export default policySlice.reducer;
 
 export const savePolicyAsync = (link,body) => async dispatch => {
+    dispatch(processing(true))
     const formData = motorFormData(body);
     const client = await getLoginClient();
     try{
@@ -61,6 +71,18 @@ export const savePolicyAsync = (link,body) => async dispatch => {
             return;
         }
         await dispatch(error(true));
+        if(status === 401){
+            showMessage({
+                type: 'danger',
+                description: "Please try again in a moment",
+                message: 'Something happend',
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
+        
         
         for (let item in data){
             showMessage({
@@ -87,3 +109,4 @@ export const savePolicyAsync = (link,body) => async dispatch => {
     }
     
 }
+

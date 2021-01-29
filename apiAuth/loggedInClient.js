@@ -3,7 +3,7 @@ import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {apiConfig} from '../settings/config';
 import {useDispatch} from 'react-redux';
-import {refreshToken} from '../store/reducers/auth';
+
 
 const getAccessToken = async () => {
     try {
@@ -34,6 +34,25 @@ const getLoginClient = async () => {
     return loginClient;
 };
 
+export const refreshToken = async refresh => {
+    const client = await getLoginClient();
+    try{ 
+        const {data, status} = await client.post('auth/token/refresh/', {refresh})
+        
+        if (status === 201 || status === 200 ){
+            let token = await AsyncStorage.getItem('tokenData');
+            token = JSON.parse(token);
+            token.access_token = data.access;
+            console.log(token)
+            await AsyncStorage.setItem('tokenData', JSON.stringify(token));
+        
+            return
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 export default getLoginClient;
 
 function getUrl(config) {
@@ -46,8 +65,7 @@ function getUrl(config) {
 // Intercept all requests
 loginClient.interceptors.request.use(
     config => {
-        //console.log(`%c ${config.method.toUpperCase()} - ${getUrl(config)}:`,'color: #0086b3; font-weight: bold',config,);
-        console.log(config)
+       
         return config;
     },error => Promise.reject(error),
 );
@@ -55,29 +73,30 @@ loginClient.interceptors.request.use(
 // Intercept all responses
 loginClient.interceptors.response.use(
     async response => {
-        if (response.status === 401) {
+        
+        return response;
+    },
+    async error => {
+        
+        console.log(error)
+        if (error.response.status === 401) {
             try {
                 const value = await AsyncStorage.getItem('tokenData');
-                const dispatch = useDispatch();
+                
                 if (value !== null) {
                     // We have data!!
-                    let token = JSON.parse(value);
-                    dispatch(refreshToken(token.refresh_token))
+                    let tokens = JSON.parse(value)
+                    refreshToken(tokens.refresh_token);
                 }
             } catch (error) {
                 // Error retrieving data
                 console.log(error, 'User not logged in');
             }
         } 
-        return response;
-    },
-    error => {
-        //return Promise.reject(error);
-        console.log(error)
+        
         if (error.response.status === 429) {
             Alert.alert('Too many requests. Please try again later.');
         } 
-        //console.log(`%c ${error.response.status} - ${getUrl(error.response.config)}:`,'color: #a71d5d; font-weight: bold',error.response,);
        
         return {data: error.response.data, status: error.response.status}
     },

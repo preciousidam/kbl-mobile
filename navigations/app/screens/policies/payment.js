@@ -1,23 +1,119 @@
 import { useTheme } from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Text, StyleSheet, View, Modal} from 'react-native';
+import {Text, StyleSheet, View, Modal, TouchableOpacity} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { Solidbutton, SolidbuttonWithIcon } from '../../../../components/button';
 import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { CardForm } from '../../../../components/form/payment';
-
+import { useSelector } from 'react-redux';
+import getLoginClient from '../../../../apiAuth/loggedInClient';
+import { showMessage } from 'react-native-flash-message';
+import { CardInputWithIcon } from '../../../../components/input/card';
+import { validateCard } from '../../../../utility';
 
 export const PaymentOptionView = ({navigation}) => {
     const {colors, dark} = useTheme();
     const [visible, setVisible] = useState(false);
+    const [showOTP, setShowOTP] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [otp, setOtp] = useState();
     const [pp, setPP] = useState("")
+    const [processing, setProcessing] = useState(false);
     const {navigate} = navigation;
+    const {form} = useSelector(state => state.policies);
+    const {user} = useSelector(state => state.auth);
+    const [rData, setRData] = useState();
+    const links = {i: {initiate:'pay/rave/', validate: 'pay/rave/validate/'}}
 
     const onClick = id => {
         setPP(id);
         setVisible(true);
+    }
+    const initiate = async card_details => {
+        setProcessing(true);
+        let details = {
+            user_id: user.pk, 
+            cardno: card_details.cNumber, 
+            cvv: card_details.cvv, 
+            pin: card_details.pin,
+            expirymonth: card_details.valid_till.split('/')[0],
+            expiryyear: card_details.valid_till.split('/')[1],
+            amount: form?.premium,
+            policy_number: form?.policy_number,
+        }
+
+        if(!validateCard(details)){
+            setMsg('Invalid card details!');
+            setProcessing(false);
+            return;
+        }
+
+        const client = await getLoginClient();
+        const {data, status} = await client.post('pay/rave/', details)
+        
+        if(status === 201 || status === 200){
+            if(data.code === '02'){
+                setVisible(false);
+                setShowOTP(true);
+                setMsg(data.msg);
+                setProcessing(false);
+                setRData(data);
+                return
+            }
+        }
+
+        setProcessing(false);
+        setMsg(data.msg)
+        showMessage({
+            type: 'error',
+            message: data.status,
+            description: data.msg,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        });
+        return;
+    }
+
+    const validate = async _ => {
+        if (processing) return;
+        setProcessing(true);
+        let details = {
+            user_id: user.pk, 
+            otp,
+            policy_number: form?.policy_number,
+            amount: form?.premium,
+            ref: rData.ref,
+        }
+
+        if (otp === undefined) return;
+
+        const client = await getLoginClient();
+        const {data, status} = await client.post('pay/rave/validate/', details)
+        
+        if(status === 201 || status === 200){
+            if(data.code === '00'){
+                
+                setShowOTP(false);
+                setMsg(data.msg);
+                setProcessing(false);
+                return
+            }
+        }
+
+        setProcessing(false);
+        setMsg(data.msg)
+        showMessage({
+            type: 'error',
+            message: data.status,
+            description: data.msg,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        });
+        return;
     }
 
     return (
@@ -31,11 +127,11 @@ export const PaymentOptionView = ({navigation}) => {
                     text="FlutterWave" icon={<FontAwesome name="money" size={16} color="#fff" />}
                     onPress={_ => onClick("FlutterWave")}
                 />
-                <Divider />
+                {/*<Divider />
                 <SolidbuttonWithIcon
                     onPress={_ => onClick("PayStack")}
                     text="Paystack" gradColors={['#63E7F9','#00AFED' ]} icon={<FontAwesome name="money" size={16} color="#fff" />} 
-                />
+                />*/}
                 <Divider />
                 <SolidbuttonWithIcon 
                     onPress={_ => onClick("QuickTeller")} 
@@ -46,9 +142,45 @@ export const PaymentOptionView = ({navigation}) => {
             <Modal
                 transparent={false}
                 visible={visible}
-                onRequestClose={_ => setVisible(false)}
+                onRequestClose={_ => {
+                    setVisible(false);
+                    setProcessing(false);
+                }}>
+                <CardForm 
+                    platform={pp} 
+                    amount={form?.premium?.toFixed(2)}  
+                    onPress={initiate}
+                    processing={processing}
+                    msg={msg}
+                />
+            </Modal>
+            <Modal
+                transparent={false}
+                visible={showOTP}
+                onRequestClose={_ => setShowOTP(false)}
             >
-                <CardForm platform={pp} />
+                <View style={styles.form}>
+                    <View style={{flex: 4, justifyContent: 'center'}}>
+                        <Text style={styles.subHeader}>{msg}</Text>
+                        <CardInputWithIcon 
+                            placeholder="000000"
+                            onChangeText={({nativeEvent}) => setOtp(nativeEvent.text)}
+                            value={otp}
+                            style={styles.input}
+                            keyboardType="numeric"
+                            textContentType="oneTimeCode"
+                        />
+                    </View>
+                    <TouchableOpacity 
+                        style={{ bottom: 0, width: '100%', marginVertical: 15}}
+                        onPress={validate}
+                    >
+                        <View style={[styles.action, {backgroundColor: colors.success}]}>
+                            <Text style={styles.actionText}>Submit</Text>
+                            {processing && <ActivityIndicator size="large" color={colors.card}/>}
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </Modal>
             <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />
         </View>
@@ -127,5 +259,43 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         fontFamily: 'Montserrat_400Regular',
         fontSize: 12,
+    },
+    input: {
+        paddingHorizontal: 10,
+        paddingVertical: 0,
+        marginVertical: 5,
+        width: '50%',
+        alignSelf: 'center',
+        textAlign: 'center'
+    },
+    label: {
+        fontFamily: 'OpenSans_700Bold',
+    },
+    subHeader: {
+        fontFamily: 'Montserrat_400Regular',
+        textAlign: 'center',
+        color: '#A5A5A5',
+        fontSize: 12,
+        marginBottom: 40,
+    },
+    action: {
+        padding: 15,
+        bottom: 0,
+        width: '100%'
+    },
+    actionText: {
+        color: '#fff',
+        fontFamily: 'Montserrat_700Bold',
+        textAlign: 'center',
+        elevation: 3,
+        textAlignVertical: 'center',
+    },
+    form: {
+        width: '100%',
+        padding: 15,
+        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        flex: 1,
     }
 })

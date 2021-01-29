@@ -53,7 +53,7 @@ export const sector = [
 
 
 export const IDS = [
-    'International passport',
+    'Int Passport',
     'Drivers License',
     'National ID',
     'Voters Card',

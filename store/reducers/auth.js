@@ -96,6 +96,7 @@ export const refreshToken = refresh => async dispatch => {
             let token = await AsyncStorage.getItem('tokenData');
             token = JSON.parse(token);
             token.access_token = data.access;
+            console.log(token)
             await AsyncStorage.setItem('tokenData', JSON.stringify(token));
         
             return
