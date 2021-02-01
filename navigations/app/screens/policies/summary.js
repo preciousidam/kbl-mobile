@@ -20,7 +20,8 @@ const vInfo = {
 export const SummaryView = ({navigation}) => {
     const {colors, dark} = useTheme();
     const {navigate} = navigation;
-    const {form, product} = useSelector(state => state.policies);
+    const {form} = useSelector(state => state.policies);
+    const product = useSelector(state => state.app?.products?.find(({id}) => id === form?.product))
 
     return (
         <View style={{flex: 1}}>
@@ -28,7 +29,7 @@ export const SummaryView = ({navigation}) => {
                 <Header premium={form?.premium?.toFixed(2)} />
                 <View style={[styles.product, {backgroundColor: colors.card}]}>
                     <Text style={[styles.pHeader, {color: colors.text}]}>Product</Text>
-                    <Text style={[styles.pTitle, {color: colors.text}]}>{product}</Text>
+                    <Text style={[styles.pTitle, {color: colors.text}]}>{product?.name}</Text>
                 </View>
                 <View style={[styles.product, {backgroundColor: colors.card}]}>
                     <Text style={[styles.pHeader, {color: colors.text}]}>Vehicle Information</Text>

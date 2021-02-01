@@ -8,7 +8,7 @@ import { refreshToken } from "./auth";
 const cop_field = ['tin', 'inc_date', 'rc_number', 'inc_cert', 'website', 'sector', 'is_corporate']
 
 export const kycSlice = createSlice({
-    name: 'policy',
+    name: 'kyc',
     initialState: {
         kyc: {
             is_individual: true,
@@ -66,21 +66,21 @@ export const saveKYCAsync = body => async dispatch => {
     const client = await getLoginClient();
     try{
         const {data, status} = await client.post('kyc/', formData);
-       console.log(data)
+       
         if (status === 200 || status === 201){
             dispatch(create(data));
             return;
         }
         await dispatch(error(true));
         if(status === 401){
-            showMessage({
+            /*showMessage({
                 type: 'danger',
                 description: "Please try again in a moment",
                 message: 'Something happend',
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
-            })
+            })*/
             return;
         }
         
@@ -123,14 +123,14 @@ export const fetchKYCAsync = email => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            showMessage({
+            /*showMessage({
                 type: 'danger',
                 description: "Please try again in a moment",
                 message: 'Something happend',
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
-            })
+            })*/
             return;
         }
         

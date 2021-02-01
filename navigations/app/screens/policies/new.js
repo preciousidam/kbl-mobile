@@ -53,7 +53,6 @@ export const NewPolicy = ({ navigation,route}) => {
     }
 
     const onSelect = (item,i) => {
-        dispatch(selected(item));
         setSelectedProduct(i);
     }
 

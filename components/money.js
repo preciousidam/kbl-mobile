@@ -10,6 +10,6 @@ export const Money = ({amount, style,...rest}) => {
 
 Money.propTypes = {
     amount: PropTypes.string.isRequired,
-    style: PropTypes.oneOf([PropTypes.object, PropTypes.array]),
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     rest: PropTypes.any,
 }

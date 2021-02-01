@@ -6,9 +6,9 @@ import {useDispatch} from 'react-redux';
 
 import {loadFonts} from '../styles/fonts';
 import { restore } from '../store/reducers/auth';
-import {terms,bootstrap} from '../store/reducers/app';
+import {retrieveProductsAsync,bootstrap} from '../store/reducers/app';
 import FocusAwareStatusBar from '../components/statusBar';
-import {refreshToken} from '../apiAuth/loggedInClient';
+
 
 
 export function SplashScreen({theme}){
@@ -25,6 +25,7 @@ export function SplashScreen({theme}){
         const {refresh_token} = await JSON.parse(tokens);
 
         dispatch(bootstrap(JSON.parse(app)));
+        dispatch(retrieveProductsAsync());
         dispatch(restore({user: JSON.parse(user)}));
         //dispatch(restore({user: null}));
     }

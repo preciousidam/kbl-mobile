@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {apiConfig} from '../settings/config';
 import {useDispatch} from 'react-redux';
+import {restore} from '../store/reducers/auth';
 
 
 const getAccessToken = async () => {
@@ -85,8 +86,10 @@ loginClient.interceptors.response.use(
                 
                 if (value !== null) {
                     // We have data!!
-                    let tokens = JSON.parse(value)
-                    refreshToken(tokens.refresh_token);
+                    //let tokens = JSON.parse(value)
+                    //refreshToken(tokens.refresh_token);
+                    Alert.alert('Session Expired. Please login again.');
+                    dispatch(restore({user: null}));
                 }
             } catch (error) {
                 // Error retrieving data

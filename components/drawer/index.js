@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 export default function DrawerCustom(props){
     const {colors} = useTheme();
-    const {user: {first_name, email}} = useSelector(state => state.auth)
+    const {user} = useSelector(state => state.auth)
     //const {Item} = Picker;
     
     return (
@@ -23,8 +23,8 @@ export default function DrawerCustom(props){
                         containerStyle={{backgroundColor: colors.primary, marginTop: 10, marginLeft: 20,}} 
                     />
                     <View style={{flexDirection: "column", padding: 10}}>
-                        <Text style={styles.h4}>{first_name}</Text>
-                        <Text>{email}</Text>
+                        <Text style={styles.h4}>{user?.first_name}</Text>
+                        <Text>{user?.email}</Text>
                     </View>
                 </View>
             </View>

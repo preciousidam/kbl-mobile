@@ -8,12 +8,21 @@ import { motorFormData } from "../../utility";
 export const policySlice = createSlice({
     name: 'policy',
     initialState: {
+        policies: [],
         form: {},
-        product: null,
         processing: false,
         error: false,
     },
     reducers: {
+        all(state, action){
+            const policies = action.payload;
+            return {
+                ...state,
+                policies,
+                processing: false,
+                error: false
+            }
+        },
         edit(state, action){
             const form =  action.payload;
             return {
@@ -44,18 +53,11 @@ export const policySlice = createSlice({
                 error, 
                 processing: false,
             }
-        },
-        selected(state, action){
-            const selected = action.payload;
-            return {
-                ...state,
-                product: selected,
-            }
         }
     }
 });
 
-export const {edit, create, processing, error, selected} = policySlice.actions;
+export const {edit, create, processing, error, selected, all} = policySlice.actions;
 
 export default policySlice.reducer;
 
@@ -72,14 +74,65 @@ export const savePolicyAsync = (link,body) => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            showMessage({
+            /*showMessage({
                 type: 'danger',
                 description: "Please try again in a moment",
                 message: 'Something happend',
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
+            })*/
+            return;
+        }
+        
+        
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
             })
+        }
+        
+        return;
+    }catch (err){
+        console.error(err)
+        dispatch(error(true));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
+    }
+    
+}
+
+export const retrievePolicyAsync = user => async dispatch => {
+    dispatch(processing(true))
+   
+    const client = await getLoginClient();
+    try{
+        const {data, status} = await client.get(`policies/${user}`);
+        
+        if (status === 200 || status === 201){
+            dispatch(all(data));
+            return;
+        }
+        await dispatch(error(true));
+        if(status === 401){
+           /*showMessage({
+                type: 'danger',
+                description: "Please try again in a moment",
+                message: 'Something happend',
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })*/
             return;
         }
         

@@ -1,5 +1,5 @@
 import { useTheme } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Button} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -9,8 +9,10 @@ import FocusAwareStatusBar from '../../../../components/statusBar';
 import {Header} from '../../../../components/header';
 import ProductList from '../../../../components/policy/quickLinks';
 
+
 export const Dashboard = ({navigation}) => {
     const {colors, dark} = useTheme();
+    
 
     return (
         <View style={[styles.container, {backgroundColor: colors.card}]}>

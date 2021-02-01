@@ -1,12 +1,13 @@
-import { Montserrat_700Bold } from '@expo-google-fonts/montserrat';
-import { OpenSans_700Bold } from '@expo-google-fonts/open-sans';
 import { useTheme } from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
+import moment from 'moment';
 import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { CommaFormatted } from '../../../../utility';
 import { Solidbutton, Outlinedbutton } from '../../../../components/button';
+import { useSelector } from 'react-redux';
+import { MotorDetails } from '../../../../components/details/motor';
 
 const vInfo = {
     'Value': '5000000.00',
@@ -18,20 +19,17 @@ const vInfo = {
     'Vehicle Class': 'Private Vehicle / Car',
 }
 
-export const PolicyDetails = ({navigation}) => {
+export const PolicyDetails = ({navigation, route}) => {
     const {colors, dark} = useTheme();
+    const {pn} = route?.params;
+    
+    const policy = useSelector(state => state?.policies?.policies.find(({policy_number}) => policy_number == pn))
+
     return (
         <View style={styles.container}>
-            <Header navigation={navigation} />
+            <Header navigation={navigation} data={policy} />
             <View style={[styles.body, {backgroundColor: colors.card}]}>
-                <Text style={styles.bodyHeader}>Policy Information</Text>
-                {Object.entries(vInfo).map(info => (
-                    <View style={[styles.infoView]}>
-                        <Text style={[styles.info1]}>{info[0]}</Text>
-                        {info[0] === 'Value'? <Money amount={info[1]} style={{fontFamily: 'OpenSans_700Bold'}} /> : 
-                            <Text style={[styles.info]}>{info[1]}</Text>}
-                    </View>
-                ))}
+                <MotorDetails data={policy} />
             </View>
             <View style={[styles.footer]}>
                 <View  style={{flex: 1, paddingRight: 5}}>
@@ -46,12 +44,13 @@ export const PolicyDetails = ({navigation}) => {
     )
 }
 
-export const Header = ({navigation}) => {
+export const Header = ({navigation, data}) => {
     const {colors, dark} = useTheme();
+    const product = useSelector(state => state.app?.products?.find(({id}) => id === data?.product))
 
     useEffect(() => {
         navigation.setOptions({
-            title: 'Third-Party Vehicle'
+            title: product?.name
         })
     })
     return (
@@ -59,21 +58,21 @@ export const Header = ({navigation}) => {
 
             <View>
                 <Text style={styles.premiumText}>Premium Payable</Text>
-                <Money amount={'5000.00'} style={styles.premium} />
+                <Money amount={parseFloat(data?.premium).toFixed(2)} style={styles.premium} />
             </View>
 
             <View style={styles.hCont}>
                 <View style={styles.info}>
                     <Text style={styles.span}>Status</Text>
-                    <Text style={styles.p}>Active</Text>
+                    <Text style={styles.p}>{data.is_active?'Active': 'In-Active'}</Text>
                 </View>
                 <View style={[styles.info, styles.middle]}>
                     <Text style={styles.span}>Policy No.</Text>
-                    <Text style={styles.p}>MBSN-123456789</Text>
+                    <Text style={styles.p}>{data.policy_number}</Text>
                 </View>
                 <View style={styles.info}>
                     <Text style={styles.span}>End Date</Text>
-                    <Text style={styles.p}>20th July, 2020</Text>
+                    <Text style={[styles.p, {fontSize: 12}]}>{moment(data.valid_till).format('lll')}</Text>
                 </View>
             </View>
         </View>
