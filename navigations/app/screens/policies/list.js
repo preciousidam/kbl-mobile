@@ -17,7 +17,7 @@ export const PolicyListView = ({navigation}) => {
     const {processing} = useSelector(state => state.policies);
     
     useEffect(() => {
-        dispatch(retrievePolicyAsync(user.pk))
+        dispatch(retrievePolicyAsync(user?.pk))
     },[])
 
     return (

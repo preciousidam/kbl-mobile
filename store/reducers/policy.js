@@ -3,6 +3,8 @@ import getLoginClient from '../../apiAuth/loggedInClient';
 //import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { motorFormData } from "../../utility";
+import { Alert } from "react-native";
+import { restore } from "./auth";
 
 
 export const policySlice = createSlice({
@@ -74,14 +76,8 @@ export const savePolicyAsync = (link,body) => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            /*showMessage({
-                type: 'danger',
-                description: "Please try again in a moment",
-                message: 'Something happend',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })*/
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(restore({user: null}));
             return;
         }
         
@@ -125,14 +121,8 @@ export const retrievePolicyAsync = user => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-           /*showMessage({
-                type: 'danger',
-                description: "Please try again in a moment",
-                message: 'Something happend',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })*/
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(restore({user: null}));
             return;
         }
         

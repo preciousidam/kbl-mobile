@@ -35,24 +35,6 @@ const getLoginClient = async () => {
     return loginClient;
 };
 
-export const refreshToken = async refresh => {
-    const client = await getLoginClient();
-    try{ 
-        const {data, status} = await client.post('auth/token/refresh/', {refresh})
-        
-        if (status === 201 || status === 200 ){
-            let token = await AsyncStorage.getItem('tokenData');
-            token = JSON.parse(token);
-            token.access_token = data.access;
-            console.log(token)
-            await AsyncStorage.setItem('tokenData', JSON.stringify(token));
-        
-            return
-        }
-    }catch (err){
-        console.log(err)
-    }
-}
 
 export default getLoginClient;
 
@@ -79,15 +61,12 @@ loginClient.interceptors.response.use(
     },
     async error => {
         
-        console.log(error)
+        /*console.log(error)
         if (error.response.status === 401) {
             try {
                 const value = await AsyncStorage.getItem('tokenData');
                 
                 if (value !== null) {
-                    // We have data!!
-                    //let tokens = JSON.parse(value)
-                    //refreshToken(tokens.refresh_token);
                     Alert.alert('Session Expired. Please login again.');
                     dispatch(restore({user: null}));
                 }
@@ -95,7 +74,7 @@ loginClient.interceptors.response.use(
                 // Error retrieving data
                 console.log(error, 'User not logged in');
             }
-        } 
+        }*/
         
         if (error.response.status === 429) {
             Alert.alert('Too many requests. Please try again later.');

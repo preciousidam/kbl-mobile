@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import client from '../../apiAuth/guestClient';
+import { restore } from "./auth";
 
 
 export const appSlice = createSlice({
@@ -71,14 +72,8 @@ export const retrieveProductsAsync = _ => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            /*showMessage({
-                type: 'danger',
-                description: "Please try again in a moment",
-                message: 'Something happend',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })*/
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(restore({user: null}));
             
             return;
         }

@@ -3,7 +3,7 @@ import getLoginClient from '../../apiAuth/loggedInClient';
 //import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { kycFormData, motorFormData } from "../../utility";
-import { refreshToken } from "./auth";
+import { restore } from "./auth";
 
 const cop_field = ['tin', 'inc_date', 'rc_number', 'inc_cert', 'website', 'sector', 'is_corporate']
 
@@ -73,14 +73,8 @@ export const saveKYCAsync = body => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            /*showMessage({
-                type: 'danger',
-                description: "Please try again in a moment",
-                message: 'Something happend',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })*/
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(restore({user: null}));
             return;
         }
         
@@ -123,14 +117,8 @@ export const fetchKYCAsync = email => async dispatch => {
         }
         await dispatch(error(true));
         if(status === 401){
-            /*showMessage({
-                type: 'danger',
-                description: "Please try again in a moment",
-                message: 'Something happend',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })*/
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(restore({user: null}));
             return;
         }
         
