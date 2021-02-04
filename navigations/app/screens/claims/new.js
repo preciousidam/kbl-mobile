@@ -1,37 +1,43 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import {Text, StyleSheet, View, ScrollView, Platform} from 'react-native';
+import {Text, StyleSheet, View, ScrollView, Platform, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
 
 import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
-import { MotorForm } from '../../../../components/form/motor';
-import {HomeForm } from '../../../../components/form/home';
-import { PassengerForm } from '../../../../components/form/passenger';
-import { MarineForm } from '../../../../components/form/marine';
+import { MotorForm } from '../../../../components/form/motorClaim';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { retrievePolicyAsync } from '../../../../store/reducers/policy';
+import { Form } from '../../../../components/form/fireClaim';
 
 const products = [
-    {name: 'Motor third party', Form: () => <MotorForm />,}, 
-    {name: 'Motor comprehensive', Form: () => <MotorForm />,}, 
-    {name: 'Home Xtra Tenant’s Plan', Form: () => <HomeForm />,},
-    {name: 'Passenger Accident Manifest', Form: () => <PassengerForm />,},
-    {name: 'Marine Cargo', Form: () => <MarineForm />,},
-    {name: 'GPA', Form: () => <MarineForm />,},
-    {name: 'Occupiers Liability', Form: () => <MarineForm />,}
+    {name: 'Motor third party', Form: () => <MotorForm />,},
+    {name: 'Home Xtra Tenant’s Plan', Form: () => <Form />,},
 ]
 
 
-export const NewPolicy = ({ navigation,route}) => {
+export const NewClaim = ({ navigation,route}) => {
     const {id} = route?.params;
-    const options = products.map(({name}) => name)
+    const [policy, setPolicy] = useState(null);
+    const [active, setActive] = useState([]);
+    
     const {colors, dark} = useTheme();
     const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
-    const [selectedProduct, setSelectedProduct] = useState(id||0);
-    const [Form, setForm] = useState(() => products[selectedProduct].Form)
+    const {user} = useSelector(state => state.auth);
+    const {policies} = useSelector(state => state.policies);
+    const dispatch  = useDispatch();
+
     useEffect(() => {
-        setForm(() => products[selectedProduct].Form);
-    }, [selectedProduct]);
+        dispatch(retrievePolicyAsync(user?.pk));
+    },[]);
+
+    useEffect(() => {
+        setActive(policies.filter(x => x.is_active == true));
+    }, [policies])
+
+    const onRequestClose = _ => navigation.goBack();
 
 
     return (
@@ -42,26 +48,35 @@ export const NewPolicy = ({ navigation,route}) => {
                 onPress={_ => navigation.navigate('confirmKYC')}
             />
             <ScrollView>
-                <View style={[styles.opt, {backgroundColor: colors.card}]}>
-                    <Text style={{fontFamily: 'OpenSans_700Bold'}}>Product</Text>
-                    <Picker 
-                        prompt="Select Product"
-                        options={options} 
-                        style={{padding: 0, width: '50%'}}
-                        value={options[selectedProduct]}
-                        onValueChange={(item,i) => setSelectedProduct(i)}
-                    />
-                </View>
                 <View style={styles.form}>
-                    <Form />
+                    <MotorForm policy={policy} />
                 </View>
             </ScrollView>
+            <Modal
+                visible={policy === null}
+                transparent={false}
+                onRequestClose={onRequestClose}
+                presentationStyle="overFullScreen"
+            >
+                <View>
+                    <View style={styles.opt}>
+                        <Text style={styles.mHeader}>Select Policy</Text>
+                    </View>
+                    {active?<ScrollView>
+                    {policies.filter(x => x.is_active == true).map(policy => 
+                        <Text key={policy?.policy_number} style={styles.tButton} onPress={_ => setPolicy(policy?.policy_number)}>
+                            {policy?.policy_number}
+                        </Text>
+                    )}
+                    </ScrollView>: <Text>You dont have an active policy</Text>}
+                </View>
+            </Modal>
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )
 }
 
-export default NewPolicy;
+export default NewClaim;
 
 const styles = StyleSheet.create({
     form: {
@@ -70,8 +85,21 @@ const styles = StyleSheet.create({
     opt: {
         width: "100%",
         flexDirection: "row",
-        justifyContent: "space-around",
+        padding: 15,
         alignItems: "center",
-        elevation: 2,
+        elevation: 3,
+        shadowColor: "#000",
+        backgroundColor: '#fff'
+    },
+    mHeader: {
+        fontFamily: 'Montserrat_700Bold',
+        fontSize: 16,
+    },
+    tButton: {
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        fontFamily: 'OpenSans_700Bold',
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(0,0,0,.3)'
     }
 });

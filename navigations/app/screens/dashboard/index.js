@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Avatar } from 'react-native-elements';
@@ -21,6 +21,12 @@ const Stack = createStackNavigator();
 export function HomeTabNavigation({navigation}){
     const {colors} = useTheme();
     const {Navigator, Screen} = Tab;
+
+    useEffect(() => {
+        navigation.addListener('beforeRemove', (e) => {
+            
+        })
+    }, [navigation])
 
     return (
         <Navigator
@@ -103,6 +109,13 @@ export const MainNavigator = ({navigation}) => {
             <Screen
                 name="new_policy"
                 component={PolicyNavigator}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Screen
+                name="new_claim"
+                component={ClaimNavigator}
                 options={{
                     headerShown: false,
                 }}

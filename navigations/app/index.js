@@ -8,7 +8,6 @@ import Dashboard from './screens/dashboard/Dashboard';
 import DrawerCustom from '../../components/drawer';
 import NotificationNavigation from './screens/notifications';
 import {WithBadge} from '../../components/badge';
-import { colors } from 'react-native-elements';
 import { MainNavigator } from './screens/dashboard';
 import { KYCNavigation } from './screens/kyc';
 import { BranchesRoute } from './screens/branches';

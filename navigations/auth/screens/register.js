@@ -177,15 +177,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     indicator: {
-        width: 100,
-        height: 100,
-        padding: 5,
+        width: 65,
+        height: 65,
+        padding: 32,
         borderWidth: 1,
         borderColor: 'transparent',
         borderRadius: 5,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        elevation: 5,
+        shadowColor: 'rgba(0,0,0,.3)'
     },
 })

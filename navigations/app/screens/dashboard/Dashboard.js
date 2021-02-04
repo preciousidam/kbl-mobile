@@ -16,7 +16,9 @@ export const Dashboard = ({navigation}) => {
 
     return (
         <View style={[styles.container, {backgroundColor: colors.card}]}>
-           <Header name="Home" />
+           <Header name="Home"  
+                onNotClick={_ => navigation.navigate('Notifications')}
+           />
             <ScrollView >
                 <View style={{marginTop: 20}}>
                     <Text style={[styles.headerText, {color: colors.text}]}>Products</Text>
@@ -27,11 +29,13 @@ export const Dashboard = ({navigation}) => {
                     <View style={styles.quickAct}>
                         <CardSquare 
                             icon={<MaterialCommunityIcons name="file-document-box-plus-outline" size={35} color="#fff" />} 
-                            name="Claims" 
+                            name="Claims"
+                            onPress={_ => navigation.navigate('TabNav', { screen: 'Claims'})}
                         />
                         <CardSquare 
                             icon={<MaterialCommunityIcons name="shield-home" size={35} color="#fff" />} 
-                            name="Policies" 
+                            name="Policies"
+                            onPress={_ => navigation.navigate('TabNav', { screen: 'Coverage'})}
                         />
                         <CardSquare 
                             icon={<AntDesign name="customerservice" size={35} color="#fff" />} 
@@ -73,7 +77,7 @@ export const CardSquare = ({icon, name, onPress}) => {
         <TouchableOpacity onPress={onPress} activeOpacity={0.9} >
             <View style={[{...styles.card, backgroundColor: colors.primary}]}>
                 {icon}
-                <Text style={{...styles.text, color: '#ffffff'}}>{name}</Text> 
+                <Text style={{...styles.text, color: '#ffffff', fontSize: 12}}>{name}</Text> 
             </View>
         </TouchableOpacity>
     )

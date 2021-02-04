@@ -14,7 +14,7 @@ export const PolicyListView = ({navigation}) => {
     const {navigate} = navigation;
     const dispatch = useDispatch();
     const {user} = useSelector(state => state.auth);
-    const {processing} = useSelector(state => state.policies);
+    
     
     useEffect(() => {
         dispatch(retrievePolicyAsync(user?.pk))

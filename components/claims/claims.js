@@ -1,47 +1,63 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Dimensions} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { Money } from '../money';
+import { retrieveClaimAsync } from '../../store/reducers/claims';
 
 
 export const ClaimList = ({}) => {
-    const {colors} = useTheme();
-    const data = [
-        {icon: <Ionicons name='ios-car' color={colors.primary} size={24} />, name: 'Toyota Pilot', amount: `${'\u20A6'} 70K`, status: 'Processing' },
-        {icon: <Ionicons name='md-car' color={colors.primary} size={24} />, name: 'Nissan Majavo', amount: `${'\u20A6'} 140K`, status: 'Completed' },
-        {icon: <Ionicons name='ios-home' color={colors.primary} size={24} />, name: '7B, Furo Ezimora, Lekki', amount: `${'\u20A6'} 1M`, status: 'Cancelled' },
-        {icon: <Fontiso name='ship' color={colors.primary} size={24} />, name: 'Ship at Port', amount: `${'\u20A6'} 2M`, status: 'Processing' },
-        {icon: <Ionicons name='ios-car' color={colors.primary} size={24} />, name: 'Toyota Pilot', amount: `${'\u20A6'} 70K`, status: 'Processing' },
-        {icon: <Ionicons name='md-car' color={colors.primary} size={24} />, name: 'Nissan Majavo', amount: `${'\u20A6'} 140K`, status: 'Cancelled' },
-        {icon: <Ionicons name='ios-home' color={colors.primary} size={24} />, name: '7B, Furo Ezimora, Lekki', amount: `${'\u20A6'} 1M`, status: 'Cancelled' },
-        {icon: <Fontiso name='ship' color={colors.primary} size={24} />, name: 'Ship at Port', amount: `${'\u20A6'} 2M`, status: 'Completed' },
-    ]
+    const {claims, processing} = useSelector(state => state.claims);
+    const {user} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     
-    const {navigate} = useNavigation()
+    const {navigate} = useNavigation();
+    
+    const refresh = () => {
+        dispatch(retrieveClaimAsync(user.pk));
+    }
+    
     
     const renderItems = ({item, index}) => (
         <Activity
             {...item}
             index={index}
-            onPress={_ => navigate('polDet', {id: item.id})}
+            onPress={_ => navigate('', {id: item.id})}
         />);
 
     return(
         <View style={styles.container}>
-           <FlatList 
-                data={data}
-                keyExtractor={(item,i) => item.name+i}
+           <FlatList
+                refreshing={processing}
+                onRefresh={refresh}
+                data={claims}
+                keyExtractor={(item,i) => item.claims_number+i}
                 renderItem={renderItems}
                 contentContainerStyle={{paddingHorizontal: 15, paddingVertical: 10, paddingBottom: 50,}}
+                ListEmptyComponent={Empty}
             />
         </View>
     )
 }
 
 export default ClaimList;
+
+export const Empty = _  => {
+    return (
+        <View style={{
+            minHeight: Dimensions.get('window').height - 150, 
+            flex: 1, 
+            backgroundColor: '#fff', 
+            alignItems: 'center', 
+            justifyContent: 'center'
+        }}>
+            <Image style={{width: 100, height: 100}} source={require('../../assets/no_data.png')} />
+            <Text style={{fontFamily: 'Montserrat_700Bold', color: '#A6A6A6'}}>Nothing to see here!</Text>
+        </View>
+    )
+}
 
 export const Activity = ({icon, amount, name, status, onPress, index}) => {
     const {colors, dark} = useTheme();

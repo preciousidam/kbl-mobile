@@ -4,7 +4,7 @@ import {Text, StyleSheet, View, ScrollView, Platform, Modal, ActivityIndicator }
 import { Ionicons } from '@expo/vector-icons';
 import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
 import { useDispatch, useSelector } from 'react-redux';
-import {savePolicyAsync, selected} from '../../../../store/reducers/policy'
+import {edit, savePolicyAsync, selected} from '../../../../store/reducers/policy'
 
 import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
@@ -15,45 +15,40 @@ import { MarineForm } from '../../../../components/form/marine';
 import { ActInd } from '../../../../components/activityIndicator';
 
 
-const products = [
-    {name: 'Motor third party', Form: () => <MotorForm />, link: 'policies/motor-third-party/'}, 
-    {name: 'Motor comprehensive', Form: () => <MotorForm />, link: 'policies/motor-comprehensive/'}, 
-    {name: 'Home Xtra Tenant’s Plan', Form: () => <HomeForm />,},
-    {name: 'Passenger Accident Manifest', Form: () => <PassengerForm />,},
-    {name: 'Marine Cargo', Form: () => <MarineForm />,},
-    {name: 'GPA', Form: () => <MarineForm />,},
-    {name: 'Occupiers Liability', Form: () => <MarineForm />,}
-]
-
+const forms = {Motor: <MotorForm />, Home: <HomeForm />,}
+   
+const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
 
 export const NewPolicy = ({ navigation,route}) => {
     
-    const {id} = route?.params;
-    const options = products.map(({name}) => name)
+    const {products} = useSelector(state => state.app)
+    const {pid} = route?.params;
+    const options = products.map(({name}) => name);
     const {colors, dark} = useTheme();
-    const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
-    const [selectedProduct, setSelectedProduct] = useState(id||0);
-    const [Form, setForm] = useState(() => products[selectedProduct].Form);
+    
+    const [selected, setSelected] = useState(pid||products[0]?.id);
+    const [Form, setForm] = useState();
+    
 
     useEffect(() => {
-        setForm(() => products[selectedProduct].Form);
-    }, [selectedProduct]);
+        
+        const category = products.find(({id}) => id === selected)?.category
+        setForm(forms[category]);
+    }, [selected]);
 
-    const {form, error, processing} = useSelector(state => state.policies);
+    const {form, processing} = useSelector(state => state.policies);
     const {user}  = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const onNextClick = async _ => {
-        dispatch(selected(products[selectedProduct].name));
-        dispatch(savePolicyAsync(products[selectedProduct].link,{...form, user: user.pk}));
-        if(error == false && processing == false){
-            //navigation.navigate('confirmKYC');
-            navigation.navigate('summary');
-        }
+        const product = products.find(({id}) => id === selected)
+        dispatch(savePolicyAsync(product,{...form, user: user.pk}, navigation));
     }
 
     const onSelect = (item,i) => {
-        setSelectedProduct(i);
+        const value = products.find(({name}) => name === item);
+        dispatch(edit({...form, product: value.id}))
+        setSelected(value.id);
     }
 
 
@@ -71,12 +66,12 @@ export const NewPolicy = ({ navigation,route}) => {
                         prompt="Select Product"
                         options={options} 
                         style={{padding: 0, width: '50%'}}
-                        value={options[selectedProduct]}
+                        value={products.find(({id}) => selected === id)?.name}
                         onValueChange={onSelect}
                     />
                 </View>
                 <View style={styles.form}>
-                    <Form />
+                    {Form}
                 </View>
             </ScrollView>
             <ActInd status={processing} />

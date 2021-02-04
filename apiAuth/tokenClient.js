@@ -25,6 +25,7 @@ function getUrl(config) {
 // Intercept all request
 client.interceptors.request.use(
     config => {
+        console.log(config)
         return config;
     },error => Promise.reject(error),
 );

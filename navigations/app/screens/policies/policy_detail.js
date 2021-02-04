@@ -29,7 +29,7 @@ export const PolicyDetails = ({navigation, route}) => {
         <View style={styles.container}>
             <Header navigation={navigation} data={policy} />
             <View style={[styles.body, {backgroundColor: colors.card}]}>
-                <MotorDetails data={policy} />
+                <MotorDetails pn={policy.policy_number} />
             </View>
             <View style={[styles.footer]}>
                 <View  style={{flex: 1, paddingRight: 5}}>

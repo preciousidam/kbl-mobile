@@ -62,6 +62,63 @@ export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, on
     )
 }
 
+export const OutlinedTimePicker = ({style, icon, help, contProps, inputStyle, onChangeText, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    const [focused, setFocused] = useState(false);
+    const [show, setShow] = useState(false);
+    useEffect(() => {
+        if(focused) setBorderColor(colors.primary)
+        else setBorderColor('#c6c6c6');
+    }, [focused])
+
+    const [borderColor, setBorderColor] = useState('#c6c6c6')
+    
+
+    const onFocus = _ => setFocused(true);
+    const onBlur = _ => setFocused(false);
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        onChangeText(moment(currentDate).format('LT'));
+      };
+    
+    
+    
+
+    return (
+        <View 
+            {...contProps} 
+            style={{...styles.container, ...style, borderColor, padding: 5,}}
+        >   
+            <TouchableOpacity onPress={_ => setShow(true)}>
+                <View style={styles.icon}>
+                    <Ionicons name="time" size={24} color="black" />
+                </View>
+            </TouchableOpacity>
+            <TextInput 
+                onFocus={onFocus} 
+                onBlur={onBlur} 
+                value={moment(value).format('LT')} 
+                style={{...styles.input, color: colors.text, ...inputStyle}} 
+                onChange={onChangeText}
+                blurOnSubmit={true}
+                editable={false}
+                {...rest} 
+            />
+            
+            {show && <DateTimePicker
+                testID="dateTimePicker"
+                value={new Date(value)}
+                mode="time"
+                display="default"
+                onChange={onChange}
+            />}
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         width: '100%',

@@ -9,7 +9,7 @@ import { retrievePolicyAsync } from '../../store/reducers/policy';
 
 
 export const PolicyList = ({}) => {
-    const {colors} = useTheme();
+    
     const {policies, processing} = useSelector(state => state.policies);
     const {user} = useSelector(state => state.auth);
     const dispatch = useDispatch();

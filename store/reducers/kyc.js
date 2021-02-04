@@ -110,7 +110,7 @@ export const fetchKYCAsync = email => async dispatch => {
     const client = await getLoginClient();
     try{
         const {data, status} = await client.post('kyc/retrieve_by_email/', {email});
-        console.log(data)
+        
         if (status === 200 || status === 201){
             dispatch(create(data));
             return;

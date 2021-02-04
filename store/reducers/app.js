@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
-import client from '../../apiAuth/guestClient';
+import { Alert } from "react-native";
+import getLoginClient from '../../apiAuth/loggedInClient';
 import { restore } from "./auth";
 
 
@@ -62,7 +63,7 @@ export const bootstrap = payload => async dispatch => {
 
 export const retrieveProductsAsync = _ => async dispatch => {
     dispatch(processing(true))
-   
+    const client = await getLoginClient();
     try{
         const {data, status} = await client.get(`products/`);
         

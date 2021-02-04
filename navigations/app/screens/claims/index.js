@@ -3,7 +3,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import {CliamListView} from './list';
+import {NewClaim} from './new';
 
 
 
@@ -16,8 +16,8 @@ export default function ClaimNavigator({navigation}){
     return (
         <Navigator>
             <Screen 
-                component={CliamListView}
-                name="Claim-list"
+                component={NewClaim}
+                name="new"
                 options={{
                     headerShown: false,
                 }}

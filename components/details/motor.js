@@ -1,9 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { showMessage } from 'react-native-flash-message';
+import getLoginClient from '../../apiAuth/loggedInClient';
+import { restore } from '../../store/reducers/auth';
 import { Money } from '../money';
 
-export const MotorDetails = ({data}) => {
-    console.log(data)
+export const MotorDetails = ({pn}) => {
+
+    const [data, setData] = useState({});
+
+    const getPolicyDetail = async _ => {
+        const client = await getLoginClient()
+
+        try{
+            const {data,status} = await client.get(`policy/${pn}/`);
+            console.log(data)
+            if (status === 200 || status === 201){
+                setData(data);
+                return;
+            }
+            if(status === 401){
+                Alert.alert('Token Expired', 'Please login again to continue.')
+                dispatch(restore({user: null}));
+                return;
+            }
+            
+            
+            for (let item in data){
+                showMessage({
+                    type: 'danger',
+                    description: data[item],
+                    message: item,
+                    icon: 'auto',
+                    duration: 3000,
+                    hideStatusBar: true,
+                })
+            }
+            
+            return;
+        }
+        catch (err){
+            console.log(err)
+            showMessage({
+                type: 'danger',
+                message: "Something happened",
+                description: err.message,
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+    }
+
+    useEffect(() => {
+        getPolicyDetail();
+    }, [pn])
+    
     return (
         <View>
             <Text style={styles.bodyHeader}>Policy Information</Text>
@@ -29,7 +81,7 @@ export const MotorDetails = ({data}) => {
             </View>
             <View style={[styles.infoView]}>
                 <Text style={[styles.info1]}>Vehicle Class</Text>
-                <Text style={[styles.info]}> {data?.vehicle_model} </Text>
+                <Text style={[styles.info]}> {data?.vehicle_class} </Text>
             </View>
         </View>
         

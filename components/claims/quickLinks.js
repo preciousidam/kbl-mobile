@@ -13,7 +13,6 @@ export const ProductList = ({}) => {
         {icon: <Ionicons name='ios-car' color="#fff" size={35} />, name: 'Motor Third Party' },
         {icon: <Ionicons name='md-car' color="#fff" size={35} />, name: 'Motor Comp' },
         {icon: <Ionicons name='ios-home' color="#fff" size={35} />, name: 'Home' },
-        {icon: <Fontiso name='ship' color="#fff" size={35} />, name: 'Marine Cargo' },
     ]
     
     const {navigate} = useNavigation()
@@ -21,7 +20,7 @@ export const ProductList = ({}) => {
     const renderItems = ({item, index}) => (
         <CardSquare
             {...item}
-            onPress={_ => navigate('Overview', {id: item.id})}
+            onPress={_ => navigate('new_policy', { screen: 'new', params:{id: index}})}
         />);
 
     return(

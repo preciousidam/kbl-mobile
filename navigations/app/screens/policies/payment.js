@@ -12,6 +12,7 @@ import getLoginClient from '../../../../apiAuth/loggedInClient';
 import { showMessage } from 'react-native-flash-message';
 import { CardInputWithIcon } from '../../../../components/input/card';
 import { validateCard } from '../../../../utility';
+import { ActivityIndicator } from 'react-native';
 
 export const PaymentOptionView = ({navigation}) => {
     const {colors, dark} = useTheme();
@@ -35,7 +36,7 @@ export const PaymentOptionView = ({navigation}) => {
         setProcessing(true);
         let details = {
             user_id: user.pk, 
-            cardno: card_details.cNumber, 
+            cardno: card_details.cNumber.replace(/\s+/g, ''), 
             cvv: card_details.cvv, 
             pin: card_details.pin,
             expirymonth: card_details.valid_till.split('/')[0],
@@ -81,11 +82,11 @@ export const PaymentOptionView = ({navigation}) => {
         if (processing) return;
         setProcessing(true);
         let details = {
-            user_id: user.pk, 
+            user_id: user?.pk, 
             otp,
             policy_number: form?.policy_number,
             amount: form?.premium,
-            ref: rData.ref,
+            ref: rData?.ref,
         }
 
         if (otp === undefined) return;
@@ -97,8 +98,16 @@ export const PaymentOptionView = ({navigation}) => {
             if(data.code === '00'){
                 
                 setShowOTP(false);
-                setMsg(data.msg);
+                setMsg('');
                 setProcessing(false);
+                showMessage({
+                    type: 'success',
+                    description: data.msg,
+                    icon: 'auto',
+                    duration: 3000,
+                    hideStatusBar: true,
+                })
+                navigation.navigate('TabNav', {screen: 'Coverage'});
                 return
             }
         }

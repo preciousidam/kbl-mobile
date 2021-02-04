@@ -48,11 +48,11 @@ export const {login, logout, restore, processing} = authSlice.actions;
 export default authSlice.reducer;
 
 export const signIn = details => async dispatch => {
-    
+    console.log(details)
     try{ 
         dispatch(processing({loading: true}));
         const {data, status} = await client.post('auth/login/', {...details})
-        
+        console.log(data)
         
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify({access_token: data.access_token, refresh_token: data.refresh_token}));
@@ -63,7 +63,7 @@ export const signIn = details => async dispatch => {
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: {item},
+                message: '',
                 description: data[item],
                 icon: 'auto',
                 duration: 3000,

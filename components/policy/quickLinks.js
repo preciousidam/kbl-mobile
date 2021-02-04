@@ -6,22 +6,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontiso from 'react-native-vector-icons/Fontisto';
 
 import {CardSquare} from './cardSquare';
+import { useSelector } from 'react-redux';
 
 export const ProductList = ({}) => {
     const {colors} = useTheme();
-    const data = [
-        {icon: <Ionicons name='ios-car' color="#fff" size={35} />, name: 'Motor Third Party' },
-        {icon: <Ionicons name='md-car' color="#fff" size={35} />, name: 'Motor Comp' },
-        {icon: <Ionicons name='ios-home' color="#fff" size={35} />, name: 'Home' },
-        {icon: <Fontiso name='ship' color="#fff" size={35} />, name: 'Marine Cargo' },
-    ]
+    const {products} = useSelector(state => state.app);
+    
+    const data = products.map(({id,category, name, icon}) => ({id, name, category, icon: <Ionicons name={icon} color="#fff" size={35} />}))
+    
     
     const {navigate} = useNavigation()
     
     const renderItems = ({item, index}) => (
         <CardSquare
             {...item}
-            onPress={_ => navigate('Overview', {id: item.id})}
+            onPress={_ => navigate('new_policy', { screen: 'new', params:{pid: item?.id}})}
         />);
 
     return(

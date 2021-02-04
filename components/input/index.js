@@ -161,6 +161,56 @@ export const DateInput = ({style, contProps, inputStyle, onChangeText, value, ..
     )
 }
 
+export const TimeInput = ({style, contProps, inputStyle, onChangeText, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    console.log(value)
+    const [focused, setFocused] = useState(false);
+    useEffect(() => {
+        if(focused) setBorderColor(colors.secondary)
+        else setBorderColor('#c6c6c6');
+    }, [focused])
+
+    const [borderColor, setBorderColor] = useState('#c6c6c6')
+    const [show, setShow] = useState(false);
+
+    const onFocus = _ => {
+        setFocused(true);
+        setShow(true);
+    }
+    const onBlur = _ => {
+        setFocused(false);
+        setShow(false);
+    }
+
+    return (
+        <View 
+            {...contProps} 
+            style={{...styles.container, ...style, borderColor}}
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+            <TextInput 
+                onFocus={onFocus} 
+                onBlur={onBlur} 
+                value={moment(value).format('DD/MM/YYYY')}
+                style={{...styles.input, color: colors.text, ...inputStyle}} 
+                onChange={onChangeText}
+                blurOnSubmit={true}
+                {...rest} 
+            />
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={value}
+                    mode='time'
+                    display="default"
+                    onChange={onChangeText}
+                />
+            )}
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         width: '100%',

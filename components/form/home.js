@@ -41,14 +41,14 @@ export const HomeForm = ({}) => {
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
         >
             <Picker
-                prompt="Select car model"
+                prompt="Select Plan"
                 options={['Bronze', 'Silver', 'Gold']} 
                 style={{padding: 0, marginVertical: 10,}}
                 value={null}
                 onValueChange={(item,i) => console.log(item)}
             />
             <Picker
-                prompt="Select car model"
+                prompt="Select Building Type"
                 options={buildingType} 
                 style={{padding: 0, marginVertical: 10,}}
                 value={null}

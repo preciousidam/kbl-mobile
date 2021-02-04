@@ -7,23 +7,24 @@ import { Alert } from "react-native";
 import { restore } from "./auth";
 
 
-export const policySlice = createSlice({
-    name: 'policy',
+export const claimSlice = createSlice({
+    name: 'claim',
     initialState: {
-        policies: [],
-        form: {
-            'vehicle_model': 'Audi Q3(2020)',
-            'vehicle_class': 'Private Vehicle / Car'
-        },
+        claims: [],
+        form: {},
         processing: false,
         error: false,
+        formPage: {
+            total: 4,
+            page: 1
+        }
     },
     reducers: {
         all(state, action){
-            const policies = action.payload;
+            const claims = action.payload;
             return {
                 ...state,
-                policies,
+                claims,
                 processing: false,
                 error: false
             }
@@ -62,23 +63,19 @@ export const policySlice = createSlice({
     }
 });
 
-export const {edit, create, processing, error, selected, all} = policySlice.actions;
+export const {edit, create, processing, error, selected, all} = claimSlice.actions;
 
-export default policySlice.reducer;
+export default claimSlice.reducer;
 
-export const savePolicyAsync = (product, body, navigation) => async dispatch => {
+export const saveClaimAsync = (link,body) => async dispatch => {
     dispatch(processing(true))
     const formData = motorFormData(body);
     const client = await getLoginClient();
-    
     try{
-        const {data, status} = await client.post(product?.purchase_link, formData);
-        console.log(data)
+        const {data, status} = await client.post(link, formData);
+        
         if (status === 200 || status === 201){
             dispatch(create(data));
-            if (data){
-                navigation.navigate('summary');
-            }
             return;
         }
         await dispatch(error(true));
@@ -115,12 +112,12 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
     
 }
 
-export const retrievePolicyAsync = user => async dispatch => {
+export const retrieveClaimAsync = user => async dispatch => {
     dispatch(processing(true))
    
     const client = await getLoginClient();
     try{
-        const {data, status} = await client.get(`policies/${user}`);
+        const {data, status} = await client.get(`claims/${user}`);
         
         if (status === 200 || status === 201){
             dispatch(all(data));

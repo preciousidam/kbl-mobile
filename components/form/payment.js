@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {Text, View, Switch, StyleSheet, TouchableOpacity} from 'react-native';
-import {  CardInputWithIcon, CardNumberInputWithIcon } from '../input/card';
+import {  CardDateInputWithIcon, CardInputWithIcon, CardNumberInputWithIcon } from '../input/card';
 import { Ionicons } from '@expo/vector-icons';
 import { Money } from '../money';
 import { useState } from 'react';
@@ -38,7 +38,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                 <View style={styles.cvv}>
                     <View style={{flex: 1, marginRight: 5}}>
                         <Text style={styles.label}>Expiration Date</Text>
-                        <CardInputWithIcon 
+                        <CardDateInputWithIcon 
                             style={styles.input}
                             placeholder="12/23"
                             value={valid_till}
@@ -57,28 +57,33 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                         />
                     </View>
                 </View>
-               
-                <Text style={styles.label}>Card Pin</Text>
-                <CardInputWithIcon 
-                    style={styles.input}
-                    placeholder="0000"
-                    value={pin}
-                    onChangeText={({nativeEvent}) => setPin(nativeEvent.text)}
-                    keyboardType="numeric"
-                    
-                />
-                
-                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 15,}}>
-                    <Switch
-                        trackColor={{ false: "#767577", true: "#767577" }}
-                        thumbColor={isEnabled ? colors.success : "#f4f3f4"}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={_ => setIsEnabled(prev => !prev)}
-                        value={isEnabled}
-                    />
-                    <Text>
-                        {` Enable auto billing`}
-                    </Text>
+                <View style={styles.cvv}>
+                    <View style={{flex: 1, marginRight: 5}}>
+                        <Text style={styles.label}>Card Pin</Text>
+                        <CardInputWithIcon 
+                            style={styles.input}
+                            placeholder="0000"
+                            value={pin}
+                            onChangeText={({nativeEvent}) => setPin(nativeEvent.text)}
+                            keyboardType="numeric"
+                            
+                        />
+                    </View>
+
+                    <View style={{flex: 1, marginRight: 5}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 15,}}>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#767577" }}
+                                thumbColor={isEnabled ? colors.success : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={_ => setIsEnabled(prev => !prev)}
+                                value={isEnabled}
+                            />
+                            <Text>
+                                {` Enable auto billing`}
+                            </Text>
+                        </View>
+                    </View>
                 </View>
                 <Text style={{textAlign: 'center', marginVertical: 20, fontFamily: 'OpenSans_400Regular'}}>
                     By enable auto billing you will be charged 

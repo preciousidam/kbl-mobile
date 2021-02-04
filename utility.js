@@ -41,30 +41,38 @@ const validUri = image => {
 export const motorFormData = body => {
 	let formData = new FormData();
 
-    formData.append("back_image", 
-        {name: "one.jpg",
-        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: validUri(body.back_image),
-	});
+	if (body.back_image){
+		formData.append("back_image", 
+			{name: "one.jpg",
+			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+			uri: validUri(body.back_image),
+		});
+	}
 	
-    formData.append("front_image", 
-        {name: "one.jpg",
-        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: validUri(body.front_image)
-	})
+	if (body.front_image){
+		formData.append("front_image", 
+			{name: "one.jpg",
+			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+			uri: validUri(body.front_image)
+		})
+	}
 
-    formData.append("vehicle_license", 
-        {name: "one.jpg",
-        type: `image/jpeg`, 
-        extension: 'jpg', ext: 'jpg',
-        uri: validUri(body.vehicle_license)
-	})
+	if (body.vehicle_license){
+		formData.append("vehicle_license", 
+			{name: "one.jpg",
+			type: `image/jpeg`, 
+			extension: 'jpg', ext: 'jpg',
+			uri: validUri(body.vehicle_license)
+		})
+	}
 	
-    formData.append("proof_of_ownership", 
-        {name: "one.jpg",
-        type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-        uri: validUri(body.proof_of_ownership)
-    })
+	if (body.proof_of_ownership){
+		formData.append("proof_of_ownership", 
+			{name: "one.jpg",
+			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+			uri: validUri(body.proof_of_ownership)
+		})
+	}
     
     for ( let key in body ) {
         if (key != "back_image" && key != "proof_of_ownership" && key != "vehicle_license" && key != "front_image" )

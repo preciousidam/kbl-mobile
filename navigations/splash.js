@@ -21,8 +21,7 @@ export function SplashScreen({theme}){
     const setup = async () => {
         const user = await AsyncStorage.getItem('user');
         const app = await AsyncStorage.getItem('apps')
-        const tokens = await AsyncStorage.getItem('tokenData')
-        const {refresh_token} = await JSON.parse(tokens);
+       
 
         dispatch(bootstrap(JSON.parse(app)));
         dispatch(retrieveProductsAsync());

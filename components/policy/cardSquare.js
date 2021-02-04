@@ -5,7 +5,6 @@ import { useTheme } from '@react-navigation/native';
 
 export function CardSquare({icon, name, onPress}){
 
-    
     const {colors} = useTheme();
     
     return (
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'OpenSans_700Bold',
-        fontSize: 14,
+        fontSize: 11.5,
         color: '#fff',
     },
 });
