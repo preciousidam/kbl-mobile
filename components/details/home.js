@@ -71,7 +71,13 @@ export const HomeDetails = ({pn}) => {
                 <Text style={[styles.info1]}>Address</Text>
                 <Text style={[styles.info]}> {data?.address} </Text>
             </View>
-            
+            <Text style={[styles.info1]}>All Items</Text>
+            {data?.items && data?.items.map(({item,value}, index) => 
+                <View style={[styles.infoView]}>
+                    <Text style={[styles.info1]}>{item}</Text>
+                    <Money style={[styles.info]} amount={parseFloat(value).toFixed(2)} />
+                </View>
+            )}
         </View>
         
     )
