@@ -42,7 +42,7 @@ export const NewPolicy = ({ navigation,route}) => {
 
     const onNextClick = async _ => {
         const product = products.find(({id}) => id === selected)
-        dispatch(savePolicyAsync(product,{...form, user: user.pk}, navigation));
+        dispatch(savePolicyAsync(product,{...form, user: user.pk, product: product?.id}, navigation));
     }
 
     const onSelect = (item,i) => {

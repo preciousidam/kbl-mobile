@@ -5,6 +5,7 @@ import {Ionicons} from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 import { IDS, STATE } from '../../constants';
 import { OutlinedInput, OutlinedInputWithIcon } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
@@ -27,13 +28,13 @@ export const KYCIndividualForm = ({}) => {
                 <OutlinedInput
                     placeholder="Full Name"
                     style={styles.input}
-                    value={ kyc.name|| `${user.first_name} ${user.last_name}`}
+                    value={ kyc.name|| `${user?.first_name} ${user?.last_name}`}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, name: nativeEvent.text}))}
                 />
                 <OutlinedInput
                     placeholder="Email"
                     style={styles.input}
-                    value={kyc.email || user.email}
+                    value={kyc.email || user?.email}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, email: nativeEvent.text}))}
                     keyboardType="email-address"
                     textContentType="emailAddress"

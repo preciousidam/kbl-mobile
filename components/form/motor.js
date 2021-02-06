@@ -17,7 +17,7 @@ export const MotorForm = ({}) => {
     const {colors, dark} = useTheme();
     const [carMakes, setCarMakes] = useState([]);
     const {form} = useSelector(state => state.policies);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     
 
     const cars = async _ => {

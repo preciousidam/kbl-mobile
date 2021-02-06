@@ -78,6 +78,11 @@ export const retrieveProductsAsync = _ => async dispatch => {
             
             return;
         }
+
+        if(status === 500){
+            Alert.alert('Error', 'Please check your network')
+            return;
+        }
         
         
         for (let item in data){

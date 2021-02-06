@@ -5,6 +5,10 @@ import { useTheme } from '@react-navigation/native';
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { edit } from '../../store/reducers/policy';
+import { showMessage } from 'react-native-flash-message';
+
 
 const buildingType = ['Flat', 'Detached Bungalow', 'Detached Duplex', 
     'Terrace Bungalow', 'Detached Duplex', 'Semi-detached Duplex']
@@ -15,16 +19,23 @@ export const HomeForm = ({}) => {
     const {colors, dark} = useTheme();
 
     const [contents, setContents] = useState([{item: '', value: ''}])
+    const {form} = useSelector(state => state.policies);
+    const dispatch = useDispatch();
 
     const addMore = _ => {
-        const lastItem = contents[contents.length -1];
-        if(lastItem.item != '' && lastItem.value != '')
-            setContents(prev => [...prev, {item: '', value: ''}])
+        console.log(form)
+        if ('items' in form){
+            let length = Object.entries(form.items).length
+            console.log(length)
+            dispatch(edit({...form, items: {...form?.items, [length]: {item: '', value: ''}}}));
+            return
+        }
+        dispatch(edit({...form, items: {...form?.items, "0": {item: '', value: ''}}}));
         return
     }
 
     const onTextChange = (index, value, field) => {
-        console.log(value)
+        
         const edit = contents[index];
         edit[field] = value;
         let newItems = [];
@@ -44,28 +55,27 @@ export const HomeForm = ({}) => {
                 prompt="Select Plan"
                 options={['Bronze', 'Silver', 'Gold']} 
                 style={{padding: 0, marginVertical: 10,}}
-                value={null}
-                onValueChange={(item,i) => console.log(item)}
+                value={form.plan}
+                onValueChange={(item,i) => dispatch(edit({...form, plan: item}))}
             />
             <Picker
                 prompt="Select Building Type"
                 options={buildingType} 
                 style={{padding: 0, marginVertical: 10,}}
-                value={null}
-                onValueChange={(item,i) => console.log(item)}
+                value={form.building_type}
+                onValueChange={(item,i) => dispatch(edit({...form, building_type: item}))}
             />
             <OutlinedInput 
                 placeholder="Property Address"
                 style={styles.input}
+                value={form.address}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, address: nativeEvent.text}))}
             />
             <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15,}}>Contents</Text>
-            {contents.map(({item, value},index) => (
+            {form?.items && Object.entries(form.items).map((item,index) => (
                 <Items 
-                    key={item+index} 
+                    key={`item${index}`} 
                     index={index} 
-                    item={item} 
-                    value={value} 
-                    onItemChange={onTextChange}
                 />
             ))}
         </KeyboardAvoidingView>
@@ -82,6 +92,8 @@ export const HomeForm = ({}) => {
 export const Items = ({index, onItemChange}) => {
     const [item, setItem] = useState('');
     const [value, setValue] = useState('');
+    const {form} = useSelector(state => state.policies);
+    const dispatch = useDispatch();
     const onItemBlur = _ => onItemChange(index, item, 'item'); 
     const onValueBlur = _ => onItemChange(index, value, 'value'); 
 
@@ -90,16 +102,31 @@ export const Items = ({index, onItemChange}) => {
         <OutlinedInput
             placeholder="Item"
             style={styles.input}
-            value={item}
-            onChangeText={({nativeEvent}) => setItem(nativeEvent.text)}
-            onBlur={onItemBlur}
+            value={form?.items[index]?.item}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    items: { ...form.items, 
+                        [index]: {...form.items[index], 
+                            item: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
             placeholder="Item value"
             style={styles.input}
-            value={value}
-            onChangeText={({nativeEvent}) => setValue(nativeEvent.text)}
-            onBlur={onValueBlur}
+            value={form?.items[index]?.value}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    items: { ...form.items, 
+                        [index]: {...form.items[index], 
+                            value: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
+            keyboardType="numeric" 
         />
     </View>)
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Dimensions} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import moment from 'moment';
@@ -6,6 +6,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useDispatch, useSelector } from 'react-redux';
 import { Money } from '../money';
 import { retrievePolicyAsync } from '../../store/reducers/policy';
+import { isNewPolicy } from '../../utility';
+import { Modal } from 'react-native';
+import { Button } from 'react-native';
 
 
 export const PolicyList = ({}) => {
@@ -59,11 +62,13 @@ export const Empty = _  => {
     )
 }
 
-export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_active, index}) => {
+export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_active, last_modified, index}) => {
     const {colors, dark} = useTheme();
     const indicator = [ colors['danger'], colors['success'], colors['warning']]
     const expired = is_active ? 1 : 0;
-    
+    const isNew = isNewPolicy(last_modified)
+   
+
     const icn = expired == 0? <MaterialCommunityIcons name="shield-off" size={35} color={indicator[expired]} />:
         <MaterialCommunityIcons name="shield-check" size={35} color={indicator[expired]} />;
     return (
@@ -72,6 +77,7 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
                 <View style={styles.amount}>
                     {icon}
                     <Money style={styles.bold} amount={parseFloat(premium).toFixed(2)} />
+                    {is_active && isNew && <Text style={[styles.new, {backgroundColor: colors.warning}]}>New</Text>}
                 </View>
                 <View style={{marginVertical: 10,}}>
                     <Text style={styles.bold}>{policy_number}</Text>
@@ -115,5 +121,13 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 15,
         top: '50%'
-    }
+    },
+    new: {
+        padding: 5,
+        paddingVertical: 2,
+        fontFamily: 'Montserrat_700Bold',
+        fontSize: 11,
+        borderRadius: 5,
+        color: '#fff',
+    },
 });

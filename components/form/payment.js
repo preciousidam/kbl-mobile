@@ -24,7 +24,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                 <View>
                     <Text style={styles.header}>Checkout</Text>
                     <Text style={styles.subHeader}>With {platform}</Text>
-                    {msg != 0 && <Text style={styles.subHeader}>{msg}</Text>}
+                    {msg != 0 && <Text style={[styles.subHeader, {color: colors.danger}]}>{msg}</Text>}
                 </View>
                 <Text style={styles.label}>Card Number</Text>
                 <CardNumberInputWithIcon 
@@ -43,7 +43,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                             placeholder="12/23"
                             value={valid_till}
                             onChangeText={({nativeEvent}) => setValid_till(nativeEvent.text)}
-                            
+                            keyboardType="numeric" 
                         />
                     </View>
                     <View style={{flex: 1, marginLeft: 5}}>
@@ -65,8 +65,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                             placeholder="0000"
                             value={pin}
                             onChangeText={({nativeEvent}) => setPin(nativeEvent.text)}
-                            keyboardType="numeric"
-                            
+                            keyboardType="numeric" 
                         />
                     </View>
 

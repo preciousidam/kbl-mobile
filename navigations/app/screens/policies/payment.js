@@ -102,12 +102,13 @@ export const PaymentOptionView = ({navigation}) => {
                 setProcessing(false);
                 showMessage({
                     type: 'success',
-                    description: data.msg,
+                    message: data.msg,
+                    description: `Policy ${form?.policy_number} is now active`,
                     icon: 'auto',
-                    duration: 3000,
+                    duration: 5000,
                     hideStatusBar: true,
                 })
-                navigation.navigate('TabNav', {screen: 'Coverage'});
+                navigate('TabNav', {screen: 'Coverage'});
                 return
             }
         }
@@ -170,7 +171,7 @@ export const PaymentOptionView = ({navigation}) => {
             >
                 <View style={styles.form}>
                     <View style={{flex: 4, justifyContent: 'center'}}>
-                        <Text style={styles.subHeader}>{msg}</Text>
+                        <Text style={[styles.subHeader, {color: colors.danger}]}>{msg}</Text>
                         <CardInputWithIcon 
                             placeholder="000000"
                             onChangeText={({nativeEvent}) => setOtp(nativeEvent.text)}

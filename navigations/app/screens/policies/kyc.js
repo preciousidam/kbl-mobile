@@ -19,24 +19,13 @@ export const KYCForm = ({navigation}) => {
     const {kyc, processing, error} = useSelector(state => state.kyc);
     const {user} = useSelector(state => state.auth);
     useEffect(() => {
-        dispatch(fetchKYCAsync(user.email));
+        if (user)
+            dispatch(fetchKYCAsync(user?.email));
+
     },[]);
 
     const submit = _ => {
-       
         dispatch(saveKYCAsync(kyc));
-        if (error === false){
-            showMessage({
-                type: 'success',
-                message: "KYC updated",
-                description: "Your KYC has been updated successfully",
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })
-            navigation.navigate('summary')
-        }
-
     }
 
     return (
@@ -49,6 +38,7 @@ export const KYCForm = ({navigation}) => {
             <ScrollView>
                 <KYCIndividualForm />
             </ScrollView>
+            <ActInd status={processing} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )

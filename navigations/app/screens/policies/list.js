@@ -1,5 +1,5 @@
-import { useTheme } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import { useTheme, useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useCallback } from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActInd } from '../../../../components/activityIndicator';
@@ -18,7 +18,12 @@ export const PolicyListView = ({navigation}) => {
     
     useEffect(() => {
         dispatch(retrievePolicyAsync(user?.pk))
-    },[])
+    },[]);
+
+    useFocusEffect(useCallback(() => {
+        dispatch(retrievePolicyAsync(user?.pk))
+        return
+    }));
 
     return (
         <View style={{flex: 1}}>

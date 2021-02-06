@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import getLoginClient from '../../apiAuth/loggedInClient';
 //import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { motorFormData } from "../../utility";
+import { motorFormData, filterData } from "../../utility";
 import { Alert } from "react-native";
 import { restore } from "./auth";
 
@@ -12,8 +12,10 @@ export const policySlice = createSlice({
     initialState: {
         policies: [],
         form: {
-            'vehicle_model': 'Audi Q3(2020)',
-            'vehicle_class': 'Private Vehicle / Car'
+            vehicle_model: 'Audi Q3(2020)',
+            vehicle_class: 'Private Vehicle / Car',
+            plan: 'Bronze',
+            building_type: 'Flat',
         },
         processing: false,
         error: false,
@@ -68,11 +70,30 @@ export default policySlice.reducer;
 
 export const savePolicyAsync = (product, body, navigation) => async dispatch => {
     dispatch(processing(true))
-    const formData = motorFormData(body);
+    const filteredData = filterData(product.category, body)
+    let formdata;
     const client = await getLoginClient();
+
+    if (product.category === 'Motor'){
+        formdata = motorFormData(filteredData);
+    }
+    else if (product.category === 'Home'){
+        
+        let newItem = []
+        if ('items' in filteredData){
+            for(let [key,value] of Object.entries(filteredData.items)){
+                newItem.push(value)
+            }
+            filteredData.items = newItem;
+        }
+        formdata = JSON.stringify(filteredData);
+        client.defaults.headers.post['Content-Type'] = 'application/json';
+    }
+
+   
     
     try{
-        const {data, status} = await client.post(product?.purchase_link, formData);
+        const {data, status} = await client.post(product?.purchase_link, formdata);
         console.log(data)
         if (status === 200 || status === 201){
             dispatch(create(data));
@@ -87,12 +108,24 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
             dispatch(restore({user: null}));
             return;
         }
+
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
         
         
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: data[item],
+                message: item,
+                description: data[item],
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
@@ -106,7 +139,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
         showMessage({
             type: 'danger',
             message: "Something happened",
-            description: err.message,
+            description: "Please make sure all data are entered properly",
             icon: 'auto',
             duration: 3000,
             hideStatusBar: true,
@@ -133,6 +166,16 @@ export const retrievePolicyAsync = user => async dispatch => {
             return;
         }
         
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
         
         for (let item in data){
             showMessage({

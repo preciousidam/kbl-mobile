@@ -18,22 +18,13 @@ export const UpdateKYC = ({}) => {
     const {kyc, processing, error} = useSelector(state => state.kyc);
     const {user} = useSelector(state => state.auth);
     useEffect(() => {
-        dispatch(fetchKYCAsync(user.email));
+        dispatch(fetchKYCAsync(user?.email));
     },[]);
 
     const submit = _ => {
-       
-        dispatch(saveKYCAsync(kyc));
-        if (error === false){
-            showMessage({
-                type: 'success',
-                message: "KYC updated",
-                description: "Your KYC has been updated successfully",
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })
-        }
+        console.log(kyc)
+        dispatch(saveKYCAsync({...kyc, email: user?.email, name: `${user?.first_name} ${user?.last_name}`}));
+        
     }
 
     return (

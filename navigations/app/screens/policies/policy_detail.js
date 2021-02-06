@@ -6,8 +6,11 @@ import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { CommaFormatted } from '../../../../utility';
 import { Solidbutton, Outlinedbutton } from '../../../../components/button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MotorDetails } from '../../../../components/details/motor';
+import { HomeDetails } from '../../../../components/details/home';
+import { Alert } from 'react-native';
+import { edit } from '../../../../store/reducers/policy';
 
 const vInfo = {
     'Value': '5000000.00',
@@ -22,21 +25,39 @@ const vInfo = {
 export const PolicyDetails = ({navigation, route}) => {
     const {colors, dark} = useTheme();
     const {pn} = route?.params;
+    const dispatch = useDispatch();
     
     const policy = useSelector(state => state?.policies?.policies.find(({policy_number}) => policy_number == pn))
+
+    const product = useSelector(state => state.app?.products?.find(({id}) => id === policy?.product))
+
+    const renew = _ => {
+        if (policy.is_active)
+            Alert.alert('Renewal', 'Can not renew policy! policy still active')
+        else{
+            dispatch(edit({...policy}));
+            navigation.navigate('payOpt');
+        }
+        
+    }
 
     return (
         <View style={styles.container}>
             <Header navigation={navigation} data={policy} />
             <View style={[styles.body, {backgroundColor: colors.card}]}>
-                <MotorDetails pn={policy.policy_number} />
+                {product?.category === 'Motor'?
+                    <MotorDetails pn={policy.policy_number} />:
+                    <HomeDetails pn={policy.policy_number} />}
             </View>
             <View style={[styles.footer]}>
                 <View  style={{flex: 1, paddingRight: 5}}>
-                    <Solidbutton text="Certificate" />
+                    <Solidbutton 
+                        onPress={_ => Alert.alert('Certificate', 'Not Available for download yet')} 
+                        text="Certificate" 
+                    />
                 </View>
                 <View style={{flex: 1, paddingLeft: 5}}>
-                    <Outlinedbutton text="Renew" style={{width: '100%'}} textStyle={{color: colors.primary}} />
+                    <Outlinedbutton onPress={renew} text="Renew" style={{width: '100%'}} textStyle={{color: colors.primary}} />
                 </View>
             </View>
             <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />
