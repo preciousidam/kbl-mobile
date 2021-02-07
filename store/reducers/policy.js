@@ -69,6 +69,7 @@ export const {edit, create, processing, error, selected, all} = policySlice.acti
 export default policySlice.reducer;
 
 export const savePolicyAsync = (product, body, navigation) => async dispatch => {
+    console.log(body)
     dispatch(processing(true))
     const filteredData = filterData(product.category, body)
     let formdata;
@@ -139,7 +140,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
         showMessage({
             type: 'danger',
             message: "Something happened",
-            description: "Please make sure all data are entered properly",
+            description: err.message,
             icon: 'auto',
             duration: 3000,
             hideStatusBar: true,

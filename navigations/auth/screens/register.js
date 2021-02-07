@@ -4,11 +4,15 @@ import { View, StyleSheet, Image, KeyboardAvoidingView, Text, ScrollView, Modal,
 import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Solidbutton } from '../../../components/button';
-import { OutlinedInput, OutlinedInputWithIcon } from '../../../components/input';
+import { EmailOutlinedInputWithIcon, OutlinedInput, OutlinedInputWithIcon, PasswordOutlinedInputWithIcon } from '../../../components/input';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FocusAwareStatusBar from '../../../components/statusBar';
 import { signUp } from '../../../store/reducers/auth';
+import { isValidEmail, isValidPassword } from '../../../utility';
+import { showMessage } from 'react-native-flash-message';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 
 export const Register = ({navigation}) => {
@@ -24,7 +28,32 @@ export const Register = ({navigation}) => {
     const {isLoading} = useSelector(state => state.auth);
     
 
-    const onPress = _ => {
+    const onPress = async _ => {
+        
+        if (!isValidEmail(email)){
+            showMessage({
+                message: 'Invalid',
+                description: "Invalid Email",
+                duration: 3000,
+                hideStatusBar: false,
+                type: 'warning',
+                icon: 'warning',
+            })
+            return
+        }
+
+        if (!isValidPassword(password)){
+            showMessage({
+                message: 'Invalid',
+                description: "Password must contain atleast one digit and special character",
+                duration: 3000,
+                hideStatusBar: false,
+                type: 'warning',
+                icon: 'warning',
+            })
+            return
+        }
+        const token = await AsyncStorage.getItem('pushToken');
         dispatch(signUp({
             username: email,
             email: email.toLowerCase(),
@@ -32,6 +61,7 @@ export const Register = ({navigation}) => {
             phone, 
             last_name: fullname.split(' ')[0],
             first_name: fullname.split(' ')[1],
+            token,
         }));
     }
 
@@ -60,15 +90,12 @@ export const Register = ({navigation}) => {
                             textContentType="name"
                         />
 
-                        <OutlinedInputWithIcon 
+                        <EmailOutlinedInputWithIcon
                             icon={<MaterialIcons name="mail-outline" color={colors.primary} size={24} />}
-                            placeholder="Email"
                             contProps={styles.textInput}
                             value={email} 
                             onChangeText={({nativeEvent}) => setEmail(nativeEvent.text)}
                             style={styles.textInput}
-                            keyboardType="email-address"
-                            textContentType="emailAddress"
                         />
 
                         <OutlinedInputWithIcon 
@@ -82,15 +109,12 @@ export const Register = ({navigation}) => {
                             contProps={styles.textInput}
                         />
 
-                        <OutlinedInputWithIcon 
+                        <PasswordOutlinedInputWithIcon 
                             icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
-                            placeholder="Password"
                             contProps={styles.textInput}
                             value={password} 
                             onChangeText={({nativeEvent}) => setPassword(nativeEvent.text)}
                             style={styles.textInput}
-                            secureTextEntry={true}
-                            textContentType="newPassword"
                         />
                         
                         <Solidbutton

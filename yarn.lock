@@ -6687,6 +6687,13 @@ react-native-screens@~2.15.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.15.2.tgz#a449700e895b462937211ec72ed6f09652758f06"
   integrity sha512-CagNf2APXkVoRlF3Mugr264FbKbrBg9eXUkqhIPVeZB8EsdS8XPrnt99yj/pzmT+yJMBY0dGrjXT8+68WYh6YQ==
 
+react-native-sheets-bottom@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-sheets-bottom/-/react-native-sheets-bottom-1.2.0.tgz#ace62dcb2c129c04c8b3eea7cb4c4f6ddd7edf3f"
+  integrity sha512-/DohiCEzX17V9jamWhB3pZpLmYO1WrP6OP0aJu4IdzUWb/N06DTkBIxqmeMyfanpuWLi3l41v5mh5tTCFw1bmg==
+  dependencies:
+    lodash "^4.17.15"
+
 react-native-size-matters@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"

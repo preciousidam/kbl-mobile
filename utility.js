@@ -179,3 +179,17 @@ export const filterData = (category, body)=> {
 		return data
 	}
 }
+
+export const isValidEmail = email => {
+
+	let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	
+	return regEmail.test(email);
+}
+
+export const isValidPassword = password => {
+	
+	let regPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,15}$/
+	
+	return regPassword.test(password);
+}

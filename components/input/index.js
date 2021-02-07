@@ -39,6 +39,167 @@ export const OutlinedInput = ({style, contProps, inputStyle, onChangeText, value
     )
 }
 
+export const EmailOutlinedInput = ({style, contProps, inputStyle, onChangeText, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    
+    const [focused, setFocused] = useState(false);
+    const [valid, setValid] = useState(false);
+    useEffect(() => {
+        if(focused && valid) setBorderColor(colors.primary);
+        else if (focused && valid == false) setBorderColor(colors.danger);
+        else setBorderColor('#c6c6c6');
+    }, [focused, value])
+
+    const [borderColor, setBorderColor] = useState('#c6c6c6');
+    const validate = _ => {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (reg.test(value) === false) {
+            setValid(false);
+            return false;
+        }
+        else {
+            setValid(true);
+        }
+    }
+    useEffect(() => {
+        validate();
+    }, [value]);
+    
+
+    const onFocus = _ => setFocused(true);
+    
+    const onBlur = _ => setFocused(false);
+
+    return (
+        <View 
+            {...contProps} 
+            style={{...styles.container, ...style, borderColor}}
+        >   
+            <TextInput 
+                onFocus={onFocus} 
+                onBlur={onBlur} 
+                value={value} 
+                style={{...styles.input, color: colors.text, ...inputStyle}} 
+                onChange={onChangeText}
+                blurOnSubmit={true}
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                placeholder="Email"
+                {...rest} 
+            />
+        </View>
+    )
+}
+
+
+export const EmailOutlinedInputWithIcon = ({style, icon, contProps, inputStyle, onChangeText, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    const [focused, setFocused] = useState(false);
+    const [valid, setValid] = useState(false);
+    useEffect(() => {
+        if(focused && valid) setBorderColor(colors.success);
+        else if (focused && valid == false) setBorderColor(colors.danger);
+        else setBorderColor('#c6c6c6');
+    }, [focused, value])
+
+    const [borderColor, setBorderColor] = useState('#c6c6c6');
+
+    const validate = _ => {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (reg.test(value) === false) {
+            setValid(false);
+            return false;
+        }
+        else {
+            setValid(true);
+        }
+    }
+
+    useEffect(() => {
+        validate();
+    }, [value]);
+
+    const onFocus = _ => setFocused(true);
+    const onBlur = _ => setFocused(false);
+
+    return (
+        <View 
+            {...contProps} 
+            style={{...styles.container, ...style, borderColor, padding: 5,}}
+        >   
+            <View style={styles.icon}>{icon}</View>
+            <TextInput 
+                onFocus={onFocus} 
+                onBlur={onBlur} 
+                value={value} 
+                style={{...styles.input, color: colors.text, ...inputStyle}} 
+                onChange={onChangeText}
+                blurOnSubmit={true}
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                placeholder="Email"
+                {...rest} 
+            />
+        </View>
+    )
+}
+
+export const PasswordOutlinedInputWithIcon = ({style, icon, contProps, inputStyle, onChangeText, value, ...rest}) => {
+    
+    const {colors} = useTheme();
+    const [focused, setFocused] = useState(false);
+    const [valid, setValid] = useState(false);
+    useEffect(() => {
+        if(focused && valid) setBorderColor(colors.success);
+        else if (focused && valid == false) setBorderColor(colors.danger);
+        else setBorderColor('#c6c6c6');
+    }, [focused, value])
+
+    const [borderColor, setBorderColor] = useState('#c6c6c6');
+
+    const validate = _ => {
+        let reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,15}$/;
+        if (reg.test(value) === false) {
+            setValid(false);
+            return false;
+        }
+        else {
+            setValid(true);
+        }
+    }
+
+    useEffect(() => {
+        validate();
+    }, [value]);
+
+    const onFocus = _ => setFocused(true);
+    const onBlur = _ => setFocused(false);
+
+    return (
+        <View 
+            {...contProps} 
+            style={{...styles.container, ...style, borderColor, padding: 5,}}
+        >   
+            <View style={styles.icon}>{icon}</View>
+            <TextInput 
+                onFocus={onFocus} 
+                onBlur={onBlur} 
+                value={value} 
+                style={{...styles.input, color: colors.text, ...inputStyle}} 
+                onChange={onChangeText}
+                blurOnSubmit={true}
+                secureTextEntry={true}
+                textContentType="newPassword"
+                placeholder="Password"
+                {...rest} 
+            />
+        </View>
+    )
+}
+
+
 export const OutlinedInputWithIcon = ({style, icon, contProps, inputStyle, onChangeText, value, ...rest}) => {
     
     const {colors} = useTheme();

@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { createSlice } from "@reduxjs/toolkit";
 import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { isAvailableAsync, setItemAsync } from 'expo-secure-store';
 
 
 
@@ -53,25 +54,30 @@ export const signIn = details => async dispatch => {
     try{ 
         dispatch(processing({loading: true}));
         const {data, status} = await client.post('auth/login/', {...details})
-        
+        dispatch(processing({loading: false}));
         
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify({access_token: data.access_token, refresh_token: data.refresh_token}));
             dispatch(login({user: data.user}));
+            let secureStore = await isAvailableAsync();
+            if(secureStore){
+                setItemAsync('username',details.username);
+                setItemAsync('password',details.password);
+            }
             AsyncStorage.setItem('user', JSON.stringify(data.user))
             return
         }
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: '',
+                message: item.toUpperCase(),
                 description: data[item],
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,
             })
         }
-        dispatch(processing({loading: false}));
+        
         return
     }catch (err){
         console.log(err)
@@ -129,32 +135,49 @@ export const refreshToken = refresh => async dispatch => {
 }
 
 export const signUp = details => async dispatch => {
+    console.log(details)
     
     try{ 
         dispatch(processing({loading: true}));
+        const res = await fetch('http://192.168.43.98:8000/api/v1/users/', {
+            method: 'POST',
+            body: JSON.stringify(details),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+        const json = await res.json()
+        console.log('this',json)
         const {data, status} = await client.post('users/', {...details})
-       
+        dispatch(processing({loading: false}));
+        console.log(data)
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify(data));
             dispatch(signIn({email: data.email, password: details.password, username: data.email}));
             return
         }
-        for (let item in data){
-            showMessage({
-                type: 'danger',
-                message: {item},
-                description: data[item],
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })
+
+        if (status === 400){
+            for (let item in data){
+                showMessage({
+                    type: 'danger',
+                    message: item.toUpperCase(),
+                    description: data[item][0],
+                    icon: 'auto',
+                    duration: 3000,
+                    hideStatusBar: true,
+                })
+            }
         }
-        dispatch(processing({loading: false}));
+        if(status === 500) throw 'Someone happen please check back later or contact support'
+        
         return
     }catch (err){
         console.log(err)
         dispatch(processing({loading: false}));
         showMessage({
+            type: 'danger',
             message: "Something happened",
             description: err.message,
             icon: 'auto',

@@ -13,6 +13,7 @@ import {store} from './store';
 import MainNavigation from './navigations';
 import { StyleSheet, Text, View } from 'react-native';
 import { registerForPushNotificationsAsync } from './notification';
+import AsyncStorage from '@react-native-community/async-storage';
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -24,7 +25,7 @@ Notifications.setNotificationHandler({
 
 export default function App() {
 	const scheme = useColorScheme();
-	const [pushToken, setPushToken] = useState();
+
 	const [notification, setNotification] = useState({});
 
 	const rntheme = scheme === 'dark' ? DarkTheme: DefaultTheme ;
@@ -36,10 +37,12 @@ export default function App() {
 		...colors,
 		}
 	}
-
+	const registerNotification = async _ => {
+		const token = await registerForPushNotificationsAsync();
+		if (token) AsyncStorage.setItem('pushToken', token);
+	}
 	useEffect(() => {
-		let token = registerForPushNotificationsAsync();
-		setPushToken(token);
+		registerNotification();
 	}, [])
 
 	useEffect(() => {

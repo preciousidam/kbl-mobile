@@ -6,10 +6,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useDispatch, useSelector } from 'react-redux';
+import { isAvailableAsync, getItemAsync } from 'expo-secure-store';
 
 
 import { Solidbutton } from '../../../components/button';
-import { OutlinedInput, OutlinedInputWithIcon } from '../../../components/input';
+import { EmailOutlinedInputWithIcon, OutlinedInput, OutlinedInputWithIcon, PasswordOutlinedInputWithIcon } from '../../../components/input';
 import FocusAwareStatusBar from '../../../components/statusBar';
 import {signIn} from '../../../store/reducers/auth';
 
@@ -40,8 +41,15 @@ export const Login = ({navigation}) => {
                 disableDeviceFallback: true,
                 cancelLabel: 'Cancel'
             });
-            if(authenticated.success)
-                Alert.alert('Success','Login Successful')
+            if(authenticated.success){
+                const secureStore = await isAvailableAsync();
+                if (secureStore){
+                    let username = await getItemAsync('username');
+                    let password = await getItemAsync('password');
+                    dispatch(signIn({username,password}));
+                }
+                else Alert.alert('Error', 'This device does not support Biometric authentication');
+            }
             if (authenticated.error)
                 Alert.alert("Error",'Could not login in with fingerprint')
         }
@@ -68,26 +76,20 @@ export const Login = ({navigation}) => {
                         <View style={styles.header}>
                             <Image source={require('../../../assets/logo.png')} />
                         </View>
-                        <OutlinedInputWithIcon 
+                        <EmailOutlinedInputWithIcon
                             icon={<MaterialIcons name="mail-outline" color={colors.primary} size={24} />}
-                            placeholder="Email"
                             contProps={styles.textInput}
                             value={username} 
                             onChangeText={({nativeEvent}) => setUsername(nativeEvent.text)}
                             style={styles.textInput}
-                            keyboardType="email-address"
-                            textContentType="emailAddress"
                         />
 
-                        <OutlinedInputWithIcon 
+                        <PasswordOutlinedInputWithIcon
                             icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
-                            placeholder="Password"
                             contProps={styles.textInput}
                             value={password} 
                             onChangeText={({nativeEvent}) => setPassword(nativeEvent.text)}
-                            style={styles.textInput}
-                            secureTextEntry={true}
-                            textContentType="newPassword"
+                            style={styles.textInput} 
                         />
                         
                         <Solidbutton
