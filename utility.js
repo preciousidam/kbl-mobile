@@ -96,6 +96,28 @@ export const motorFormData = body => {
 	return formData;
 }
 
+export const motorClaimData = body => {
+	let formData = new FormData();
+
+	if (body?.witness_signature){
+		formData.append("back_image", 
+			{name: "one.jpg",
+			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
+			uri: validUri(body.witness_signature),
+		});
+	}
+	
+	
+    
+    for ( let key in body ) {
+        if (key != "witness_signature" && key != "injureds" )
+            formData.append(key, body[key]);
+	}
+	
+	return formData;
+}
+
+
 export const kycFormData = body => {
 	let formData = new FormData();
 	let signature;

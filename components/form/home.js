@@ -18,15 +18,13 @@ export const HomeForm = ({}) => {
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
 
-    const [contents, setContents] = useState([{item: '', value: ''}])
     const {form} = useSelector(state => state.policies);
     const dispatch = useDispatch();
 
     const addMore = _ => {
-        console.log(form)
         if ('items' in form){
             let length = Object.entries(form.items).length
-            console.log(length)
+            
             dispatch(edit({...form, items: {...form?.items, [length]: {item: '', value: ''}}}));
             return
         }
@@ -34,17 +32,6 @@ export const HomeForm = ({}) => {
         return
     }
 
-    const onTextChange = (index, value, field) => {
-        
-        const edit = contents[index];
-        edit[field] = value;
-        let newItems = [];
-        contents.forEach((x,i) => {
-            if(i == index) newItems.push(edit);
-            else newItems.push(x);
-        });
-        setContents(newItems);
-    }
 
     return (<View style={styles.form}>
         <KeyboardAvoidingView
@@ -90,12 +77,10 @@ export const HomeForm = ({}) => {
 }
 
 export const Items = ({index, onItemChange}) => {
-    const [item, setItem] = useState('');
-    const [value, setValue] = useState('');
+    
     const {form} = useSelector(state => state.policies);
     const dispatch = useDispatch();
-    const onItemBlur = _ => onItemChange(index, item, 'item'); 
-    const onValueBlur = _ => onItemChange(index, value, 'value'); 
+    
 
     return (<View>
         <Text style={{fontFamily: "OpenSans_400Regular"}}>Item #{index+1}</Text>

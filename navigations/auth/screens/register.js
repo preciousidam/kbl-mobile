@@ -179,10 +179,10 @@ const styles = StyleSheet.create({
     indicator: {
         width: 65,
         height: 65,
-        padding: 32,
+        padding: 5,
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 5,
+        borderRadius: 32,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

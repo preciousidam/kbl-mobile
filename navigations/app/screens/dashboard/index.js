@@ -12,6 +12,8 @@ import PolicyNavigator from '../policies';
 import ClaimNavigator from '../claims';
 import { PolicyListView } from '../policies/list';
 import { CliamListView } from '../claims/list';
+import { Help } from '../help';
+import SettingNavigator from '../profile';
 
 
 
@@ -82,17 +84,12 @@ export function HomeTabNavigation({navigation}){
             />
             <Screen
                 name="Profile"
-                component={Blank}
-            />
-            <Screen
-                name="More"
-                component={Blank}
+                component={SettingNavigator}
             />
         </Navigator>
     );
 }
 
-export const Blank = () => <View />
 
 export const MainNavigator = ({navigation}) => {
     const {colors} = useTheme();
@@ -118,6 +115,17 @@ export const MainNavigator = ({navigation}) => {
                 component={ClaimNavigator}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Screen
+                name="help"
+                component={Help}
+                options={{
+                    title: "Get In Touch",
+                    headerTitleStyle:{
+                        fontFamily: "Montserrat_700Bold",
+                        fontSize: 16,
+                    }
                 }}
             />
         </Navigator>

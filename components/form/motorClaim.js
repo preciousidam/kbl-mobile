@@ -8,37 +8,216 @@ import { useDispatch, useSelector } from 'react-redux';
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { carApi } from '../../apiAuth/carApi';
-import {edit} from '../../store/reducers/policy';
+import {edit} from '../../store/reducers/claims';
 import { OutlinedDatePicker, OutlinedTimePicker } from '../input/datepicker';
+import {ImageUploader} from './motor';
 
+const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
 
-export const MotorForm = ({policy}) => {
+export const Page1 = ({policy}) => {
     
-    const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
-    const {colors, dark} = useTheme();
-    const [carMakes, setCarMakes] = useState([]);
-    const {form} = useSelector(state => state.policies);
+    const {form} = useSelector(state => state.claims);
     const dispatch = useDispatch();
-    
-    const [injureds, setContents] = useState([{name: '', address: '', injury: '', is_pass: false, in_hos: false, hospital: false,}])
+
+    return (<View style={styles.form}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios'? "padding": "position"}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+        >
+            <OutlinedInput 
+                placeholder="Policy Number"
+                style={styles.input}
+                value={form.policy}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, policy: nativeEvent.text}))}
+            />
+            <Text style={styles.help}>Date of Accident</Text>
+            <OutlinedDatePicker
+                placeholder="YYYY-MM-DD"
+                style={styles.input}
+                value={form?.accident_date || new Date()}
+                onChangeText={value => dispatch(edit({...form, accident_date: value}))}
+            />
+            <Text style={styles.help}>Time of Accident</Text>
+            <OutlinedTimePicker
+                placeholder="YYYY-MM-DD"
+                style={styles.input}
+                value={form?.accident_time || new Date()}
+                onChangeText={value => dispatch(edit({...form, accident_time: value}))}
+            />
+            <OutlinedInput 
+                placeholder="Place of Accident"
+                style={styles.input}
+                value={form?.accident_place}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, accident_place: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="How did the loss occure?"
+                style={styles.input}
+                value={form?.desc}
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, desc: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Extent of direct damage"
+                style={styles.input}
+                value={form?.damage_desc}
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, damage_desc: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Estimated cost of repair"
+                style={styles.input}
+                value={form?.est_cost}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, est_cost: nativeEvent.text}))}
+                keyboardType="numeric"
+            />
+            <OutlinedInput 
+                placeholder="Police Report if any?"
+                style={styles.input}
+                value={form?.police_report}
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, police_report: nativeEvent.text}))}
+            />
+
+            <OutlinedInput 
+                placeholder="Detail of other insurance cover on the car"
+                style={styles.input}
+                value={form?.other_policy}
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, other_policy: nativeEvent.text}))}
+            />
+
+        </KeyboardAvoidingView>
+    </View>);
+}
+
+export const Page2 = ({}) => {
+   
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
+
+    return (<View style={styles.form}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios'? "padding": "position"}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+        >
+            <Text style={styles.help}>Driver Details</Text>
+            <OutlinedInput 
+                placeholder="Who was driving?"
+                style={styles.input}
+                value={form?.driver}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, driver: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="The driver's Phone number"
+                style={styles.input}
+                value={form?.driver_phone}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, driver_phone: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Driver's Licence number"
+                style={styles.input}
+                value={form?.driver_licence}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, driver_licence: nativeEvent.text}))}
+            />
+            <Text style={styles.help}>Date Issued</Text>
+            <OutlinedDatePicker
+                placeholder="YYYY-MM-DD"
+                style={styles.input}
+                value={form?.licence_date_issued || new Date()}
+                onChangeText={value => dispatch(edit({...form, licence_date_issued: value}))}
+            />
+            <Text style={styles.help}>Date of Expiry</Text>
+            <OutlinedDatePicker
+                placeholder="YYYY-MM-DD"
+                style={styles.input}
+                value={form?.licence_date_expired || new Date()}
+                onChangeText={value => dispatch(edit({...form, licence_date_expired: value}))}
+            />
+            <OutlinedInput 
+                placeholder="Were you present in vehicle?"
+                style={styles.input}
+                value={form?.present_in_vehicle}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, present_in_vehicle: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Where can we inspect the vehicle?"
+                style={styles.input}
+                value={form?.current_location}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, current_location: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Was the accident caused by third party?"
+                style={styles.input}
+                value={form?.cause_by_tp}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, cause_by_tp: nativeEvent.text}))}
+            />
+            
+        </KeyboardAvoidingView>
+    </View>);
+}
+
+export const Page3 = ({}) => {
+   
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
+
+    return (<View style={styles.form}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios'? "padding": "position"}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+        >
+            <Text style={styles.help}>If caused by third party (or skip).</Text>
+            <OutlinedInput 
+                placeholder="Third party Name"
+                style={styles.input}
+                value={form?.tp_name}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, tp_name: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Third party Phone"
+                style={styles.input}
+                value={form?.tp_phone}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, tp_phone: nativeEvent.text}))}
+            />
+            <OutlinedInput 
+                placeholder="Third party address"
+                style={styles.input}
+                value={form?.tp_address}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, tp_address: nativeEvent.text}))}
+            />
+            <Text style={styles.help}>Others.</Text>
+            <OutlinedInput 
+                placeholder="Damaged Property/livestock"
+                style={styles.input}
+                value={form?.damage_prop_live}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, damage_prop_live: nativeEvent.text}))}
+            />
+        </KeyboardAvoidingView>
+        
+    </View>);
+}
+
+export const Page4 = ({}) => {
+   
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
+    const {colors} = useTheme();
 
     const addMore = _ => {
-        const lastItem = contents[contents.length -1];
-        if(lastItem.item != '' && lastItem.value != '')
-            setContents(prev => [...prev, {item: '', value: ''}])
+        console.log(form)
+        if ('injureds' in form){
+            let length = Object.entries(form.injureds).length
+            
+            dispatch(edit({...form, injureds: {...form?.injureds, [length]: {name: '', address: '', injury: '', is_passenger: ''}}}));
+            return
+        }
+        dispatch(edit({...form, items: {...form?.items, "0": {name: '', address: '', injury: '', is_passenger: ''}}}));
         return
-    }
-
-    const onTextChange = (index, value, field) => {
-        console.log(value)
-        const edit = contents[index];
-        edit[field] = value;
-        let newItems = [];
-        contents.forEach((x,i) => {
-            if(i == index) newItems.push(edit);
-            else newItems.push(x);
-        });
-        setContents(newItems);
     }
 
     return (<View style={styles.form}>
@@ -46,251 +225,197 @@ export const MotorForm = ({policy}) => {
             behavior={Platform.OS === 'ios'? "padding": "position"}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
         >
-            <Picker
-                prompt="Select Policy"
-                options={[policy]} 
-                style={{padding: 0, marginVertical: 10,}}
-                value={policy}
-                onValueChange={(item,i) => dispatch(edit({...form, vehicle_model: item}))}
-            />
-            <Text style={styles.help}>Date of Accident</Text>
-            <OutlinedDatePicker
-                placeholder="YYYY-MM-DD"
-                style={styles.input}
-                value={new Date()}
-                onChangeText={value => console.log(value)}
-            />
-            <Text style={styles.help}>Time of Accident</Text>
-            <OutlinedTimePicker
-                placeholder="YYYY-MM-DD"
-                style={styles.input}
-                value={new Date()}
-                onChangeText={value => console.log(value)}
-            />
-            <OutlinedInput 
-                placeholder="Place of Accident"
-                style={styles.input}
-                value={form.registration_number}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, registration_number: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="How did the loss occure?"
-                style={styles.input}
-                value={form.engine_number}
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, engine_number: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Extent of direct damage"
-                style={styles.input}
-                value={form.chasis_number}
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, chasis_number: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Estimated cost of repair"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Policy Report if any?"
-                style={styles.input}
-                value={form.value}
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
 
-            <OutlinedInput 
-                placeholder="Detail of other insurance cover on the car"
-                style={styles.input}
-                value={form.value}
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <Text style={styles.help}>Driver Details</Text>
-            <OutlinedInput 
-                placeholder="Who was driving?"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="The driver's Phone number"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Driver's Licence number"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <Text style={styles.help}>Date Issued</Text>
-            <OutlinedDatePicker
-                placeholder="YYYY-MM-DD"
-                style={styles.input}
-                value={new Date()}
-                onChangeText={value => console.log(value)}
-            />
-            <Text style={styles.help}>Date of Expiry</Text>
-            <OutlinedDatePicker
-                placeholder="YYYY-MM-DD"
-                style={styles.input}
-                value={new Date()}
-                onChangeText={value => console.log(value)}
-            />
-            <OutlinedInput 
-                placeholder="Were you present in vehicle?"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Where can we inspect the vehicle?"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Was the accident caused by third party?"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <Text style={styles.help}>If caused by third party (or skip).</Text>
-            <OutlinedInput 
-                placeholder="Third party Name"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Third party Phone"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <OutlinedInput 
-                placeholder="Third party address"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
-            <Text style={styles.help}>Others.</Text>
-            <OutlinedInput 
-                placeholder="Damaged Property/livestock"
-                style={styles.input}
-                value={form.value}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
-            />
             <Text style={styles.help}>Injureds</Text>
-            {injureds.map(({name, value},index) => (
+            
+            {form?.injureds && Object.entries(form.injureds).map((item,index) => (
                 <Injured 
-                    key={name+index} 
+                    key={`injureds${index}`} 
                     index={index} 
-                    item={name} 
-                    value={value} 
-                    onItemChange={onTextChange}
                 />
             ))}
-            <TouchableOpacity onPress={addMore}>
+           
+            <TouchableOpacity onPress={addMore} >
                 <View>
                     <Text style={styles.add}><Ionicons name="ios-add-circle" color={colors.info} size={20} />  Add more</Text>
                 </View>
             </TouchableOpacity>
         </KeyboardAvoidingView>
-        <ImageUploader image={form.front_image} callback={image => dispatch(edit({...form, front_image: image}))} text="Upload front image of Vehicle" />
-        <ImageUploader image={form.back_image} callback={image => dispatch(edit({...form, back_image: image}))}  text="Upload back image of Vehicle" />
-        <ImageUploader image={form.vehicle_license} callback={image => dispatch(edit({...form, vehicle_license: image}))} text="Upload vehicle license"  />
-        <ImageUploader image={form.proof_of_ownership} callback={image => dispatch(edit({...form, proof_of_ownership: image}))} text="Upload Proof of ownership"  />
     </View>);
 }
 
-export const ImageUploader = ({image, callback, text}) => {
-    let openImagePickerAsync = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
-        if (permissionResult.granted === false) {
-          alert("Permission to access camera roll is required!");
-          return;
-        }
-    
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        
-        if (pickerResult.cancelled === true) {
-            return;
-        }
-        callback(pickerResult)
-    }
-    const {colors, dark} = useTheme();
-
+export const Witness = ({}) => {
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
+    const {colors} = useTheme();
     return (
-        <TouchableOpacity onPress={openImagePickerAsync}>
-            <View style={[styles.image, {borderColor: colors.primary}]} >
-                {image? 
-                    <Image source={{uri: image?.uri || image}} style={{width: 60, height: 60}} />
-                    :<Ionicons name="ios-images" color={colors.info} size={60} />}
-                <Text style={{fontFamily: 'OpenSans_400Regular'}}>{text}</Text>
-            </View>
-        </TouchableOpacity>
+        <View style={styles.form}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios'? "padding": "position"}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+            >
+                <Text style={styles.help}>Witness</Text>
+                <OutlinedInput 
+                    placeholder="Witness Name"
+                    style={styles.input}
+                    value={form?.witness_name}
+                    onChangeText={({nativeEvent}) => dispatch(edit({...form, witness_name: nativeEvent.text}))}
+                />
+                <OutlinedInput 
+                    placeholder="Witness address"
+                    style={styles.input}
+                    value={form?.witness_address}
+                    onChangeText={({nativeEvent}) => dispatch(edit({...form, witness_address: nativeEvent.text}))}
+                />
+                <OutlinedDatePicker
+                    placeholder="YYYY-MM-DD"
+                    style={styles.input}
+                    value={form?.witness_date || new Date()}
+                    onChangeText={value => dispatch(edit({...form, witness_date: value}))}
+                />
+                <ImageUploader image={form.witness_signature} callback={image => dispatch(edit({...form, witness_signature: image}))} text="Upload Signature"  />
+            </KeyboardAvoidingView>
+        </View>
+    )
+}
+export const SignOff = ({}) => {
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
+    const {colors} = useTheme();
+    return (
+        <View style={styles.form}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios'? "padding": "position"}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+            >
+                <Text style={styles.help}>Witness</Text>
+                <OutlinedInput 
+                    placeholder="Witness Name"
+                    style={styles.input}
+                    value={form.value}
+                    onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
+                />
+                <OutlinedInput 
+                    placeholder="Witness address"
+                    style={styles.input}
+                    value={form.value}
+                    onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
+                />
+                <OutlinedDatePicker
+                    placeholder="YYYY-MM-DD"
+                    style={styles.input}
+                    value={new Date()}
+                    onChangeText={value => console.log(value)}
+                />
+                <ImageUploader />
+            </KeyboardAvoidingView>
+        </View>
     )
 }
 
 export const Injured = ({index, onItemChange}) => {
-    const [item, setItem] = useState('');
-    const [value, setValue] = useState('');
-    const onItemBlur = _ => onItemChange(index, item, 'item'); 
-    const onValueBlur = _ => onItemChange(index, value, 'value'); 
+    const {form} = useSelector(state => state.claims);
+    const dispatch = useDispatch();
 
     return (<View>
         <Text style={{fontFamily: "OpenSans_400Regular", fontSize:11}}>Injured #{index+1}</Text>
         <OutlinedInput
             placeholder="Name"
             style={styles.input}
-            value={item}
-            onChangeText={({nativeEvent}) => setItem(nativeEvent.text)}
-            onBlur={onItemBlur}
+            value={form?.injureds[index]?.name}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            name: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
             placeholder="Phone"
             style={styles.input}
-            value={value}
-            onChangeText={({nativeEvent}) => setValue(nativeEvent.text)}
-            onBlur={onValueBlur}
+            value={form?.injureds[index]?.phone}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            phone: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
-            placeholder="address"
+            placeholder="Address"
             style={styles.input}
-            value={item}
-            onChangeText={({nativeEvent}) => setItem(nativeEvent.text)}
-            onBlur={onItemBlur}
+            value={form?.injureds[index]?.address}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            address: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
+        />
+        <OutlinedInput
+            placeholder="Injuries"
+            style={styles.input}
+            value={form?.injureds[index]?.injury}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            injury: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
             placeholder="Is a passenger?"
             style={styles.input}
-            value={value}
-            onChangeText={({nativeEvent}) => setValue(nativeEvent.text)}
-            onBlur={onValueBlur}
+            value={form?.injureds[index]?.is_passenger}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            is_passenger: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
             placeholder="Is in hospital?"
             style={styles.input}
-            value={value}
-            onChangeText={({nativeEvent}) => setValue(nativeEvent.text)}
-            onBlur={onValueBlur}
+            value={form?.injureds[index]?.in_hospital}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            in_hospital: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
         <OutlinedInput
             placeholder="Hospital details?"
             style={styles.input}
-            value={value}
-            onChangeText={({nativeEvent}) => setValue(nativeEvent.text)}
-            onBlur={onValueBlur}
+            value={form?.injureds[index]?.hospital_detail}
+            onChangeText={({nativeEvent}) => 
+                dispatch(edit({...form, 
+                    injureds: { ...form.injured, 
+                        [index]: {...form.injureds[index], 
+                            hospital_detail: nativeEvent.text}
+                        }
+                    }
+                ))
+            }
         />
     </View>)
 }

@@ -1,43 +1,35 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import React, { useState } from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import { WebView } from 'react-native-webview';
+import { ActInd } from '../../../../components/activityIndicator';
+import FocusAwareStatusBar from '../../../../components/statusBar';
 
 
-export const ProductList = ({}) => {
+export const Products = ({}) => {
+    const {colors, dark} = useTheme();
+    const [loading, setLoading] = useState(false);
 
+    const onLoad = syntheticEvent => {
+        const { nativeEvent } = syntheticEvent;
+        setLoading(nativeEvent.loading);
+    }
+   
     return (
-        <View>
+        <View style={styles.container}>
+            <WebView 
+                source={{ uri: 'https://kblinsurance.com/personal-insurance/' }} 
+                onLoadStart={onLoad}
+                onLoadEnd={onLoad}
+            />
+            <ActInd status={loading} />
+            <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content'} backgroundColor={colors.card} />
         </View>
     )
 }
 
-const Stack = createStackNavigator()
-export const KYCNavigation = ({navigation}) => {
-    const {Navigator, Screen} = Stack;
-    const {colors, dark} = useTheme();
-    return (
-        <Navigator>
-            <Screen
-                name="updateKYC"
-                component={UpdateKYC}
-                options={{
-                    title: "KYC Form",
-                    headerTitleStyle:{
-                        color: '#fff',
-                    },
-                    headerStyle: {
-                        backgroundColor: colors.primary,
-                    },
-                    headerLeft: ({color, size}) => {
-                        return (
-                            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                                <View style={{paddingLeft: 15}}>
-                                    <Ionicons name="ios-menu" color="#fff" size={30}  />
-                                </View>
-                            </TouchableOpacity>       
-                        )
-                    }
-                }}
-            />
-        </Navigator>
-    );
-}
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
+})

@@ -24,6 +24,7 @@ export const authSlice = createSlice({
             };
         },
         logout(state){
+            AsyncStorage.removeItem('user');
             return {...state, isSignOut: true, user: null};
         },
         restore(state, action){
@@ -48,11 +49,11 @@ export const {login, logout, restore, processing} = authSlice.actions;
 export default authSlice.reducer;
 
 export const signIn = details => async dispatch => {
-    console.log(details)
+    
     try{ 
         dispatch(processing({loading: true}));
         const {data, status} = await client.post('auth/login/', {...details})
-        console.log(data)
+        
         
         if (status === 201 || status === 200 ){
             await AsyncStorage.setItem('tokenData', JSON.stringify({access_token: data.access_token, refresh_token: data.refresh_token}));

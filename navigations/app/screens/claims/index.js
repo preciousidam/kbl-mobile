@@ -4,6 +4,8 @@ import {View, Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import {NewClaim} from './new';
+import { MotorClaim } from './motor';
+import { FireClaim } from './home';
 
 
 
@@ -19,10 +21,27 @@ export default function ClaimNavigator({navigation}){
                 component={NewClaim}
                 name="new"
                 options={{
+                    title: 'Select Policy',
+                    headerTitleStyle: {
+                        fontSize: 16,
+                        fontFamily: 'Montserrat_700Bold'
+                    }
+                }}
+            />
+            <Screen 
+                component={MotorClaim}
+                name="motor"
+                options={{
                     headerShown: false,
                 }}
             />
-            
+            <Screen 
+                component={FireClaim}
+                name="fire"
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Navigator>
     )
 }

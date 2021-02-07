@@ -4,7 +4,7 @@ import getLoginClient from '../../apiAuth/loggedInClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { motorFormData, filterData } from "../../utility";
 import { Alert } from "react-native";
-import { restore } from "./auth";
+import { logout, restore } from "./auth";
 
 
 export const policySlice = createSlice({
@@ -105,7 +105,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
         await dispatch(error(true));
         if(status === 401){
             Alert.alert('Token Expired', 'Please login again to continue.')
-            dispatch(restore({user: null}));
+            dispatch(logout());
             return;
         }
 
@@ -162,7 +162,7 @@ export const retrievePolicyAsync = user => async dispatch => {
         await dispatch(error(true));
         if(status === 401){
             Alert.alert('Token Expired', 'Please login again to continue.')
-            dispatch(restore({user: null}));
+            dispatch(logout());
             return;
         }
         

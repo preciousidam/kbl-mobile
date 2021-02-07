@@ -11,6 +11,7 @@ import {WithBadge} from '../../components/badge';
 import { MainNavigator } from './screens/dashboard';
 import { KYCNavigation } from './screens/kyc';
 import { BranchesRoute } from './screens/branches';
+import { Products } from './screens/products';
 
 
 const Drawer = createDrawerNavigator();
@@ -36,6 +37,14 @@ export const AppNavigator = ({}) => {
                 options={{
                     title: 'Update KYC',
                     drawerIcon: ({color, size}) => <AntDesign name="form" size={size} color={color} />
+                }}
+            />
+            <Screen
+                name="products"
+                component={Products}
+                options={{
+                    title: 'Products',
+                    drawerIcon: ({color, size}) => <AntDesign name="shoppingcart" size={size} color={color} />
                 }}
             />
             <Screen 

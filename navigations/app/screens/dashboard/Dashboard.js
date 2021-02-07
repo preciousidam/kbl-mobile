@@ -28,18 +28,19 @@ export const Dashboard = ({navigation}) => {
                     <Text style={[styles.headerText, {color: colors.text}]}>Quick Actions</Text>
                     <View style={styles.quickAct}>
                         <CardSquare 
-                            icon={<MaterialCommunityIcons name="file-document-box-plus-outline" size={35} color="#fff" />} 
+                            icon={<AntDesign name="form" size={28} color="#fff" />} 
                             name="Claims"
-                            onPress={_ => navigation.navigate('TabNav', { screen: 'Claims'})}
+                            onPress={_ => navigation.navigate("new_claim", { screen: 'new', params:{id: null}})}
                         />
                         <CardSquare 
-                            icon={<MaterialCommunityIcons name="shield-home" size={35} color="#fff" />} 
+                            icon={<MaterialCommunityIcons name="shield-home" size={28} color="#fff" />} 
                             name="Policies"
-                            onPress={_ => navigation.navigate('TabNav', { screen: 'Coverage'})}
+                            onPress={_ => navigation.navigate("new_policy", { screen: 'new', params:{id: null}})}
                         />
                         <CardSquare 
-                            icon={<AntDesign name="customerservice" size={35} color="#fff" />} 
-                            name="Help" 
+                            icon={<AntDesign name="customerservice" size={28} color="#fff" />} 
+                            name="Help"
+                            onPress={_ => navigation.navigate("help")}
                         />
                         
                     </View>

@@ -4,13 +4,18 @@ import {View, Alert, StyleSheet} from 'react-native';
 import {Avatar, Text} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {logout} from '../../store/reducers/auth';
 //import { Picker } from '@react-native-community/picker';
 
 export default function DrawerCustom(props){
     const {colors} = useTheme();
-    const {user} = useSelector(state => state.auth)
+    const {user} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     //const {Item} = Picker;
+    const signOut = _ => {
+        dispatch(logout());
+    }
     
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={{height: '100%'}}>
@@ -29,7 +34,10 @@ export default function DrawerCustom(props){
                 </View>
             </View>
             <DrawerItemList {...props} />
-            
+            <View style={[styles.bottom,{bottom: 40}]}>
+                <Text onPress={signOut} style={{color: '#8d8d8d'}}>Logout</Text>
+                
+            </View>
             <View style={styles.bottom}>
                 <Text style={{color: '#8d8d8d'}}>Version 0.0.1</Text>
             </View>

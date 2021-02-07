@@ -2,12 +2,14 @@ import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
 import { useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
 import List from '../../../../components/policy';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import ReadNotificationScreen from './read';
+import { TouchableOpacity } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +21,16 @@ export default function NotificationNavigator({navigation}){
                 component={NotificationScreen}
                 name="Notifications"
                 options={{
-                    title: 'Notifications'
+                    title: 'Notifications',
+                    headerLeft: () => {
+                        return (
+                            <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
+                                <View style={{marginHorizontal: 15,}}>
+                                    <Ionicons name='ios-menu' size={30} color="#000" />
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    }
                 }}
             />
             <Screen 

@@ -15,11 +15,17 @@ export const Header = ({name, onNotClick}) => {
     const notification = count > 0;
     const {top, bottom} = useSafeAreaInsets();
     const paddingTop = Platform.OS == 'ios' ? top : 10;
+    const navigation = useNavigation();
     
 
     return (
         <View style={[styles.header,{paddingTop}]}>
             <View style={styles.headerprofile}>
+                <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
+                    <View style={styles.more}>
+                        <Ionicons name='ios-menu' size={30} color="#000" />
+                    </View>
+                </TouchableOpacity>
                 <Text style={styles.h4}>{name}</Text>
             </View>
             <TouchableOpacity onPress={onNotClick}>
@@ -52,17 +58,18 @@ export const ActionHeader = ({name, onPress}) => {
     )
 }
 
-export const FormHeader = ({name, onPress, Icon}) => {
+export const FormHeader = ({name, onPress, Icon, onBackPress}) => {
     const {colors} = useTheme();
     const {top, bottom} = useSafeAreaInsets();
     const paddingTop = Platform.OS == 'ios' ? top : 10;
     const {goBack} = useNavigation()
     
 
+
     return (
         <View style={[styles.header,{paddingTop, backgroundColor: colors.card, elevation: 2}]}>
             <View style={styles.headerprofile}>
-                <TouchableOpacity onPress={_ => goBack()} activeOpacity={.8}>
+                <TouchableOpacity onPress={onBackPress? _ => onBackPress(): _ => goBack()} activeOpacity={.8}>
                     <View style={{height: 50, justifyContent: "center", alignItems: 'center', paddingRight: 30}}>
                         <Ionicons name="ios-arrow-back" size={24} color="black" />
                     </View>
@@ -133,6 +140,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginHorizontal: 10,
         fontFamily: 'OpenSans_700Bold'
+    },
+    more: {
+        marginRight: 10,
     }
 
 });

@@ -179,15 +179,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     indicator: {
-        width: 100,
-        height: 100,
+        width: 65,
+        height: 65,
         padding: 5,
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 5,
+        borderRadius: 32,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        elevation: 5,
+        shadowColor: 'rgba(0,0,0,.3)'
     },
 })

@@ -1,22 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import getLoginClient from '../../apiAuth/loggedInClient';
+import moment from 'moment';
 //import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { motorFormData } from "../../utility";
+import { motorClaimData, motorFormData } from "../../utility";
 import { Alert } from "react-native";
-import { restore } from "./auth";
+import { logout, restore } from "./auth";
 
 
 export const claimSlice = createSlice({
     name: 'claim',
     initialState: {
         claims: [],
-        form: {},
+        form: {
+            accident_date: moment(new Date()).format('YYYY-MM-DD'),
+            accident_time: moment(new Date()).format('YYYY-MM-DD'),
+            witness_date: moment(new Date()).format('YYYY-MM-DD'),
+            licence_date_issued: moment(new Date()).format('YYYY-MM-DD'),
+            licence_date_expired: moment(new Date()).format('YYYY-MM-DD'),
+            injureds: {'0':{}}
+        },
         processing: false,
         error: false,
         formPage: {
             total: 4,
-            page: 1
+            page: 0
         }
     },
     reducers: {
@@ -59,17 +67,29 @@ export const claimSlice = createSlice({
                 error, 
                 processing: false,
             }
+        },
+        next(state, action){
+            const next = action.payload;
+            if (next > 4 || next < 0)
+                return {...state}
+
+            return {
+                ...state,
+                formPage: {total: 4, page: next}
+            }
         }
+
     }
 });
 
-export const {edit, create, processing, error, selected, all} = claimSlice.actions;
+export const {edit, create, processing, error, selected, all, next} = claimSlice.actions;
 
 export default claimSlice.reducer;
 
 export const saveClaimAsync = (link,body) => async dispatch => {
     dispatch(processing(true))
-    const formData = motorFormData(body);
+    const formData = motorClaimData(body);
+    console.log(formData)
     const client = await getLoginClient();
     try{
         const {data, status} = await client.post(link, formData);
@@ -81,10 +101,20 @@ export const saveClaimAsync = (link,body) => async dispatch => {
         await dispatch(error(true));
         if(status === 401){
             Alert.alert('Token Expired', 'Please login again to continue.')
-            dispatch(restore({user: null}));
+            dispatch(logout());
             return;
         }
         
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
         
         for (let item in data){
             showMessage({
@@ -126,7 +156,18 @@ export const retrieveClaimAsync = user => async dispatch => {
         await dispatch(error(true));
         if(status === 401){
             Alert.alert('Token Expired', 'Please login again to continue.')
-            dispatch(restore({user: null}));
+            dispatch(logout());
+            return;
+        }
+
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
             return;
         }
         

@@ -1,76 +1,62 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import {Text, StyleSheet, View, ScrollView, Platform, Modal} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
-
-import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
-import { MotorForm } from '../../../../components/form/motorClaim';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { retrievePolicyAsync } from '../../../../store/reducers/policy';
-import { Form } from '../../../../components/form/fireClaim';
-
-const products = [
-    {name: 'Motor third party', Form: () => <MotorForm />,},
-    {name: 'Home Xtra Tenant’s Plan', Form: () => <Form />,},
-]
+import { Button } from 'react-native';
 
 
 export const NewClaim = ({ navigation,route}) => {
-    const {id} = route?.params;
-    const [policy, setPolicy] = useState(null);
-    const [active, setActive] = useState([]);
     
     const {colors, dark} = useTheme();
-    const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
     const {user} = useSelector(state => state.auth);
-    const {policies} = useSelector(state => state.policies);
+    const policies = useSelector(state => state.policies.policies.filter(x => x.is_active == true));
+    const {products} = useSelector(state => state.app);
     const dispatch  = useDispatch();
 
     useEffect(() => {
         dispatch(retrievePolicyAsync(user?.pk));
     },[]);
 
-    useEffect(() => {
-        setActive(policies.filter(x => x.is_active == true));
-    }, [policies])
+    const category = {'Home': 'fire', 'Motor': 'motor'}
 
-    const onRequestClose = _ => navigation.goBack();
+    const onPress = pNumber => {
+        let p = policies.find(({policy_number}) => pNumber === policy_number);
+        const {category: cat} = products.find(({id}) => id === p.product);
+        let path = category[cat]
+        navigation.navigate(path, {pn: pNumber});
+    }
 
+
+    if (policies.length <= 0){
+        return (
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{marginVertical: 15, fontFamily: 'OpenSans_700Bold'}}>No Active Policy</Text>
+                <Button 
+                    title="Get Insurance" 
+                    onPress={_ => navigation.navigate('new_policy', { screen: 'new', params:{id: null}})} 
+                />
+            </View>
+        )
+    }
 
     return (
         <View style={{flex: 1, backgroundColor: colors.card}}>
-            <FormHeader 
-                name="New Application" 
-                Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />}
-                onPress={_ => navigation.navigate('confirmKYC')}
-            />
             <ScrollView>
                 <View style={styles.form}>
-                    <MotorForm policy={policy} />
-                </View>
-            </ScrollView>
-            <Modal
-                visible={policy === null}
-                transparent={false}
-                onRequestClose={onRequestClose}
-                presentationStyle="overFullScreen"
-            >
-                <View>
-                    <View style={styles.opt}>
-                        <Text style={styles.mHeader}>Select Policy</Text>
-                    </View>
-                    {active?<ScrollView>
-                    {policies.filter(x => x.is_active == true).map(policy => 
-                        <Text key={policy?.policy_number} style={styles.tButton} onPress={_ => setPolicy(policy?.policy_number)}>
-                            {policy?.policy_number}
+                    {policies.map(policy => 
+                        <Text 
+                            key={policy?.policy_number} 
+                            style={styles.tButton} 
+                            onPress={_ => onPress(policy?.policy_number)}
+                        >
+                            {policy?.policy_number} - <Text style={{color: colors.success}}>Active</Text>
                         </Text>
                     )}
-                    </ScrollView>: <Text>You dont have an active policy</Text>}
                 </View>
-            </Modal>
+            </ScrollView>
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )
@@ -97,9 +83,9 @@ const styles = StyleSheet.create({
     },
     tButton: {
         paddingHorizontal: 15,
-        paddingVertical: 10,
+        paddingVertical: 15,
         fontFamily: 'OpenSans_700Bold',
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(0,0,0,.3)'
-    }
+    },
 });
