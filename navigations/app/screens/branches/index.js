@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { Ionicons, Foundation } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SearchInput } from '../../../../components/input';
 import FocusAwareStatusBar from '../../../../components/statusBar';
+import SwipeablePanel from 'react-native-sheets-bottom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Linking } from 'react-native';
+import { retrieveBranchAsync } from '../../../../store/reducers/app';
 
 const Stack = createStackNavigator();
 
-export const BranchesRoute = ({}) => {
+export const BranchesRoute = ({navigation}) => {
     const {Navigator, Screen} = Stack;
 
     return (
@@ -20,6 +25,15 @@ export const BranchesRoute = ({}) => {
                     title: 'Branches',
                     headerTitleStyle: {
                         fontSize: 18,
+                    },
+                    headerLeft: () => {
+                        return (
+                            <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
+                                <View style={{marginHorizontal: 15,}}>
+                                    <Ionicons name='ios-menu' size={30} color="#000" />
+                                </View>
+                            </TouchableOpacity>
+                        )
                     }
                 }}
             />
@@ -29,10 +43,33 @@ export const BranchesRoute = ({}) => {
 
 export const Branches = ({}) => {
     const {colors, dark} = useTheme();
+    const [activePanel, setActivePanel] = useState(false);
+    const {branchs} = useSelector(state => state.app);
+    const dispatch = useDispatch();
+    const [filtered, setFiltered] = useState('');
+    const [search, setSearch] = useState('');
+
+    const openPanel = () => setActivePanel(true);
+    
+    const closePanel = () => setActivePanel(false);
+
+    useEffect(() => {
+        dispatch(retrieveBranchAsync());
+        openPanel();
+    }, []);
+
+    useEffect(() => {
+        if (search === '') setFiltered(undefined)
+        else {
+            setFiltered(branchs.filter(({region}) => region.toLowerCase() == search.toLowerCase()))
+        }
+    }, [search])
+
     return (
         <View style={styles.container}>
             <MapView 
                 style={styles.map}
+                showsUserLocation={true}
                 initialRegion={{
                     latitude: 6.45407,
                     longitude: 3.39467,
@@ -40,23 +77,58 @@ export const Branches = ({}) => {
                     longitudeDelta: 0.0421,
                 }}
             />
-            <View style={[styles.bottom, {backgroundColor: colors.card}]}>
-                <Text>Bottom Part</Text>
-            </View>
-            <Header />
+            <SwipeablePanel
+                fullWidth
+                isActive={activePanel}
+                onClose={closePanel}
+                onPressCloseButton={closePanel}
+            >
+               <PanelContent branchs={filtered||branchs} />
+            </SwipeablePanel>
+            <Header value={search} onChange={text => setSearch(text)} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )
 }
 
-export const Header = ({}) => {
+export const PanelContent = ({branchs}) => {
+    const {colors} = useTheme()
+    return (
+        <View style={styles.bottom}>
+            {branchs.map(({region, address, tel_one, tel_two}) => (
+                <View>
+                    <Text style={styles.region}>{region.toUpperCase()} BRANCH</Text>
+                    <View style={styles.shared}>
+                        <View style={styles.fst}><Ionicons name="location-sharp" size={30} color={colors.success} /></View>
+                        <View style={styles.snd}>
+                            <Text style={styles.text}>{address}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.shared}>
+                        <View style={styles.fst}><Foundation name="telephone" size={30} color={colors.success} /></View>
+                        <View style={styles.snd}>
+                            <Text onPress={_ => Linking.openURL(`tel:${tel_one}`)} style={[styles.text, {marginRight: 15}]}>{tel_one}</Text>
+                            {tel_two && <Text onPress={_ => Linking.openURL(`tel:${tel_two}`)} style={[styles.text]}>{tel_two}</Text>}
+                        </View>
+                    </View>
+                </View>
+            ))}
+        </View>
+    )
+}
+
+
+
+export const Header = ({value, onChange}) => {
     const {colors, dark} = useTheme();
     return (
         <View style={[styles.header, {backgroundColor: colors.card}]}>
 
             <SearchInput 
-                placeholder="Search branches by location"
+                placeholder="Search e.g (Aba or Abuja, Owerri)"
                 style={styles.search}
+                value={value}
+                onChangeText={onChange}
             />
         </View>
     )
@@ -74,15 +146,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
     },
     bottom: {
-        minHeight: 100,
-        width: Dimensions.get('window').width,
-        elevation: 2,
-        shadowOpacity: .5,
-        borderTopStartRadius: 20,
-        borderTopEndRadius: 20,
         padding: 15,
-        position: 'absolute',
-        bottom: 0,
     },
     header: {
         position: 'absolute',
@@ -93,5 +157,28 @@ const styles = StyleSheet.create({
     },
     search: {
         paddingVertical: 5,
+    },
+    shared:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    fst: {
+        flex: 1,
+    },
+    snd: {
+        flex: 7,
+        flexDirection: 'row'
+    },
+    text: {
+        fontFamily: 'OpenSans_400Regular',
+        color: '#000'
+    },
+    region: {
+        fontFamily: 'Montserrat_700Bold',
+        color: '#000',
+        fontSize: 15,
+        marginBottom: 15,
     }
 });

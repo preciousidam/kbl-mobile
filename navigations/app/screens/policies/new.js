@@ -1,17 +1,15 @@
-import { useTheme } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import { useFocusEffect, useTheme } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
 import {Text, StyleSheet, View, ScrollView, Platform, Modal, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
 import { useDispatch, useSelector } from 'react-redux';
-import {edit, savePolicyAsync, selected} from '../../../../store/reducers/policy'
+import {edit, savePolicyAsync, reset} from '../../../../store/reducers/policy'
 
 import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { MotorForm } from '../../../../components/form/motor';
 import {HomeForm } from '../../../../components/form/home';
-import { PassengerForm } from '../../../../components/form/passenger';
-import { MarineForm } from '../../../../components/form/marine';
 import { ActInd } from '../../../../components/activityIndicator';
 
 
@@ -20,6 +18,7 @@ const forms = {Motor: <MotorForm />, Home: <HomeForm />,}
 const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
 
 export const NewPolicy = ({ navigation,route}) => {
+
     
     const {products} = useSelector(state => state.app)
     const {pid} = route?.params;
@@ -28,21 +27,33 @@ export const NewPolicy = ({ navigation,route}) => {
     
     const [selected, setSelected] = useState(pid||products[0]?.id);
     const [Form, setForm] = useState();
+    const dispatch = useDispatch();
     
 
     useEffect(() => {
-        
         const category = products.find(({id}) => id === selected)?.category
         setForm(forms[category]);
     }, [selected]);
 
+    
+
+    const totalValue = _ => {
+        let val = 0;
+        for (let item in form.items){
+            val += parseFloat(form?.items[item]?.value)
+        }
+        return val;
+    }
+
+
     const {form, processing} = useSelector(state => state.policies);
     const {user}  = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    
 
     const onNextClick = async _ => {
         const product = products.find(({id}) => id === selected)
-        dispatch(savePolicyAsync(product,{...form, user: user.pk, product: product?.id}, navigation));
+        const value = product?.category == 'Home' ? totalValue() : form.value;
+        dispatch(savePolicyAsync(product,{...form, user: user.pk, product: product?.id, value}, navigation));
     }
 
     const onSelect = (item,i) => {

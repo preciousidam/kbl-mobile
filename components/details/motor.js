@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import { showMessage } from 'react-native-flash-message';
@@ -8,6 +9,7 @@ import { Money } from '../money';
 export const MotorDetails = ({pn}) => {
 
     const [data, setData] = useState({});
+    const {colors} = useTheme();
 
     const getPolicyDetail = async _ => {
         const client = await getLoginClient()
@@ -58,6 +60,10 @@ export const MotorDetails = ({pn}) => {
     
     return (
         <View>
+            {!data?.is_active && <Text style={[styles.error,{color: colors.danger}]}>
+                * {data?.valid_till == null?'This policy is inactive as you did not complete payment. click payment button to activate.':
+                    "This policy has expired. click renew button to activate."}
+            </Text>}
             <Text style={styles.bodyHeader}>Policy Information</Text>
             <View style={[styles.infoView]}>
                 <Text style={[styles.info1]}>Vehicle Value</Text>
@@ -101,5 +107,10 @@ const styles = StyleSheet.create({
     },
     info: {
         fontFamily: 'OpenSans_400Regular',
+    },
+    error: {
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 11,
+        marginVertical: 15
     }
 });

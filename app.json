@@ -20,7 +20,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page.",
+        "NSLocationWhenInUseUsageDescription": "This app needs to access location to show current location on map"
       }
     },
     "android": {

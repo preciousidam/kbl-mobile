@@ -135,20 +135,10 @@ export const refreshToken = refresh => async dispatch => {
 }
 
 export const signUp = details => async dispatch => {
-    console.log(details)
     
     try{ 
         dispatch(processing({loading: true}));
-        const res = await fetch('http://192.168.43.98:8000/api/v1/users/', {
-            method: 'POST',
-            body: JSON.stringify(details),
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
-        });
-        const json = await res.json()
-        console.log('this',json)
+        
         const {data, status} = await client.post('users/', {...details})
         dispatch(processing({loading: false}));
         console.log(data)

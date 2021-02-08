@@ -45,11 +45,13 @@ export const MotorForm = ({}) => {
             />
             <Picker
                 prompt="Vehicle Class"
-                options={['Vehicle Class', 'Commercial', 'Company, Taxi, Car Hire', 
+                options={['Buses, Omnibus','Commercial', 
+                            'Company, Taxi, Car Hire',
+                            'Motorcycle/Tricycle',
+                            'Private Vehicle / Car',
                             'Stage Carriage 8 - 15 persons',
                             'Stage Carriage over 15 persons',
-                            'Buses, Omnibus', 'Motorcycle/Tricycle',
-                            'Tractor & Equipment', 'Private Vehicle / Car',
+                            'Tractor & Equipment', 
                         ]} 
                 style={{padding: 0, marginVertical: 10,}}
                 value={form.vehicle_class||'Vehicle Class'}
@@ -59,7 +61,7 @@ export const MotorForm = ({}) => {
                 placeholder="Vehicle Reg No."
                 style={styles.input}
                 value={form.registration_number}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, registration_number: nativeEvent.text}))}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, registration_number: nativeEvent.text.replace(/\s+/g, '').replace('-','')}))}
             />
             <OutlinedInput 
                 placeholder="Engine No."
@@ -71,13 +73,14 @@ export const MotorForm = ({}) => {
                 placeholder="Chasis No."
                 style={styles.input}
                 value={form.chasis_number}
-                onChangeText={({nativeEvent}) => dispatch(edit({...form, chasis_number: nativeEvent.text}))}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, chasis_number: nativeEvent.text.replace("I", '').replace('O','').replace("i", '').replace('o','')}))}
             />
             <OutlinedInput 
                 placeholder="Vehicle value"
                 style={styles.input}
                 value={form.value}
                 onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
+                keyboardType="numeric"
             />
         </KeyboardAvoidingView>
         <ImageUploader image={form.front_image} callback={image => dispatch(edit({...form, front_image: image}))} text="Upload front image of Vehicle" />

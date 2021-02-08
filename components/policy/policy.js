@@ -82,7 +82,8 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
                 <View style={{marginVertical: 10,}}>
                     <Text style={styles.bold}>{policy_number}</Text>
                 </View>
-                <Text style={{color: '#858585', fontSize: 13,}}>Valid Till: {moment(valid_till).format('lll')}</Text>
+                {is_active ?<Text style={{color: '#858585', fontSize: 13,}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
+                <Text style={{color: colors.warning, fontSize: 13,}}>In-Active</Text>}
                 <Text style={styles.shield}>{icn}</Text>
             </View>
         </TouchableOpacity>

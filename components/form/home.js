@@ -8,6 +8,7 @@ import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { edit } from '../../store/reducers/policy';
 import { showMessage } from 'react-native-flash-message';
+import { Money } from '../money';
 
 
 const buildingType = ['Flat', 'Detached Bungalow', 'Detached Duplex', 
@@ -17,27 +18,51 @@ export const HomeForm = ({}) => {
 
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
+    const plan = {Gold: 1000000, Silver: 750000, Bronze: 500000}
 
     const {form} = useSelector(state => state.policies);
     const dispatch = useDispatch();
+    const [exceeded, setExceeded] = useState(false);
+
+    const totalValue = _ => {
+        let val = 0;
+        for (let item in form.items){
+            val += parseFloat(form?.items[item]?.value)
+        }
+        return val;
+    }
 
     const addMore = _ => {
+        if(totalValue()  >= plan[form.plan]){
+            setExceeded(true);
+            dispatch(edit({...form, value: totalValue()}))
+            return;
+        }
+        
+        setExceeded(false);
+
         if ('items' in form){
             let length = Object.entries(form.items).length
             
-            dispatch(edit({...form, items: {...form?.items, [length]: {item: '', value: ''}}}));
+            dispatch(edit({...form, value: totalValue(), items: {...form?.items, [length]: {item: '', value: ''}}}));
             return
         }
-        dispatch(edit({...form, items: {...form?.items, "0": {item: '', value: ''}}}));
+        dispatch(edit({...form, value: totalValue(), items: {...form?.items, "0": {item: '', value: ''}}}));
         return
     }
 
 
     return (<View style={styles.form}>
+
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios'? "padding": "position"}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
         >
+            <View style={[styles.infoView, {borderColor: colors.success}]}>
+                <Text style={styles.infoText}>{'\u2B24'}  Bronze plan -- Sum insured on contents <Money amount="500000.00" /></Text>
+                <Text style={styles.infoText}>{'\u2B24'}  Silver plan -- Sum insured on contents <Money amount="750000.00" /></Text>
+                <Text style={styles.infoText}>{'\u2B24'}  Gold plan -- Sum insured on contents <Money amount="1000000.00" /></Text>
+            </View>
             <Picker
                 prompt="Select Plan"
                 options={['Bronze', 'Silver', 'Gold']} 
@@ -58,6 +83,7 @@ export const HomeForm = ({}) => {
                 value={form.address}
                 onChangeText={({nativeEvent}) => dispatch(edit({...form, address: nativeEvent.text}))}
             />
+            {exceeded && <Text style={[styles.error, {color: colors.danger}]}>* Total amount for contents insured for selected plan exceeded</Text>}
             <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15,}}>Contents</Text>
             {form?.items && Object.entries(form.items).map((item,index) => (
                 <Items 
@@ -141,5 +167,19 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'OpenSans_400Regular',
         textAlignVertical: "center"
+    },
+    infoView: {
+        borderRadius: 5,
+        padding: 10,
+        borderWidth: 1,
+    },
+    infoText: {
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 10,
+        textAlignVertical: 'center'
+    },
+    error: {
+        fontFamily: 'OpenSans_700Bold',
+        fontSize: 10,
     }
 })

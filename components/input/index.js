@@ -264,7 +264,7 @@ export const SearchInput = ({style, contProps, inputStyle, onChangeText, value, 
                 onBlur={onBlur} 
                 value={value} 
                 style={{...styles.input, color: colors.text, ...inputStyle,}} 
-                onChange={onChangeText}
+                onChangeText={onChangeText}
                 blurOnSubmit={true}
                 {...rest} 
             />

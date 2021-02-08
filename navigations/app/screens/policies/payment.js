@@ -7,12 +7,13 @@ import { Solidbutton, SolidbuttonWithIcon } from '../../../../components/button'
 import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { CardForm } from '../../../../components/form/payment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import getLoginClient from '../../../../apiAuth/loggedInClient';
 import { showMessage } from 'react-native-flash-message';
 import { CardInputWithIcon } from '../../../../components/input/card';
 import { validateCard } from '../../../../utility';
 import { ActivityIndicator } from 'react-native';
+import { reset } from '../../../../store/reducers/policy';
 
 export const PaymentOptionView = ({navigation}) => {
     const {colors, dark} = useTheme();
@@ -25,6 +26,7 @@ export const PaymentOptionView = ({navigation}) => {
     const {navigate} = navigation;
     const {form} = useSelector(state => state.policies);
     const {user} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     const [rData, setRData] = useState();
     const links = {i: {initiate:'pay/rave/', validate: 'pay/rave/validate/'}}
 
@@ -108,6 +110,7 @@ export const PaymentOptionView = ({navigation}) => {
                     duration: 5000,
                     hideStatusBar: true,
                 })
+                dispatch(reset());
                 navigate('TabNav', {screen: 'Coverage'});
                 return
             }

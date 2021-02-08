@@ -29,7 +29,7 @@ export const Register = ({navigation}) => {
     
 
     const onPress = async _ => {
-        
+        console.log('clicked')
         if (!isValidEmail(email)){
             showMessage({
                 message: 'Invalid',
@@ -54,15 +54,16 @@ export const Register = ({navigation}) => {
             return
         }
         const token = await AsyncStorage.getItem('pushToken');
-        dispatch(signUp({
-            username: email,
-            email: email.toLowerCase(),
-            password, 
-            phone, 
-            last_name: fullname.split(' ')[0],
-            first_name: fullname.split(' ')[1],
-            token,
-        }));
+        if (token)
+            dispatch(signUp({
+                username: email,
+                email: email.toLowerCase(),
+                password, 
+                phone, 
+                last_name: fullname.split(' ')[0],
+                first_name: fullname.split(' ')[1],
+                token,
+            }));
     }
 
     return (

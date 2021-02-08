@@ -60,16 +60,27 @@ export const policySlice = createSlice({
                 error, 
                 processing: false,
             }
+        },
+        reset(state){
+            return {
+                ...state,
+                form: {
+                    vehicle_model: 'Audi Q3(2020)',
+                    vehicle_class: 'Private Vehicle / Car',
+                    plan: 'Bronze',
+                    building_type: 'Flat',
+                }
+            }
         }
     }
 });
 
-export const {edit, create, processing, error, selected, all} = policySlice.actions;
+export const {edit, create, processing, error, selected, all, reset} = policySlice.actions;
 
 export default policySlice.reducer;
 
 export const savePolicyAsync = (product, body, navigation) => async dispatch => {
-    console.log(body)
+    
     dispatch(processing(true))
     const filteredData = filterData(product.category, body)
     let formdata;
@@ -125,7 +136,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: item,
+                message: item.toUpperCase(),
                 description: data[item],
                 icon: 'auto',
                 duration: 3000,
@@ -181,7 +192,8 @@ export const retrievePolicyAsync = user => async dispatch => {
         for (let item in data){
             showMessage({
                 type: 'danger',
-                message: data[item],
+                message: item.toUpperCase(),
+                description: data[item],
                 icon: 'auto',
                 duration: 3000,
                 hideStatusBar: true,

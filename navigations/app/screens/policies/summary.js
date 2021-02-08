@@ -36,11 +36,11 @@ export const SummaryView = ({navigation}) => {
                     </View>
                     <View style={[styles.infoView]}>
                         <Text style={[styles.info1]}>Value</Text>
-                        <Text style={[styles.info]}>{form.value}</Text>
+                        <Money style={[styles.info]} amount={parseFloat(form.value).toFixed(2)} />
                     </View>
                     <View style={[styles.infoView]}>
                         <Text style={[styles.info1]}>Valid Till</Text>
-                        <Text style={[styles.info]}>{moment(form?.valid_till).format('lll')}</Text>
+                        {form?.valid_till && <Text style={[styles.info]}>{moment(form?.valid_till).format('lll')}</Text>}
                     </View>
                 </View>
             </ScrollView>

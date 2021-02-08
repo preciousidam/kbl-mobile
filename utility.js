@@ -155,7 +155,7 @@ export const validateCard = ({cardno,cvv,pin,expiryyear, expirymonth}) => {
 export const filterData = (category, body)=> {
 	let data;
 	if (category === 'Home'){
-		data = {address: body.address, plan: body.plan, building_type: body.building_type, user: body.user, product: body.product}
+		data = {address: body.address, plan: body.plan, building_type: body.building_type, user: body.user, product: body.product, value: body.value}
 
 		if ('items' in body){
 			let hold = {}

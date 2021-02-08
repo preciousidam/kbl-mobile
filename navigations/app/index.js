@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';

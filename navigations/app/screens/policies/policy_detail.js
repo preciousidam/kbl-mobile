@@ -41,6 +41,8 @@ export const PolicyDetails = ({navigation, route}) => {
         
     }
 
+    
+
     return (
         <View style={styles.container}>
             <Header navigation={navigation} data={policy} />
@@ -57,7 +59,7 @@ export const PolicyDetails = ({navigation, route}) => {
                     />
                 </View>
                 <View style={{flex: 1, paddingLeft: 5}}>
-                    <Outlinedbutton onPress={renew} text="Renew" style={{width: '100%'}} textStyle={{color: colors.primary}} />
+                    <Outlinedbutton onPress={renew} text={policy.valid_till == null?"Payment": "Renew"} style={{width: '100%'}} textStyle={{color: colors.primary}} />
                 </View>
             </View>
             <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />
@@ -93,7 +95,7 @@ export const Header = ({navigation, data}) => {
                 </View>
                 <View style={styles.info}>
                     <Text style={styles.span}>End Date</Text>
-                    <Text style={[styles.p, {fontSize: 12}]}>{moment(data.valid_till).format('lll')}</Text>
+                    {data.is_active && <Text style={[styles.p, {fontSize: 12}]}>{moment(data.valid_till).format('lll')}</Text>}
                 </View>
             </View>
         </View>

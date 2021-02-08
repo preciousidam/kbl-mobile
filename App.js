@@ -39,6 +39,7 @@ export default function App() {
 	}
 	const registerNotification = async _ => {
 		const token = await registerForPushNotificationsAsync();
+		console.log(token)
 		if (token) AsyncStorage.setItem('pushToken', token);
 	}
 	useEffect(() => {
