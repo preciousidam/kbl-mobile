@@ -11,6 +11,7 @@ import { MotorDetails } from '../../../../components/details/motor';
 import { HomeDetails } from '../../../../components/details/home';
 import { Alert } from 'react-native';
 import { edit } from '../../../../store/reducers/policy';
+import { Linking } from 'react-native';
 
 const vInfo = {
     'Value': '5000000.00',
@@ -41,6 +42,17 @@ export const PolicyDetails = ({navigation, route}) => {
         
     }
 
+    const view_cert = _ => {
+        if(policy.is_active) {
+            Linking.openURL(policy?.certificate[policy?.certificate?.length -1].certificate)
+            .catch((err) =>{
+                console.log(err)
+                Alert.alert('Something Happened', "Cannot view certificate at the moment try later.")
+            })
+        }else{
+            Alert.alert('Certificate', 'Not Available for download yet')
+        }
+    }
     
 
     return (
@@ -54,7 +66,7 @@ export const PolicyDetails = ({navigation, route}) => {
             <View style={[styles.footer]}>
                 <View  style={{flex: 1, paddingRight: 5}}>
                     <Solidbutton 
-                        onPress={_ => Alert.alert('Certificate', 'Not Available for download yet')} 
+                        onPress={view_cert} 
                         text="Certificate" 
                     />
                 </View>

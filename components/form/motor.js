@@ -16,16 +16,37 @@ export const MotorForm = ({}) => {
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
     const [carMakes, setCarMakes] = useState([]);
+    const [carModels, setCarModels] = useState([]);
+    const [carYears, setCarYears] = useState([]);
     const {form} = useSelector(state => state.policies);
+    const [allCars, setCars] = useState([]);
     const dispatch = useDispatch();
     
 
     const cars = async _ => {
-        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=100&order=-Year');
-        
-        let make_model = results.map(veh => `${veh.Make} ${veh.Model}(${veh.Year})`)
-        setCarMakes(make_model);
+        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=1000');
+        setCars(results);
+        let make = results.map(veh => `${veh.Make}`).sort();
+        let set = new Set(make)
+        setCarMakes(['Select Vehicle Make',...set]);
     }
+
+    useEffect(() => {
+        const filtered = allCars.filter(({Make}) => Make == form?.vehicle_make);
+        let models = filtered.map(veh => `${veh.Model}`).sort();
+        let hold = new Set(models)
+        setCarModels(['Select Vehicle Model',...hold]);
+        
+    }, [form?.vehicle_make])
+
+    useEffect(() => {
+        const filtered = allCars.filter(({Model}) => Model == form?.vehicle_model);
+        let years = filtered.map(veh => `${veh.Year}`).sort();
+        let hold = new Set(years)
+        setCarYears(['Select Vehicle Year',...hold]);
+       
+    }, [form?.vehicle_model])
+
 
     useEffect(() => {
         cars();
@@ -37,11 +58,25 @@ export const MotorForm = ({}) => {
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
         >
             <Picker
-                prompt="Select car model"
+                
                 options={carMakes} 
                 style={{padding: 0, marginVertical: 10,}}
-                value={form.vehicle_model||'Vehicle Model'}
+                value={form.vehicle_make||'Vehicle Make'}
+                onValueChange={(item,i) => dispatch(edit({...form, vehicle_make: item}))}
+            />
+            <Picker
+                
+                options={carModels} 
+                style={{padding: 0, marginVertical: 10,}}
+                value={form.vehicle_model||'Vehicle M'}
                 onValueChange={(item,i) => dispatch(edit({...form, vehicle_model: item}))}
+            />
+            <Picker
+                
+                options={carYears} 
+                style={{padding: 0, marginVertical: 10,}}
+                value={form.vehicle_year||'Vehicle Model'}
+                onValueChange={(item,i) => dispatch(edit({...form, vehicle_year: item}))}
             />
             <Picker
                 prompt="Vehicle Class"

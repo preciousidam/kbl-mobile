@@ -30,10 +30,7 @@ export const Agree = ({navigation}) => {
                 <Text 
                     style={styles.text}
                 >
-                    Lorem ipsum dolor sit amet, 
-                    consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt 
-                    ut labore et dolore magna aliqua.
+                    It is simple and easy; insure your assets on the go.
                 </Text>
             </View>
             <View style={styles.second}>
