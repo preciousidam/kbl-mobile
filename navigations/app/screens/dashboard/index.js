@@ -14,6 +14,7 @@ import { PolicyListView } from '../policies/list';
 import { CliamListView } from '../claims/list';
 import { Help } from '../help';
 import SettingNavigator from '../profile';
+import ClaimsForm from '../claims/form';
 
 
 
@@ -80,7 +81,7 @@ export function HomeTabNavigation({navigation}){
             />
             <Screen
                 name="Claims"
-                component={CliamListView}
+                component={ClaimNavigator}
             />
             <Screen
                 name="Profile"

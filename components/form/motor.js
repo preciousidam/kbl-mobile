@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { carApi } from '../../apiAuth/carApi';
 import {edit} from '../../store/reducers/policy';
+import { ImageUploader } from '../imageUploader';
 
 
 export const MotorForm = ({}) => {
@@ -17,7 +16,7 @@ export const MotorForm = ({}) => {
     const {colors, dark} = useTheme();
     const [carMakes, setCarMakes] = useState([]);
     const [carModels, setCarModels] = useState([]);
-    const [carYears, setCarYears] = useState([]);
+    
     const {form} = useSelector(state => state.policies);
     const [allCars, setCars] = useState([]);
     const dispatch = useDispatch();
@@ -39,14 +38,6 @@ export const MotorForm = ({}) => {
         
     }, [form?.vehicle_make])
 
-    useEffect(() => {
-        const filtered = allCars.filter(({Model}) => Model == form?.vehicle_model);
-        let years = filtered.map(veh => `${veh.Year}`).sort();
-        let hold = new Set(years)
-        setCarYears(['Select Vehicle Year',...hold]);
-       
-    }, [form?.vehicle_model])
-
 
     useEffect(() => {
         cars();
@@ -61,22 +52,28 @@ export const MotorForm = ({}) => {
                 
                 options={carMakes} 
                 style={{padding: 0, marginVertical: 10,}}
-                value={form.vehicle_make||'Vehicle Make'}
+                value={form.vehicle_make||'Select Vehicle Make'}
                 onValueChange={(item,i) => dispatch(edit({...form, vehicle_make: item}))}
             />
             <Picker
                 
                 options={carModels} 
                 style={{padding: 0, marginVertical: 10,}}
-                value={form.vehicle_model||'Vehicle M'}
+                value={form.vehicle_model||'Select Vehicle Model'}
                 onValueChange={(item,i) => dispatch(edit({...form, vehicle_model: item}))}
             />
-            <Picker
-                
-                options={carYears} 
-                style={{padding: 0, marginVertical: 10,}}
-                value={form.vehicle_year||'Vehicle Model'}
-                onValueChange={(item,i) => dispatch(edit({...form, vehicle_year: item}))}
+            <OutlinedInput 
+                placeholder="Vehicle Year"
+                style={styles.input}
+                value={form.vehicle_year}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, vehicle_year: nativeEvent.text}))}
+                keyboardType="numeric"
+            />
+            <OutlinedInput 
+                placeholder="Vehicle Color"
+                style={styles.input}
+                value={form.vehicle_color}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, vehicle_color: nativeEvent.text}))}
             />
             <Picker
                 prompt="Vehicle Class"
@@ -125,35 +122,7 @@ export const MotorForm = ({}) => {
     </View>);
 }
 
-export const ImageUploader = ({image, callback, text}) => {
-    let openImagePickerAsync = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
-        if (permissionResult.granted === false) {
-          alert("Permission to access camera roll is required!");
-          return;
-        }
-    
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        
-        if (pickerResult.cancelled === true) {
-            return;
-        }
-        callback(pickerResult)
-    }
-    const {colors, dark} = useTheme();
 
-    return (
-        <TouchableOpacity onPress={openImagePickerAsync}>
-            <View style={[styles.image, {borderColor: colors.primary}]} >
-                {image? 
-                    <Image source={{uri: image?.uri || image}} style={{width: 60, height: 60}} />
-                    :<Ionicons name="ios-images" color={colors.info} size={60} />}
-                <Text style={{fontFamily: 'OpenSans_400Regular'}}>{text}</Text>
-            </View>
-        </TouchableOpacity>
-    )
-}
 
 const styles = StyleSheet.create({
     form: {

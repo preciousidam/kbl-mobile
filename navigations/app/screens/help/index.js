@@ -20,7 +20,6 @@ export const Help = ({navigation}) => {
     const dispatch = useDispatch();
 
     const onChange = (key, value) => {
-        console.log(key,value)
         setDetails(prev => ({...prev, [key]: value}));
     }
 
@@ -72,7 +71,6 @@ export const Help = ({navigation}) => {
         catch(err){
             setProcessing(false);
             console.error(err)
-            dispatch(error(true));
             showMessage({
                 type: 'danger',
                 message: "Something happened",
@@ -151,7 +149,7 @@ export const Help = ({navigation}) => {
                         style={[styles.input, styles.message]}
                         placeholder="Message"
                         multiline={true}
-                        onChangeText={(e) => onChange('message',e)}
+                        onChangeText={ text => onChange('message',text)}
                         value={details?.message}
                     />
 

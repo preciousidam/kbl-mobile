@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {NewClaim} from './new';
 import { MotorClaim } from './motor';
 import { FireClaim } from './home';
+import ClaimsForm from './form';
 
 
 
@@ -18,10 +19,10 @@ export default function ClaimNavigator({navigation}){
     return (
         <Navigator>
             <Screen 
-                component={NewClaim}
+                component={ClaimsForm}
                 name="new"
                 options={{
-                    title: 'Select Policy',
+                    title: 'Claims Form',
                     headerTitleStyle: {
                         fontSize: 16,
                         fontFamily: 'Montserrat_700Bold'

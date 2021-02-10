@@ -11,7 +11,7 @@ import { Modal } from 'react-native';
 import { Button } from 'react-native';
 
 
-export const PolicyList = ({}) => {
+export const PolicyList = ({ref}) => {
     
     const {policies, processing} = useSelector(state => state.policies);
     const {user} = useSelector(state => state.auth);
@@ -33,6 +33,7 @@ export const PolicyList = ({}) => {
     return(
         <View style={styles.container}>
            <FlatList
+                ref={ref}
                 refreshing={processing}
                 onRefresh={refresh}
                 data={policies}

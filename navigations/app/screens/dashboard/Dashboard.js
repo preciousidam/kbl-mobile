@@ -1,17 +1,39 @@
-import { useTheme } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import { useFocusEffect, useTheme } from '@react-navigation/native';
+import React, { createRef, forwardRef, useCallback, useEffect, useRef } from 'react';
 import {Button} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Ionicons} from '@expo/vector-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import moment from 'moment';
 
-import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import {Header} from '../../../../components/header';
 import ProductList from '../../../../components/policy/quickLinks';
+import { useSelector, useDispatch } from 'react-redux';
+import {retrieveActivitiesAsync} from '../../../../store/reducers/app';
 
 
 export const Dashboard = ({navigation}) => {
     const {colors, dark} = useTheme();
+    const flatlist = useRef();
+    
+    const {user} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(retrieveActivitiesAsync(user?.pk));
+        return;
+    }, []);
+
+    useFocusEffect(useCallback(() => {
+        dispatch(retrieveActivitiesAsync(user?.pk))
+        return
+    }));
+
+    const ControlledProductList = forwardRef((props, ref) => (
+        <ProductList ref={ref} />
+    ))
     
 
     return (
@@ -21,8 +43,18 @@ export const Dashboard = ({navigation}) => {
            />
             <ScrollView >
                 <View style={{marginTop: 20}}>
-                    <Text style={[styles.headerText, {color: colors.text}]}>Products</Text>
-                    <ProductList />
+                    <View style={styles.more}>
+                        <Text style={[styles.headerText, {color: colors.text}]}>Products</Text>
+                        <TouchableOpacity 
+                            activeOpacity={.7} 
+                            style={{flexDirection: 'row'}}
+                            onPress={() => console.log(flatlist)}
+                        >
+                            <Text style={{textAlign: 'center', textAlignVertical: 'center'}}>more</Text>
+                            <Ionicons name="arrow-forward" size={24} color={colors.primary} />
+                        </TouchableOpacity>
+                    </View>
+                    <ControlledProductList ref={ref => flatlist = ref} />
                 </View>
                 <View >
                     <Text style={[styles.headerText, {color: colors.text}]}>Quick Actions</Text>
@@ -52,17 +84,7 @@ export const Dashboard = ({navigation}) => {
                     </Text>
                     <Button onPress={() => navigation.navigate('KYC')} buttonStyle={{width: 150}} title="Update" />
                 </View>
-                <View style={{marginVertical: 20, paddingHorizontal: 15,}}>
-                    <Text 
-                        style={[styles.headerText, {color: colors.text, paddingLeft: 0, marginBottom: 15}]}
-                    >
-                        Recent Activities
-                    </Text>
-                    <Activity type="Policy" summary="Certificate for policy #12345 is now downloadable" time="1 day" />
-                    <Activity type="Claims" summary="Claims recieved and is been processed" time="44m" />
-                    <Activity type="Policy" summary="Certificate for policy #12345 is now downloadable" time="1 day" />
-                    <Activity type="Claims" summary="Claims recieved and is been processed" time="44m" />
-                </View>
+                <Activities />
             </ScrollView>
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
@@ -84,15 +106,38 @@ export const CardSquare = ({icon, name, onPress}) => {
     )
 }
 
-export const Activity = ({type, summary, time}) => {
+export const Activities = ({}) => {
+    const {activities} = useSelector(state => state.app);
+    const {colors, dark} = useTheme();
+
+    const empty = (
+        <View style={{marginVertical: 15, justifyContent: 'center', alignItems: 'center',}}>
+            <Image source={require('../../../../assets/empty.png')} style={{width: 100,height: 80}} />
+            <Text style={{fontFamily: 'OpenSans_400Regular', marginVertical: 10}}>Nothing to see here</Text>
+        </View>
+    )
+    
+    return (
+        <View style={{marginVertical: 20, paddingHorizontal: 15,}}>
+            <Text 
+                style={[styles.headerText, {color: colors.text, paddingLeft: 0, marginBottom: 15}]}
+            >
+                Recent Activities
+            </Text>
+            {activities.length <= 0 ? empty : activities?.slice(0,11).map((activity,i) => <Activity key={`${i}`} {...activity} />)}
+        </View>
+    )
+}
+
+export const Activity = ({type, desc, when}) => {
     return (
         <View style={styles.update}>
             <Text style={styles.updateText}>{type}</Text>
             <View style={styles.apart}>
-                <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular'}]}>{summary}</Text>
+                <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular'}]}>{desc}</Text>
                 <Text style={styles.icon}><MaterialCommunityIcons name="file-cabinet" size={24} color="#fff" /></Text>
             </View>
-            <Text style={{fontFamily: 'OpenSans_400Regular'}}>{time} ago</Text>
+            <Text style={{fontFamily: 'OpenSans_400Regular'}}>{moment(when).fromNow()}</Text>
         </View>
     )
 }
@@ -175,5 +220,11 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         textAlign: "center",
         textAlignVertical: "center",
+    },
+    more: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingRight: 15,
     }
 });

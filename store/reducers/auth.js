@@ -4,6 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import client from '../../apiAuth/tokenClient';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { isAvailableAsync, setItemAsync } from 'expo-secure-store';
+import { Alert } from "react-native";
+import getLoginClient from "../../apiAuth/loggedInClient";
+import { colors } from "react-native-elements";
 
 
 
@@ -65,6 +68,8 @@ export const signIn = details => async dispatch => {
                 setItemAsync('password',details.password);
             }
             AsyncStorage.setItem('user', JSON.stringify(data.user))
+            const pushToken = await AsyncStorage.getItem('pushToken');
+            dispatch(savePushToken(data.user.pk, pushToken));
             return
         }
         for (let item in data){
@@ -103,7 +108,7 @@ export const refreshToken = refresh => async dispatch => {
             let token = await AsyncStorage.getItem('tokenData');
             token = JSON.parse(token);
             token.access_token = data.access;
-            console.log(token)
+            
             await AsyncStorage.setItem('tokenData', JSON.stringify(token));
         
             return
@@ -141,9 +146,9 @@ export const signUp = details => async dispatch => {
         
         const {data, status} = await client.post('users/', {...details})
         dispatch(processing({loading: false}));
-        console.log(data)
+        
         if (status === 201 || status === 200 ){
-            await AsyncStorage.setItem('tokenData', JSON.stringify(data));
+            
             dispatch(signIn({email: data.email, password: details.password, username: data.email}));
             return
         }
@@ -177,34 +182,79 @@ export const signUp = details => async dispatch => {
     }
 }
 
-
-/*export const getUserProfile = async (user_id, dispatch) => {
+export const savePushToken = (user, token) => async dispatch => {
+    const client = await getLoginClient();
+    client.defaults.headers.post['Content-type'] = 'application/json';
     try{
-        const loginClient = await getLoginClient();
-        const {data, status} = await loginClient.get(`profile/${user_id}`);
-        if (status === 201 || status === 200 ){
-            dispatch(processing({loading: true}));
-            dispatch(login(JSON.stringify({data})));
-            return
-        }
-        dispatch(processing({loading: false}));
-        showMessage({
-            type: 'danger',
-            message: data.detail,
-            icon: 'auto',
-            duration: 3000,
-            hideStatusBar: true
-        });
-        return
-    }catch (err){
-        console.log(err)
-        dispatch(processing({loading: false}));
-        showMessage({
-            type: 'danger',
-            message: err.message,
-            icon: 'auto',
-            duration: 3000,
-            hideStatusBar: true
-        })
+        const {data, status} = await client.post(`push-token/save/`, {user,token})
     }
-}*/
+    catch{
+        console.log(err)
+    }
+}
+
+export const changePassword = details => async dispatch => {
+    
+    const client = await getLoginClient();
+    dispatch(processing({loading: true}));
+    client.defaults.headers.post['Content-type'] = 'application/json';
+    try{
+        const {data, status} = await client.post(`auth/password/change/`, details)
+        
+        dispatch(processing({loading: false}));
+        if (status === 200 || status === 201){
+            showMessage({
+                type: 'success',
+                message: data.message,
+                duration: 3000,
+                icon: 'success',
+                hideStatusBar: true,
+            })
+            dispatch(logout());
+            Alert.alert('Notice', 'Password change was succesful, you need to login again with new password');
+            return;
+        }
+
+        if(status === 401){
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(logout());
+            return;
+        }
+
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
+        
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+        return;
+    }
+    catch(err){
+        dispatch(processing(false));
+        console.error(err)
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        });
+    }
+}
+
+

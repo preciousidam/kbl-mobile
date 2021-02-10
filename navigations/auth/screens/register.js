@@ -29,7 +29,7 @@ export const Register = ({navigation}) => {
     
 
     const onPress = async _ => {
-        console.log('clicked')
+        
         if (!isValidEmail(email)){
             showMessage({
                 message: 'Invalid',

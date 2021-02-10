@@ -51,7 +51,7 @@ export const MotorClaim = ({navigation, route}) => {
     }, [page]);
 
     useEffect(() => {
-        console.log(form)
+        
         dispatch(edit({...form, policy: policy?.policy_number}))
     },[])
 

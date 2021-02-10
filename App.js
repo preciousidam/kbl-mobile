@@ -6,7 +6,8 @@ import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import {Provider} from 'react-redux';
 import FlashMessage from "react-native-flash-message";
-import * as Notifications from 'expo-notifications'
+import * as Notifications from 'expo-notifications';
+import * as Linking from 'expo-linking';
 
 import {dark,light} from './styles/theme';
 import {store} from './store';
@@ -23,8 +24,62 @@ Notifications.setNotificationHandler({
 	}),
 });
 
+const prefix = Linking.createURL('/');
+
 export default function App() {
 	const scheme = useColorScheme();
+	const linking = {
+		prefixes: [prefix, 'https://kblinsuranceng.com', 'exps://kblinsuranceng.com'],
+		config: {
+			// Configuration for linking
+			screens: {
+				App: {
+					screen: {
+						Home: {
+							screen: {
+								TabNav: {
+									Coverage: 'policy/:pn',
+								}
+							}
+						},
+						Notifications: {
+							screen: {
+								Notifications: {
+									screen: {
+										Read: 'notification/:id'
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+        subscribe(listener) {
+			const onReceiveURL = ({ url }) => listener(url);
+
+			// Listen to incoming links from deep linking
+			Linking.addEventListener('url', onReceiveURL);
+
+			// Listen to expo push notifications
+			const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+			
+				const url = response.notification.request.content.data.url;
+
+				// Any custom logic to see whether the URL needs to be handled
+				//...
+
+				// Let React Navigation handle the URL
+				listener(url);
+			});
+
+			return () => {
+				// Clean up the event listeners
+				Linking.removeEventListener('url', onReceiveURL);
+				subscription.remove();
+			};
+        },
+	}
 
 	const [notification, setNotification] = useState({});
 
@@ -39,7 +94,6 @@ export default function App() {
 	}
 	const registerNotification = async _ => {
 		const token = await registerForPushNotificationsAsync();
-		console.log(token)
 		if (token) AsyncStorage.setItem('pushToken', token);
 	}
 	useEffect(() => {
@@ -65,7 +119,7 @@ export default function App() {
 	};
 	
 	const _handleNotificationResponse = response => {
-		console.log(response);
+		
 	};
 
   return (
@@ -73,7 +127,7 @@ export default function App() {
 		<AppearanceProvider>
 			<ActionSheetProvider>
 			<SafeAreaProvider>
-				<NavigationContainer theme={theme}>
+				<NavigationContainer theme={theme} linking={linking}>
 					<MainNavigation />
 				</NavigationContainer>
 			</SafeAreaProvider>

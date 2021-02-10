@@ -275,7 +275,7 @@ export const SearchInput = ({style, contProps, inputStyle, onChangeText, value, 
 export const DateInput = ({style, contProps, inputStyle, onChangeText, value, ...rest}) => {
     
     const {colors} = useTheme();
-    console.log(value)
+    
     const [focused, setFocused] = useState(false);
     useEffect(() => {
         if(focused) setBorderColor(colors.secondary)
@@ -325,7 +325,7 @@ export const DateInput = ({style, contProps, inputStyle, onChangeText, value, ..
 export const TimeInput = ({style, contProps, inputStyle, onChangeText, value, ...rest}) => {
     
     const {colors} = useTheme();
-    console.log(value)
+    
     const [focused, setFocused] = useState(false);
     useEffect(() => {
         if(focused) setBorderColor(colors.secondary)

@@ -209,7 +209,7 @@ export const Page4 = ({}) => {
     const {colors} = useTheme();
 
     const addMore = _ => {
-        console.log(form)
+        
         if ('injureds' in form){
             let length = Object.entries(form.injureds).length
             

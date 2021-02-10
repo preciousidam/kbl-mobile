@@ -35,7 +35,7 @@ export default function NotificationNavigator({navigation}){
             />
             <Screen 
                 component={ReadNotificationScreen}
-                name="ReadNotifications"
+                name="Read"
                 options={{
                     title: 'Notifications'
                 }}

@@ -38,8 +38,7 @@ export const Agree = ({navigation}) => {
                     style={styles.terms}
                 >
                     To continue, read and agree to the
-                    <Text style={styles.inner} onPress={() => onPressTermPolicy('Terms')}> Terms of Service </Text>
-                    and <Text style={styles.inner} onPress={() => onPressTermPolicy('Policy')}> Policy Notice</Text>
+                    <Text style={styles.inner} onPress={() => onPressTermPolicy('Policy')}> Terms of Service and Data Protection </Text>
                 </Text>
                 <Solidbutton 
                     text="Agree" 

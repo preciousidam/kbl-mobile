@@ -16,7 +16,7 @@ export const MotorDetails = ({pn}) => {
 
         try{
             const {data,status} = await client.get(`policy/${pn}/`);
-            console.log(data)
+         
             if (status === 200 || status === 201){
                 setData(data);
                 return;

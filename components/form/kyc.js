@@ -11,7 +11,7 @@ import { OutlinedInput, OutlinedInputWithIcon } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { OutlinedDatePicker } from '../input/datepicker';
 import {edit} from '../../store/reducers/kyc';
-import { ImageUploader } from './motor';
+import {ImageUploader} from '../imageUploader';
 
 
 export const KYCIndividualForm = ({}) => {

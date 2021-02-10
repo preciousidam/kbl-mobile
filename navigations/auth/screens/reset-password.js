@@ -20,12 +20,12 @@ export const Reset = props => {
     const reset = async _ => {
         setProcessing(true);
         try{
-            const {data, status} = await client.get(`user/reset-password/?email=${email}`)
+            const {data, status} = await client.post(`auth/password/reset/`,{email})
             setProcessing(false);
             if (status === 200 || status === 201){
                 showMessage({
                     type: 'success',
-                    message: data.message,
+                    message: data.detail,
                     duration: 3000,
                     icon: 'success',
                     hideStatusBar: true,

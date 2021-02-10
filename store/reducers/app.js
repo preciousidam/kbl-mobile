@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
+import { showMessage } from "react-native-flash-message";
 import getLoginClient from '../../apiAuth/loggedInClient';
 import { logout, restore } from "./auth";
 
@@ -11,6 +12,7 @@ export const appSlice = createSlice({
         terms: null,
         products: [],
         branchs: [],
+        activities: [],
         processing: false,
         error: false,
     },
@@ -37,6 +39,13 @@ export const appSlice = createSlice({
                 branchs
             }
         },
+        activities(state, action){
+            const activities = action.payload;
+            return {
+                ...state,
+                activities
+            }
+        },
         processing(state, action){
             const process = action.payload;
             return {
@@ -55,7 +64,7 @@ export const appSlice = createSlice({
     }
 });
 
-export const {terms, products, processing, error, branchs} = appSlice.actions;
+export const {terms, products, processing, error, branchs, activities} = appSlice.actions;
 
 export default appSlice.reducer;
 
@@ -127,6 +136,56 @@ export const retrieveBranchAsync = _ => async dispatch => {
         
         if (status === 200 || status === 201){
             dispatch(branchs(data));
+            return;
+        }
+        await dispatch(error(true));
+        if(status === 401){
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(logout());
+            
+            return;
+        }
+
+        if(status === 500){
+            Alert.alert('Error', 'Please check your network')
+            return;
+        }
+        
+        
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+        
+        return;
+    }catch (err){
+        console.error(err)
+        dispatch(error(true));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
+    }
+    
+}
+
+export const retrieveActivitiesAsync = pk => async dispatch => {
+    dispatch(processing(true))
+    const client = await getLoginClient();
+    try{
+        const {data, status} = await client.get(`activities/${pk}/`);
+        
+        if (status === 200 || status === 201){
+            dispatch(activities(data));
             return;
         }
         await dispatch(error(true));

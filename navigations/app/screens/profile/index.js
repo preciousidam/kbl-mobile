@@ -1,12 +1,16 @@
 import { useTheme } from '@react-navigation/native';
-import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import { useSelector } from 'react-redux';
+import React, {useCallback, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Linking, Modal, ActivityIndicator} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import FocusAwareStatusBar from '../../../../components/statusBar';
-
+import * as IntentLauncher from 'expo-intent-launcher';
+import { PasswordOutlinedInputWithIcon } from '../../../../components/input';
+import { Image } from 'react-native';
+import { changePassword } from '../../../../store/reducers/auth';
+import { Solidbutton } from '../../../../components/button';
 
 
 
@@ -21,7 +25,7 @@ export default function SettingNavigator({navigation}){
                 component={Profile}
                 name="Setting"
                 options={{
-                    title: 'Settings'
+                    title: 'Profile'
                 }}
             />
             
@@ -29,9 +33,97 @@ export default function SettingNavigator({navigation}){
     )
 }
 
-export const Profile = () => {
+const OpenSettingsButton = ({ children }) => {
+    const handlePress = useCallback(async () => {
+        // Open the custom settings if the app has one
+        await Linking.openSettings();
+    }, []);
+  
+    return (
+        <TouchableOpacity onPress={handlePress}>
+            <View style={styles.action}>
+                <Text style={styles.actText}>{children}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};
+
+const OpenNotificationSettingsButton = ({ children }) => {
+    const handlePress = useCallback(async () => {
+        // Open the custom settings if the app has one
+        await IntentLauncher.startActivityAsync(IntentLauncher.ACTION_APP_NOTIFICATION_SETTINGS);
+    }, []);
+  
+    return (
+        <TouchableOpacity onPress={handlePress}>
+            <View style={styles.action}>
+                <Text style={styles.actText}>{children}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};
+
+const ResetPasswordButton = ({ children }) => {
+    const [visible, setVisible] = useState(false)
+    const handlePress = () => setVisible(true);
+    const {colors, dark} = useTheme();
+    const [new_password1, setPass1] = useState('');
+    const [new_password2, setPass2] = useState('');
+    const dispatch = useDispatch();
+    const {isLoading} = useSelector(state => state.auth);
+    const change = async () => {
+        dispatch(changePassword({new_password1, new_password2}));
+    }
+  
+    return (
+        <View>
+            <TouchableOpacity onPress={handlePress}>
+                <View style={styles.action}>
+                    <Text style={styles.actText}>{children}</Text>
+                </View>
+            </TouchableOpacity>
+            <Modal
+                visible={visible}
+                transparent={false}
+                onRequestClose={_ => setVisible(false)}
+            >
+                <View style={styles.modal}>
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <Image source={require('../../../../assets/key.png')} style={{width: 100, height: 100}} />
+                        <Text style={styles.modalText}>Enter new password. Password must include numbers and one special character</Text>
+                        {isLoading && <ActivityIndicator color={colors.info} size="large" />}
+                    </View>
+                    <PasswordOutlinedInputWithIcon
+                        icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
+                        contProps={styles.textInput}
+                        placeholder="New Password"
+                        value={new_password1} 
+                        onChangeText={({nativeEvent}) => setPass1(nativeEvent.text)}
+                        style={styles.textInput} 
+                    />
+                    <PasswordOutlinedInputWithIcon
+                        icon={<MaterialIcons name="lock-outline" color={colors.primary} size={24} />}
+                        contProps={styles.textInput}
+                        placeholder="Confirm New Password"
+                        value={new_password2} 
+                        onChangeText={({nativeEvent}) => setPass2(nativeEvent.text)}
+                        style={styles.textInput} 
+                    />
+                    <Solidbutton text="Change" style={{marginVertical: 20,}} onPress={change} />
+                </View>
+            </Modal>
+        </View>
+    );
+};
+
+export const Profile = ({navigation}) => {
     const {user} = useSelector(state => state.auth);
     const {colors, dark} = useTheme();
+    const dispatch = useDispatch();
+    const signOut = _ => {
+        dispatch(logout());
+    }
+
     return (
         <View style={styles.container}>
             <View style={[styles.header, {backgroundColor: colors.card}]}>
@@ -42,22 +134,17 @@ export const Profile = () => {
                 </View>
             </View>
             <View style={{marginVertical: 15,}}>
-                <TouchableOpacity>
-                    <View style={styles.action}>
-                        <Text style={styles.actText}>Notifications</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.action}>
-                        <Text style={styles.actText}>Request password change</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
+                
+                <ResetPasswordButton>Change Password</ResetPasswordButton>
+            
+                <TouchableOpacity onPress={_ => navigation.navigate("help")}>
                     <View style={styles.action}>
                         <Text style={styles.actText}>Support</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <OpenNotificationSettingsButton>Notification</OpenNotificationSettingsButton>
+                <OpenSettingsButton>Settings</OpenSettingsButton>
+                <TouchableOpacity onPress={signOut}>
                     <View style={styles.action}>
                         <Text style={styles.actText}>Sign Out</Text>
                     </View>
@@ -88,5 +175,21 @@ const styles = StyleSheet.create({
     },
     actText: {
         fontFamily: 'OpenSans_700Bold',
+    },
+    textInput: {
+        marginVertical: 15,
+    },
+    modal: {
+        flex: 1,
+        padding: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
+    modalText: {
+        fontFamily: "Montserrat_400Regular",
+        textAlign: 'center',
+        marginVertical:20
     }
 })
+

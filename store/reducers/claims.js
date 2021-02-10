@@ -89,7 +89,7 @@ export default claimSlice.reducer;
 export const saveClaimAsync = (link,body) => async dispatch => {
     dispatch(processing(true))
     const formData = motorClaimData(body);
-    console.log(formData)
+    
     const client = await getLoginClient();
     try{
         const {data, status} = await client.post(link, formData);

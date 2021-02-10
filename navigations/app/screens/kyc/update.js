@@ -22,7 +22,7 @@ export const UpdateKYC = ({}) => {
     },[]);
 
     const submit = _ => {
-        console.log(kyc)
+     
         dispatch(saveKYCAsync({...kyc, email: user?.email, name: `${user?.first_name} ${user?.last_name}`}));
         
     }
