@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "298937143455",
-    "project_id": "kblinsurance-fb2da",
-    "storage_bucket": "kblinsurance-fb2da.appspot.com"
+    "project_number": "540524641967",
+    "project_id": "kbl-insurance-553c5",
+    "storage_bucket": "kbl-insurance-553c5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:298937143455:android:e24fd8afb65569cf0312aa",
+        "mobilesdk_app_id": "1:540524641967:android:2f599eb69233355db5de5a",
         "android_client_info": {
           "package_name": "com.kblinsurance"
         }
       },
       "oauth_client": [
         {
-          "client_id": "298937143455-ag94bdfq2skl1psl6qbcnbt9rvmmvu3c.apps.googleusercontent.com",
+          "client_id": "540524641967-gu7fjikd76suvcjtr2tjnr9j5kktpp8i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCGSNoqSm7SQ0EzrwDY-CDwlGQvakcCswg"
+          "current_key": "AIzaSyDxVTNNv2HLzYiIbWGUUhlsGh3ATjxz74w"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "298937143455-ag94bdfq2skl1psl6qbcnbt9rvmmvu3c.apps.googleusercontent.com",
+              "client_id": "540524641967-gu7fjikd76suvcjtr2tjnr9j5kktpp8i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
