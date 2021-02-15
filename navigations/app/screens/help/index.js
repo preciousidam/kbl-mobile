@@ -125,7 +125,7 @@ export const Help = ({navigation}) => {
                     </View>
                 </LinearGradient>
                 <View style={[styles.bottom, {backgroundColor: colors.card}]}>
-                    <Text style={[styles.header]}>Leave A Message</Text>
+                    <Text style={[styles.header, {color: colors.text}]}>Leave A Message</Text>
                     <OutlinedInput 
                         style={styles.input}
                         placeholder="Fullname"
@@ -151,11 +151,12 @@ export const Help = ({navigation}) => {
                         multiline={true}
                         onChangeText={ text => onChange('message',text)}
                         value={details?.message}
+                        placeholderTextColor="#c6c6c6"
                     />
 
                     <TouchableOpacity activeOpacity={.7} onPress={send_mail}>
                         <View style={styles.send} onPress={send_mail}>
-                            <Text style={styles.sendText} onPress={send_mail}>SEND</Text>
+                            <Text style={[styles.sendText, {color: colors.text}]} onPress={send_mail}>SEND</Text>
                             <Text
                                 onPress={send_mail}
                                 style={[styles.circle, {backgroundColor: colors.success}]}

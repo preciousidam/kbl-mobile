@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useDispatch, useSelector } from 'react-redux';
 import { isAvailableAsync, getItemAsync } from 'expo-secure-store';
+import { wp, hp } from '../../../utility';
 
 
 import { Solidbutton } from '../../../components/button';
@@ -71,7 +72,7 @@ export const Login = ({navigation}) => {
                 <View style={styles.view}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios'? "padding": "position"}
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? hp(100): hp(10)}
                     >
                         <View style={styles.header}>
                             <Image source={require('../../../assets/logo.png')} />
@@ -134,10 +135,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    avoidingView: {
-        flex: 1,
-        height: '100%',
-    },
     view: {
         flex: 1,
         width: '100%',
@@ -147,11 +144,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: 100,
+        paddingVertical: hp(100),
     },
     link: {
         fontFamily: 'OpenSans_400Regular',
-        fontSize: 14,
+        fontSize: wp(14),
     },
     inner: {
         fontFamily: 'OpenSans_700Bold',
@@ -159,10 +156,10 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        marginVertical: 10,
+        marginVertical: hp(10),
     },
     textInput: {
-        marginVertical: 15,
+        marginVertical: hp(15),
     },
     bottom: {
         justifyContent: 'center',
@@ -175,7 +172,7 @@ const styles = StyleSheet.create({
     },
     forgot: {
         fontFamily: 'Montserrat_400Regular',
-        marginVertical: 10,
+        marginVertical: hp(10),
     },
     modal: {
         flex: 1,
@@ -183,8 +180,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     indicator: {
-        width: 65,
-        height: 65,
+        width: wp(65),
+        height: hp(65),
         padding: 5,
         borderWidth: 1,
         borderColor: 'transparent',

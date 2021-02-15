@@ -48,7 +48,7 @@ export const Dashboard = ({navigation}) => {
                             style={{flexDirection: 'row'}}
                             onPress={() => console.log(flatlist)}
                         >
-                            <Text style={{textAlign: 'center', textAlignVertical: 'center'}}>more</Text>
+                            <Text style={{textAlign: 'center', textAlignVertical: 'center', color: colors.text}}>more</Text>
                             <Ionicons name="arrow-forward" size={24} color={colors.primary} />
                         </TouchableOpacity>
                     </View>

@@ -12,6 +12,7 @@ import { signUp } from '../../../store/reducers/auth';
 import { isValidEmail, isValidPassword } from '../../../utility';
 import { showMessage } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-community/async-storage';
+import { wp, hp } from '../../../utility';
 
 
 
@@ -74,7 +75,7 @@ export const Register = ({navigation}) => {
                 <View style={styles.view}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios'? "padding": "position"}
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? hp(100): hp(10)}
                     >
                         <View style={styles.header}>
                             <Image source={require('../../../assets/logo.png')} />
@@ -158,10 +159,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    avoidingView: {
-        flex: 1,
-        height: '100%',
-    },
     view: {
         flex: 1,
         width: '100%',
@@ -171,16 +168,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: 50,
+        paddingVertical: hp(50),
     },
     headerText: {
         fontFamily: 'Montserrat_700Bold',
-        fontSize: 24,
-        marginTop: 10,
+        fontSize: wp(24),
+        marginTop: hp(10),
     },
     link: {
         fontFamily: 'OpenSans_400Regular',
-        fontSize: 14,
+        fontSize: wp(14),
     },
     inner: {
         fontFamily: 'OpenSans_700Bold',
@@ -188,10 +185,10 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        marginVertical: 10,
+        marginVertical: hp(10),
     },
     textInput: {
-        marginVertical: 15,
+        marginVertical: hp(15),
     },
     bottom: {
         justifyContent: 'center',
@@ -206,12 +203,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     indicator: {
-        width: 65,
-        height: 65,
+        width: wp(65),
+        height: hp(65),
         padding: 5,
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 32,
+        borderRadius: wp(32),
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

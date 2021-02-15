@@ -12,6 +12,7 @@ import { HomeDetails } from '../../../../components/details/home';
 import { Alert } from 'react-native';
 import { edit } from '../../../../store/reducers/policy';
 import { Linking } from 'react-native';
+import { ScrollView } from 'react-native';
 
 const vInfo = {
     'Value': '5000000.00',
@@ -59,9 +60,11 @@ export const PolicyDetails = ({navigation, route}) => {
         <View style={styles.container}>
             <Header navigation={navigation} data={policy} />
             <View style={[styles.body, {backgroundColor: colors.card}]}>
-                {product?.category === 'Motor'?
-                    <MotorDetails pn={policy.policy_number} />:
-                    <HomeDetails pn={policy.policy_number} />}
+                <ScrollView>
+                    {product?.category === 'Motor'?
+                        <MotorDetails pn={policy.policy_number} />:
+                        <HomeDetails pn={policy.policy_number} />}
+                </ScrollView>
             </View>
             <View style={[styles.footer]}>
                 <View  style={{flex: 1, paddingRight: 5}}>

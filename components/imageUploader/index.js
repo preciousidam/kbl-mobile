@@ -16,7 +16,7 @@ export const ImageUploader = ({image, callback, text}) => {
     const {colors, dark} = useTheme();
     const [view, setView] = useState(false);
     const icons = [
-        <Image source={require('../../assets/photo.png')} style={styles.icon} />,
+        /*<Image source={require('../../assets/photo.png')} style={styles.icon} />,*/
         <Image source={require('../../assets/gallery.png')} style={styles.icon} />,
         <Image source={require('../../assets/x-button.png')} style={styles.icon} />,
     ]
@@ -47,6 +47,10 @@ export const ImageUploader = ({image, callback, text}) => {
         title: 'Complete action with',
         useModal: true,
         icons,
+        containerStyle: {backgroundColor: colors.card},
+        tintColor: colors.text,
+        textStyle: {color: colors.text},
+        titleTextStyle: {color: colors.text}
     },
     async (buttonIndex) => {
         if (buttonIndex === 1) {
@@ -93,7 +97,7 @@ export const ImageUploader = ({image, callback, text}) => {
         <TouchableOpacity onPress={changeImage}>
             <View style={styles.actionBtn}>
                 <Ionicons name="pencil" size={24} color={colors.primary} />
-                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular'}}>Change</Text>
+                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular', color: colors.text}}>Change</Text>
             </View>
         </TouchableOpacity>
     )
@@ -102,7 +106,7 @@ export const ImageUploader = ({image, callback, text}) => {
         <TouchableOpacity onPress={clearImage}>
             <View style={styles.actionBtn}>
                 <Ionicons name="close" size={24} color={colors.danger} />
-                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular'}}>Clear</Text>
+                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular', color: colors.text}}>Clear</Text>
             </View>
         </TouchableOpacity>
     )
@@ -113,7 +117,7 @@ export const ImageUploader = ({image, callback, text}) => {
             <TouchableOpacity onPress={showOptions}>
                 <View style={[styles.image, {borderColor: colors.primary}]} >
                     <Ionicons name="ios-images" color={colors.info} size={60} />
-                    <Text style={{fontFamily: 'OpenSans_400Regular'}}>{text}</Text>
+                    <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text}}>{text}</Text>
                 </View>
             </TouchableOpacity>
         )

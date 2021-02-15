@@ -3,6 +3,7 @@ import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import { hp, wp } from '../../utility';
 
 
 export const Outlinedbutton = ({text, onPress, style, textStyle}) =>{
@@ -56,7 +57,7 @@ export const FloatingActionButton = ({icon, onPress, style}) => {
         <TouchableOpacity 
             onPress={onPress} 
             activeOpacity={0.8} 
-            style={[{position: "absolute", bottom: 30, right: 30}, style]}
+            style={[{position: "absolute", bottom: hp(30), right: wp(30)}, style]}
         >
             <View style={[styles.actionBtn, {backgroundColor: colors.primary}]}>
                 {icon}
@@ -118,30 +119,30 @@ const styles = StyleSheet.create({
     },
     grad: {
         width: '100%',
-        padding: 15,
+        padding: wp(15),
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 10,
+        borderRadius: wp(10),
         justifyContent: "center",
         alignItems: 'center',
         flexDirection: "row"
     },
     outlined: {
-        padding: 15,
+        padding: wp(15),
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 10,
+        borderRadius: wp(10),
         justifyContent: "center",
         alignItems: 'center',
-        borderRadius: 30,
+        borderRadius: wp(30),
     },
     actionBtn: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
+        width: wp(60),
+        height: hp(60),
+        borderRadius: wp(30),
         borderWidth: 1,
         borderColor: 'transparent',
-        padding: 20,
+        padding: wp(20),
         elevation: 10,
         alignItems: "center",
         justifyContent: "center"
@@ -150,8 +151,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 8,
         backgroundColor: '#000000',
-        padding: 10,
+        padding: hp(10),
         borderWidth: 1,
-        borderRadius: 20,
+        borderRadius: wp(20),
     },
 })

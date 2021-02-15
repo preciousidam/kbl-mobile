@@ -1,3 +1,33 @@
+import {
+	widthPercentageToDP as wp2dp,
+	heightPercentageToDP as hp2dp,
+} from 'react-native-responsive-screen';
+import { Dimensions } from 'react-native';
+  
+  /**
+   * Width-Percentage
+   * Converts width dimension to percentage
+   * 360, 760 - design were made using this scale
+   * @param dimension directly taken from design wireframes
+   * @returns {string} percentage string e.g. '25%'
+   */
+export const wp = dimension => {
+	const width = Dimensions.get('window').width;
+	return wp2dp((dimension / width) * 100 + '%');
+};
+  
+  /**
+   * Height-Percentage
+   * Converts width dimension to percentage
+   * * 360, 760 - design were made using this scale
+   * @param dimension directly taken from design wireframes
+   * @returns {string} percentage string e.g. '25%'
+   */
+export const hp = dimension => {
+	const height = Dimensions.get('window').height;
+	return hp2dp((dimension / height) * 100 + '%');
+};
+
 export function CommaFormatted(amount) {
 	var delimiter = ","; // replace comma if desired
 	var a = amount.split('.',2)
@@ -210,3 +240,5 @@ export const isValidPassword = password => {
 	
 	return regPassword.test(password);
 }
+
+

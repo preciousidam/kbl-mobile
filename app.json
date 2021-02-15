@@ -21,6 +21,8 @@
     "ios": {
       "bundleIdentifier": "com.kblinsurance",
       "supportsTablet": true,
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page.",
         "NSLocationWhenInUseUsageDescription": "This app needs to access location to show current location on map"
@@ -31,6 +33,7 @@
       "versionCode": 1,
       "enableDangerousExperimentalLeanBuilds": true,
       "googleServicesFile": "./google-services.json",
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -40,10 +43,27 @@
           "apiKey": "AIzaSyCGSNoqSm7SQ0EzrwDY-CDwlGQvakcCswg"
         }
       },
-      "permissions": [ "CAMERA", "WRITE_EXTERNAL_STORAGE", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "MEDIA_LIBRARY", "MEDIA_LIBRARY_WRITE_ONLY" ]
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA_ROLL",
+        "READ_EXTERNAL_STORAGE",
+        "MEDIA_LIBRARY",
+        "MEDIA_LIBRARY_WRITE_ONLY",
+        "USE_FINGERPRINT",
+        "USE_BIOMETRIC",
+        "VIBRATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "KBL Insurance mobile app",
+    "notification": {
+      "icon": "./assets/kblicon.png",
+      "color": "#ffffff",
+      "iosDisplayInForeground": true
+    },
+    "androidShowExponentNotificationInShellApp": true
   }
 }
