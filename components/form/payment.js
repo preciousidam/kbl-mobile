@@ -26,7 +26,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                     <Text style={styles.subHeader}>With {platform}</Text>
                     {msg != 0 && <Text style={[styles.subHeader, {color: colors.danger}]}>{msg}</Text>}
                 </View>
-                <Text style={styles.label}>Card Number</Text>
+                <Text style={[styles.label, {color: colors.text}]}>Card Number</Text>
                 <CardNumberInputWithIcon 
                     style={styles.input}
                     placeholder="0000 0000 0000 0000"
@@ -37,7 +37,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                 />
                 <View style={styles.cvv}>
                     <View style={{flex: 1, marginRight: 5}}>
-                        <Text style={styles.label}>Expiration Date</Text>
+                        <Text style={[styles.label, {color: colors.text}]}>Expiration Date</Text>
                         <CardDateInputWithIcon 
                             style={styles.input}
                             placeholder="12/23"
@@ -47,7 +47,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                         />
                     </View>
                     <View style={{flex: 1, marginLeft: 5}}>
-                        <Text style={styles.label}>CVV</Text>
+                        <Text style={[styles.label, {color: colors.text}]}>CVV</Text>
                         <CardInputWithIcon 
                             style={styles.input}
                             placeholder="2341"
@@ -59,7 +59,7 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                 </View>
                 <View style={styles.cvv}>
                     <View style={{flex: 1, marginRight: 5}}>
-                        <Text style={styles.label}>Card Pin</Text>
+                        <Text style={[styles.label, {color: colors.text}]}>Card Pin</Text>
                         <CardInputWithIcon 
                             style={styles.input}
                             placeholder="0000"
@@ -78,13 +78,13 @@ export const CardForm = ({platform, amount, onPress, processing, msg}) => {
                                 onValueChange={_ => setIsEnabled(prev => !prev)}
                                 value={isEnabled}
                             />
-                            <Text>
+                            <Text style={[{color: colors.text}]}>
                                 {` Enable auto billing`}
                             </Text>
                         </View>
                     </View>
                 </View>
-                <Text style={{textAlign: 'center', marginVertical: 20, fontFamily: 'OpenSans_400Regular'}}>
+                <Text style={{textAlign: 'center', marginVertical: 20, fontFamily: 'OpenSans_400Regular', color: colors.text}}>
                     By enable auto billing you will be charged 
                         you current premium rate at upon expiration of this payment.
                 </Text>

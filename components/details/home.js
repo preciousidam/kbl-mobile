@@ -64,24 +64,24 @@ export const HomeDetails = ({pn}) => {
                 * {data?.valid_till == null?'This policy is inactive as you did not complete payment. click payment button to activate.':
                     "This policy has expired. click renew button to activate."}
             </Text>}
-            <Text style={styles.bodyHeader}>Policy Information</Text>
+            <Text style={[styles.bodyHeader, {color: colors.text}]}>Policy Information</Text>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Plan</Text>
-                <Text style={[styles.info]}> {data?.plan} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Plan</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.plan} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Building Type</Text>
-                <Text style={[styles.info]}> {data?.building_type} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Building Type</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.building_type} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Address</Text>
-                <Text style={[styles.info]}> {data?.address} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Address</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.address} </Text>
             </View>
-            <Text style={[styles.info1]}>All Items</Text>
+            <Text style={[styles.info1, {color: colors.text}]}>All Items</Text>
             {data?.items && data?.items.map(({item,value}, index) => 
-                <View style={[styles.infoView]}>
-                    <Text style={[styles.info1]}>{item}</Text>
-                    <Money style={[styles.info]} amount={parseFloat(value).toFixed(2)} />
+                <View key={item} style={[styles.infoView]}>
+                    <Text style={[styles.info1, {color: colors.text}]}>{item}</Text>
+                    <Money style={[styles.info, {color: colors.text}]} amount={parseFloat(value).toFixed(2)} />
                 </View>
             )}
         </View>

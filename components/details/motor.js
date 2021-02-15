@@ -64,30 +64,30 @@ export const MotorDetails = ({pn}) => {
                 * {data?.valid_till == null?'This policy is inactive as you did not complete payment. click payment button to activate.':
                     "This policy has expired. click renew button to activate."}
             </Text>}
-            <Text style={styles.bodyHeader}>Policy Information</Text>
+            <Text style={[styles.bodyHeader, {color: colors.text}]}>Policy Information</Text>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Vehicle Value</Text>
-                <Money style={[styles.info]} amount={parseFloat(data?.value).toFixed(2)} />
+                <Text style={[styles.info1, {color: colors.text}]}>Vehicle Value</Text>
+                <Money style={[styles.info, {color: colors.text}]} amount={parseFloat(data?.value).toFixed(2)} />
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Vehicle Model</Text>
-                <Text style={[styles.info]}> {data?.vehicle_model} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Vehicle Model</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.vehicle_model} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Registration Number</Text>
-                <Text style={[styles.info]}> {data?.registration_number} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Registration Number</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.registration_number} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Engine Number</Text>
-                <Text style={[styles.info]}> {data?.engine_number} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Engine Number</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.engine_number} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Chassis Number</Text>
-                <Text style={[styles.info]}> {data?.chasis_number} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Chassis Number</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.chasis_number} </Text>
             </View>
             <View style={[styles.infoView]}>
-                <Text style={[styles.info1]}>Vehicle Class</Text>
-                <Text style={[styles.info]}> {data?.vehicle_class} </Text>
+                <Text style={[styles.info1, {color: colors.text}]}>Vehicle Class</Text>
+                <Text style={[styles.info, {color: colors.text}]}> {data?.vehicle_class} </Text>
             </View>
         </View>
         

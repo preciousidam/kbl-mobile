@@ -28,11 +28,11 @@ export const UpdateKYC = ({}) => {
     }
 
     return (
-        <View style={[styles.container, {backgroundColor: colors.card}]}>
+        <View style={[styles.container, {backgroundColor: dark? colors.background:colors.card}]}>
             <ScrollView>
                 <KYCIndividualForm />
                 <View style={{paddingHorizontal: 15}}>
-                    <Text style={styles.help}>I hereby declare that the information I provided is true and complete to the best of my knowledge and belief and I undertake to inform KBL Insurance of any changes therein immediately. In the event that the information I provided proves to be untrue and incomplete in any respect, the Company shall have no liability under the Insurance.</Text>
+                    <Text style={[styles.help, {color: colors.text}]}>I hereby declare that the information I provided is true and complete to the best of my knowledge and belief and I undertake to inform KBL Insurance of any changes therein immediately. In the event that the information I provided proves to be untrue and incomplete in any respect, the Company shall have no liability under the Insurance.</Text>
                     <Solidbutton text="Submit" style={styles.button} onPress={submit} />
                 </View>
             </ScrollView>

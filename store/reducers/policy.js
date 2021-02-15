@@ -87,7 +87,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
     const client = await getLoginClient();
 
     if (product.category === 'Motor'){
-        formdata = motorFormData(filteredData);
+        formdata = await motorFormData(filteredData);
     }
     else if (product.category === 'Home'){
         
@@ -106,7 +106,7 @@ export const savePolicyAsync = (product, body, navigation) => async dispatch => 
     
     try{
         const {data, status} = await client.post(product?.purchase_link, formdata);
-       
+        console.log(data)
         if (status === 200 || status === 201){
             dispatch(create(data));
             if (data){

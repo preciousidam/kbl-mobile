@@ -11,7 +11,7 @@ export function CardSquare({icon, name, onPress}){
         <TouchableOpacity onPress={onPress} activeOpacity={0.7} >
             <View style={[{...styles.card, backgroundColor: colors.primary}]}>
                 {icon}
-                <Text style={styles.text}>{name}</Text> 
+                <Text style={[styles.text, {color: colors.text}]}>{name}</Text> 
             </View>
         </TouchableOpacity>
     )

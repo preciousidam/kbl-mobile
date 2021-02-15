@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Dimensions} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import moment from 'moment';
@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Money } from '../money';
 import { retrievePolicyAsync } from '../../store/reducers/policy';
 import { isNewPolicy } from '../../utility';
-import { Modal } from 'react-native';
-import { Button } from 'react-native';
 
 
 export const PolicyList = ({ref}) => {
@@ -46,14 +44,15 @@ export const PolicyList = ({ref}) => {
     )
 }
 
-export default PolicyList;
+export default forwardRef((props,ref) => <PolicyList ref={ref} {...props} />);
 
 export const Empty = _  => {
+    const {colors, dark} = useTheme();
     return (
         <View style={{
             minHeight: Dimensions.get('window').height - 150, 
             flex: 1, 
-            backgroundColor: '#fff', 
+            backgroundColor: dark? colors.background : colors.card, 
             alignItems: 'center', 
             justifyContent: 'center'
         }}>
@@ -77,11 +76,11 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
             <View style={[styles.update, {backgroundColor: colors.card}]}>
                 <View style={styles.amount}>
                     {icon}
-                    <Money style={styles.bold} amount={parseFloat(premium).toFixed(2)} />
+                    <Money style={{...styles.bold, color: colors.text}} amount={parseFloat(premium).toFixed(2)} />
                     {is_active && isNew && <Text style={[styles.new, {backgroundColor: colors.warning}]}>New</Text>}
                 </View>
                 <View style={{marginVertical: 10,}}>
-                    <Text style={styles.bold}>{policy_number}</Text>
+                    <Text style={[styles.bold, {color: colors.text}]}>{policy_number}</Text>
                 </View>
                 {is_active ?<Text style={{color: '#858585', fontSize: 13,}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
                 <Text style={{color: colors.warning, fontSize: 13,}}>In-Active</Text>}

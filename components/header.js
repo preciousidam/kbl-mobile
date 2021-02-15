@@ -23,10 +23,10 @@ export const Header = ({name, onNotClick}) => {
             <View style={styles.headerprofile}>
                 <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
                     <View style={styles.more}>
-                        <Ionicons name='ios-menu' size={30} color="#000" />
+                        <Ionicons name='ios-menu' size={30} color={colors.text} />
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.h4}>{name}</Text>
+                <Text style={[styles.h4, {color: colors.text}]}>{name}</Text>
             </View>
             <TouchableOpacity onPress={onNotClick}>
                 <View>
@@ -47,7 +47,7 @@ export const ActionHeader = ({name, onPress}) => {
     return (
         <View style={[styles.header,{paddingTop, backgroundColor: colors.card}]}>
             <View style={styles.headerprofile}>
-                <Text style={styles.h4}>{name}</Text>
+                <Text style={[styles.h4, {color: colors.text}]}>{name}</Text>
             </View>
             <TouchableOpacity onPress={onPress} activeOpacity={.8}>
                 <View style={[styles.action, {backgroundColor: colors.primary}]}>
@@ -71,10 +71,10 @@ export const FormHeader = ({name, onPress, Icon, onBackPress}) => {
             <View style={styles.headerprofile}>
                 <TouchableOpacity onPress={onBackPress? _ => onBackPress(): _ => goBack()} activeOpacity={.8}>
                     <View style={{height: 50, justifyContent: "center", alignItems: 'center', paddingRight: 30}}>
-                        <Ionicons name="ios-arrow-back" size={24} color="black" />
+                        <Ionicons name="ios-arrow-back" size={24} color={colors.text} />
                     </View>
                 </TouchableOpacity>
-                <Text style={[styles.h4, {fontSize: 18,}]}>{name}</Text>
+                <Text style={[styles.h4, {fontSize: 18, color: colors.text}]}>{name}</Text>
             </View>
             <TouchableOpacity onPress={onPress} activeOpacity={.8}>
                 <View style={[styles.next, {backgroundColor: colors.primary}]}>

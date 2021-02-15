@@ -10,11 +10,13 @@ import SwipeablePanel from 'react-native-sheets-bottom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Linking } from 'react-native';
 import { retrieveBranchAsync } from '../../../../store/reducers/app';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
 export const BranchesRoute = ({navigation}) => {
     const {Navigator, Screen} = Stack;
+    const {colors, dark} = useTheme();
 
     return (
         <Navigator>
@@ -30,7 +32,7 @@ export const BranchesRoute = ({navigation}) => {
                         return (
                             <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
                                 <View style={{marginHorizontal: 15,}}>
-                                    <Ionicons name='ios-menu' size={30} color="#000" />
+                                    <Ionicons name='ios-menu' size={30} color={colors.text} />
                                 </View>
                             </TouchableOpacity>
                         )
@@ -66,8 +68,9 @@ export const Branches = ({}) => {
     }, [search])
 
     return (
-        <View style={styles.container}>
-            <MapView 
+        <View style={[styles.container, {backgroundColor: dark? colors.background: colors.card}]}>
+            <Header value={search} onChange={text => setSearch(text)} />
+            {/*<MapView 
                 style={styles.map}
                 showsUserLocation={true}
                 initialRegion={{
@@ -76,38 +79,36 @@ export const Branches = ({}) => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
-            />
-            <SwipeablePanel
-                fullWidth
-                isActive={activePanel}
-                onClose={closePanel}
-                onPressCloseButton={closePanel}
-            >
-               <PanelContent branchs={filtered||branchs} />
-            </SwipeablePanel>
-            <Header value={search} onChange={text => setSearch(text)} />
+            />*/}
+            
+            <View style={{width: '100%'}}>
+                <ScrollView>
+                    <PanelContent branchs={filtered||branchs} />
+               </ScrollView>
+            </View>
+            
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )
 }
 
 export const PanelContent = ({branchs}) => {
-    const {colors} = useTheme()
+    const {colors, dark} = useTheme()
     return (
-        <View style={styles.bottom}>
-            {branchs.map(({region, address, tel_one, tel_two}) => (
-                <View>
-                    <Text style={styles.region}>{region.toUpperCase()} BRANCH</Text>
+        <View style={[styles.bottom, {color: colors.background}]}>
+            {branchs.map(({region, address, tel_one, tel_two},i) => (
+                <View style={{backgroundColor: dark? colors.background: colors.card}} key={region+i}>
+                    <Text style={[styles.region, {color: colors.text}]}>{region.toUpperCase()} BRANCH</Text>
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Ionicons name="location-sharp" size={30} color={colors.success} /></View>
+                        <View style={styles.fst}><Ionicons name="location-sharp" size={24} color={colors.success} /></View>
                         <View style={styles.snd}>
-                            <Text style={styles.text}>{address}</Text>
+                            <Text style={[styles.text, {color: colors.text}]}>{address}</Text>
                         </View>
                     </View>
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Foundation name="telephone" size={30} color={colors.success} /></View>
+                        <View style={styles.fst}><Foundation name="telephone" size={24} color={colors.success} /></View>
                         <View style={styles.snd}>
-                            <Text onPress={_ => Linking.openURL(`tel:${tel_one}`)} style={[styles.text, {marginRight: 15}]}>{tel_one}</Text>
+                            <Text onPress={_ => Linking.openURL(`tel:${tel_one}`)} style={[styles.text, {marginRight: 15, color: colors.text}]}>{tel_one}</Text>
                             {tel_two && <Text onPress={_ => Linking.openURL(`tel:${tel_two}`)} style={[styles.text]}>{tel_two}</Text>}
                         </View>
                     </View>
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 45,
     },
     map: {
         width: Dimensions.get('window').width,
@@ -149,11 +151,11 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     header: {
-        position: 'absolute',
-        top: 0,
+        
         width: Dimensions.get('window').width,
         padding: 15,
-        zIndex: 10,
+        margin: 0,
+       
     },
     search: {
         paddingVertical: 5,

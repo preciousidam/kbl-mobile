@@ -9,7 +9,7 @@ import FocusAwareStatusBar from '../../../../components/statusBar';
 import * as IntentLauncher from 'expo-intent-launcher';
 import { PasswordOutlinedInputWithIcon } from '../../../../components/input';
 import { Image } from 'react-native';
-import { changePassword } from '../../../../store/reducers/auth';
+import { changePassword, logout } from '../../../../store/reducers/auth';
 import { Solidbutton } from '../../../../components/button';
 
 
@@ -34,6 +34,7 @@ export default function SettingNavigator({navigation}){
 }
 
 const OpenSettingsButton = ({ children }) => {
+    const {colors, dark} = useTheme();
     const handlePress = useCallback(async () => {
         // Open the custom settings if the app has one
         await Linking.openSettings();
@@ -41,14 +42,15 @@ const OpenSettingsButton = ({ children }) => {
   
     return (
         <TouchableOpacity onPress={handlePress}>
-            <View style={styles.action}>
-                <Text style={styles.actText}>{children}</Text>
+            <View style={[styles.action, {backgroundColor: colors.card}]}>
+                <Text style={[styles.actText, {color: colors.text}]}>{children}</Text>
             </View>
         </TouchableOpacity>
     );
 };
 
 const OpenNotificationSettingsButton = ({ children }) => {
+    const {colors, dark} = useTheme();
     const handlePress = useCallback(async () => {
         // Open the custom settings if the app has one
         await IntentLauncher.startActivityAsync(IntentLauncher.ACTION_APP_NOTIFICATION_SETTINGS);
@@ -56,8 +58,8 @@ const OpenNotificationSettingsButton = ({ children }) => {
   
     return (
         <TouchableOpacity onPress={handlePress}>
-            <View style={styles.action}>
-                <Text style={styles.actText}>{children}</Text>
+            <View style={[styles.action, {backgroundColor: colors.card}]}>
+                <Text style={[styles.actText, {color: colors.text}]}>{children}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -78,8 +80,8 @@ const ResetPasswordButton = ({ children }) => {
     return (
         <View>
             <TouchableOpacity onPress={handlePress}>
-                <View style={styles.action}>
-                    <Text style={styles.actText}>{children}</Text>
+                <View style={[styles.action, {backgroundColor: colors.card}]}>
+                    <Text style={[styles.actText, {color: colors.text}]}>{children}</Text>
                 </View>
             </TouchableOpacity>
             <Modal
@@ -87,10 +89,10 @@ const ResetPasswordButton = ({ children }) => {
                 transparent={false}
                 onRequestClose={_ => setVisible(false)}
             >
-                <View style={styles.modal}>
+                <View style={[styles.modal, {backgroundColor: colors.card}]}>
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <Image source={require('../../../../assets/key.png')} style={{width: 100, height: 100}} />
-                        <Text style={styles.modalText}>Enter new password. Password must include numbers and one special character</Text>
+                        <Text style={[styles.modalText, {color: colors.text}]}>Enter new password. Password must include numbers and one special character</Text>
                         {isLoading && <ActivityIndicator color={colors.info} size="large" />}
                     </View>
                     <PasswordOutlinedInputWithIcon
@@ -129,8 +131,8 @@ export const Profile = ({navigation}) => {
             <View style={[styles.header, {backgroundColor: colors.card}]}>
                 <Avatar icon={{name:"person"}} size="medium" rounded containerStyle={{backgroundColor: '#c6c6c6', marginRight: 12,}} />
                 <View>
-                    <Text style={styles.text}>{`${user?.first_name} ${user?.last_name}`}</Text>
-                    <Text style={styles.text}>{user?.email}</Text>
+                    <Text style={[styles.text, {color: colors.text}]}>{`${user?.first_name} ${user?.last_name}`}</Text>
+                    <Text style={[styles.text, {color: colors.text}]}>{user?.email}</Text>
                 </View>
             </View>
             <View style={{marginVertical: 15,}}>
@@ -138,15 +140,15 @@ export const Profile = ({navigation}) => {
                 <ResetPasswordButton>Change Password</ResetPasswordButton>
             
                 <TouchableOpacity onPress={_ => navigation.navigate("help")}>
-                    <View style={styles.action}>
-                        <Text style={styles.actText}>Support</Text>
+                    <View style={[styles.action, {backgroundColor: colors.card}]}>
+                        <Text style={[styles.actText, {color: colors.text}]}>Support</Text>
                     </View>
                 </TouchableOpacity>
                 <OpenNotificationSettingsButton>Notification</OpenNotificationSettingsButton>
                 <OpenSettingsButton>Settings</OpenSettingsButton>
                 <TouchableOpacity onPress={signOut}>
-                    <View style={styles.action}>
-                        <Text style={styles.actText}>Sign Out</Text>
+                    <View style={[styles.action, {backgroundColor: colors.card}]}>
+                        <Text style={[styles.actText, {color: colors.text}]}>Sign Out</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -169,7 +171,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat_700Bold'
     },
     action: {
-        backgroundColor: '#fff',
         padding: 20,
         borderBottomWidth: 1,
     },

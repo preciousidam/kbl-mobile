@@ -12,6 +12,7 @@ import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { OutlinedDatePicker } from '../input/datepicker';
 import {edit} from '../../store/reducers/kyc';
 import {ImageUploader} from '../imageUploader';
+import { colors } from 'react-native-elements';
 
 
 export const KYCIndividualForm = ({}) => {
@@ -21,6 +22,7 @@ export const KYCIndividualForm = ({}) => {
     const {kyc} = useSelector(state => state.kyc);
     const {user} = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const {colors} = useTheme();
 
     return (
         <View style={styles.container}>
@@ -40,7 +42,7 @@ export const KYCIndividualForm = ({}) => {
                     textContentType="emailAddress"
                 />
                 <OutlinedInputWithIcon
-                    icon={<Text>+234</Text>}
+                    icon={<Text style={{color: colors.text}}>+234</Text>}
                     placeholder="Phone" 
                     style={styles.input}
                     keyboardType='phone-pad'
@@ -76,7 +78,7 @@ export const KYCIndividualForm = ({}) => {
                     value={kyc.policy_number}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, policy_number: nativeEvent.text}))}
                 />
-                <Text style={styles.help}>Date of Birth</Text>
+                <Text style={[styles.help, {color: colors.text}]}>Date of Birth</Text>
                 <OutlinedDatePicker
                     placeholder="YYYY-MM-DD"
                     style={styles.input}
@@ -90,7 +92,7 @@ export const KYCIndividualForm = ({}) => {
                     value={kyc.occupation}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, occupation: nativeEvent.text}))}
                 />
-                <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15,}}>Identification</Text>
+                <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15, color: colors.text}}>Identification</Text>
                 <Picker
                     prompt="Type of ID"
                     options={IDS} 
@@ -104,14 +106,14 @@ export const KYCIndividualForm = ({}) => {
                     value={kyc.id_number}
                     onChangeText={({nativeEvent}) => dispatch(edit({...kyc, id_number: nativeEvent.text}))}
                 />
-                <Text style={styles.help}>Date Issued</Text>
+                <Text style={[styles.help, {color: colors.text}]}>Date Issued</Text>
                 <OutlinedDatePicker
                     placeholder="YYYY-MM-DD"
                     style={styles.input}
                     value={kyc.issued_at || new Date()}
                     onChangeText={value => dispatch(edit({...kyc, issued_at: value}))}
                 />
-                <Text style={styles.help}>Expiry Date</Text>
+                <Text style={[styles.help, {color: colors.text}]}>Expiry Date</Text>
                 <OutlinedDatePicker
                     placeholder="YYYY-MM-DD"
                     style={styles.input}
@@ -123,7 +125,7 @@ export const KYCIndividualForm = ({}) => {
                     image={kyc.id_image}
                     callback={image => dispatch(edit({...kyc, id_image: image}))}
                 />
-                <Text style={styles.help}>Signature</Text>
+                <Text style={[styles.help, {color: colors.text}]}>Signature</Text>
                 <ImageUploader 
                     text="Upload image of your signature"
                     image={kyc.signature}

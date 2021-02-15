@@ -52,47 +52,64 @@ export const isNewPolicy = created_at => {
 const validUri = image => {
 	return typeof image !== 'object'? image : Platform.OS === "android" ? image?.uri : image?.uri.replace("file://", ""); 
 }
-export const motorFormData = body => {
+
+const get_file_name = uri => {
+  	let filename = uri.split('/').pop();
+	return filename;
+}
+
+
+const get_file_type = image => {
+	let match = /\.(\w+)$/.exec(image);
+  	let type = match ? `image/${match[1]}` : `image`;
+	return type;
+}
+
+const image_from_base64 = async (image, name, type) => {
+	const res = await fetch(`data:${type};base64,${image.base64}`);
+	const blob = await res.blob()
+	const file = File([blob],name, {type})
+	console.log(file)
+	return file;
+}
+
+export const motorFormData = async body => {
 	let formData = new FormData();
 
 	if (body?.back_image){
-		formData.append("back_image", 
-			{name: "one.jpg",
-			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-			uri: validUri(body.back_image),
-		});
+		
+		let uri = validUri(body.back_image)
+		let name = get_file_name(uri)
+		let type = get_file_type(name)
+		formData.append("back_image", {name,type,uri})
 	}
 	
 	if (body?.front_image){
-		formData.append("front_image", 
-			{name: "one.jpg",
-			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-			uri: validUri(body.front_image)
-		})
+		let uri = validUri(body.front_image)
+		let name = get_file_name(uri)
+		let type = get_file_type(name)
+		formData.append("front_image", {name,type,uri})
 	}
 
 	if (body?.vehicle_license){
-		formData.append("vehicle_license", 
-			{name: "one.jpg",
-			type: `image/jpeg`, 
-			extension: 'jpg', ext: 'jpg',
-			uri: validUri(body.vehicle_license)
-		})
+		let uri = validUri(body.vehicle_license)
+		let name = get_file_name(uri)
+		let type = get_file_type(name)
+		formData.append("vehicle_license", {name,type,uri})
 	}
 	
 	if (body?.proof_of_ownership){
-		formData.append("proof_of_ownership", 
-			{name: "one.jpg",
-			type: `image/jpeg`, extension: 'jpg', ext: 'jpg',
-			uri: validUri(body.proof_of_ownership)
-		})
+		let uri = validUri(body.proof_of_ownership)
+		let name = get_file_name(uri)
+		let type = get_file_type(name)
+		formData.append("proof_of_ownership", {name,type,uri})
 	}
     
     for ( let key in body ) {
         if (key != "back_image" && key != "proof_of_ownership" && key != "vehicle_license" && key != "front_image" )
             formData.append(key, body[key]);
 	}
-	
+	console.log('formdata', formData)
 	return formData;
 }
 

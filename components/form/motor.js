@@ -23,7 +23,8 @@ export const MotorForm = ({}) => {
     
 
     const cars = async _ => {
-        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=1000');
+        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=100');
+        console.warn(results)
         setCars(results);
         let make = results.map(veh => `${veh.Make}`).sort();
         let set = new Set(make)

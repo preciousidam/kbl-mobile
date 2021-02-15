@@ -71,13 +71,13 @@ export const Reset = props => {
     
     return (
         <View style={[styles.container, 
-            {paddingBottom: bottom+ 20, paddingTop: top+100, backgroundColor: colors.card}]}
+            {paddingBottom: bottom+ 20, paddingTop: top+100, backgroundColor: dark? colors.background:colors.card}]}
         >
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios'? "padding": "position"}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
             >
-                <Text style={styles.headerText}>
+                <Text style={[styles.headerText, {color: colors.text}]}>
                     Enter an email address associated with your account and we'll send you instructions
                     to reset your password.
                 </Text>

@@ -37,7 +37,7 @@ export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, on
         >   
             <TouchableOpacity onPress={_ => setShow(true)}>
                 <View style={styles.icon}>
-                    <Ionicons name="md-calendar" size={24} color="black" />
+                    <Ionicons name="md-calendar" size={24} color={colors.text} />
                 </View>
             </TouchableOpacity>
             <TextInput 
@@ -94,7 +94,7 @@ export const OutlinedTimePicker = ({style, icon, help, contProps, inputStyle, on
         >   
             <TouchableOpacity onPress={_ => setShow(true)}>
                 <View style={styles.icon}>
-                    <Ionicons name="time" size={24} color="black" />
+                    <Ionicons name="time" size={24} color={colors.text} />
                 </View>
             </TouchableOpacity>
             <TextInput 

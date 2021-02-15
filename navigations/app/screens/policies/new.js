@@ -64,7 +64,7 @@ export const NewPolicy = ({ navigation,route}) => {
 
 
     return (
-        <View style={{flex: 1, backgroundColor: colors.card}}>
+        <View style={{flex: 1, backgroundColor: dark ? colors.background:colors.card}}>
             <FormHeader 
                 name="New Application" 
                 Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />}
@@ -72,13 +72,14 @@ export const NewPolicy = ({ navigation,route}) => {
             />
             <ScrollView>
                 <View style={[styles.opt, {backgroundColor: colors.card}]}>
-                    <Text style={{fontFamily: 'OpenSans_700Bold'}}>Product</Text>
+                    <Text style={{fontFamily: 'OpenSans_700Bold', color: colors.text}}>Product</Text>
                     <Picker 
                         prompt="Select Product"
                         options={options} 
-                        style={{padding: 0, width: '50%'}}
+                        style={{padding: 0, width: '50%', color: colors.text}}
                         value={products.find(({id}) => selected === id)?.name}
                         onValueChange={onSelect}
+                        dropdownIconColor={colors.text}
                     />
                 </View>
                 <View style={styles.form}>

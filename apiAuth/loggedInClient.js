@@ -58,7 +58,7 @@ loginClient.interceptors.response.use(
         return response;
     },
     async error => {
-        
+        console.log(error)
         if (error.response.status === 429) {
             Alert.alert('Too many requests. Please try again later.');
         } 

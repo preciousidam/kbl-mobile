@@ -82,6 +82,7 @@ export const Login = ({navigation}) => {
                             value={username} 
                             onChangeText={({nativeEvent}) => setUsername(nativeEvent.text)}
                             style={styles.textInput}
+                            placeholderTextColor="#c6c6c6"
                         />
 
                         <PasswordOutlinedInputWithIcon
@@ -89,7 +90,8 @@ export const Login = ({navigation}) => {
                             contProps={styles.textInput}
                             value={password} 
                             onChangeText={({nativeEvent}) => setPassword(nativeEvent.text)}
-                            style={styles.textInput} 
+                            style={styles.textInput}
+                            placeholderTextColor="#c6c6c6"
                         />
                         
                         <Solidbutton
@@ -98,15 +100,15 @@ export const Login = ({navigation}) => {
                             onPress={onPress}
                         />
                         <View style={styles.forgotCont}>
-                            <Text style={styles.forgot} onPress={_ => navigate('Reset')}>Forgot password?</Text>
-                            <Text style={styles.forgot} onPress={_ => biometric()}>Fingerprint Login</Text>
+                            <Text style={[styles.forgot, {color: colors.text}]} onPress={_ => navigate('Reset')}>Forgot password?</Text>
+                            <Text style={[styles.forgot, {color: colors.text}]} onPress={_ => biometric()}>Fingerprint Login</Text>
                         </View>
                     
                     </KeyboardAvoidingView>
                     <View style={styles.bottom}>
-                        <Text style={styles.link}>
+                        <Text style={[styles.link, {color: colors.text}]}>
                             Don't have an account? 
-                            <Text style={styles.inner} onPress={() => navigate('Register')}> Register</Text>
+                            <Text style={[styles.inner, {color: colors.text}]} onPress={() => navigate('Register')}> Register</Text>
                         </Text>
                     </View>
                 </View>

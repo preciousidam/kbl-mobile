@@ -31,21 +31,21 @@ export const SummaryView = ({navigation}) => {
                 <View style={[styles.product, {backgroundColor: colors.card}]}>
                     <Text style={[styles.pHeader, {color: colors.text}]}>Detail Information</Text>
                     <View style={[styles.infoView]}>
-                        <Text style={[styles.info1]}>Policy Number</Text>
-                        <Text style={[styles.info]}>{form.policy_number}</Text>
+                        <Text style={[styles.info1, {color: colors.text}]}>Policy Number</Text>
+                        <Text style={[styles.info, {color: colors.text}]}>{form.policy_number}</Text>
                     </View>
                     <View style={[styles.infoView]}>
-                        <Text style={[styles.info1]}>Value</Text>
-                        <Money style={[styles.info]} amount={parseFloat(form.value).toFixed(2)} />
+                        <Text style={[styles.info1, {color: colors.text}]}>Value</Text>
+                        <Money style={[styles.info, {color: colors.text}]} amount={parseFloat(form.value).toFixed(2)} />
                     </View>
                     <View style={[styles.infoView]}>
-                        <Text style={[styles.info1]}>Valid Till</Text>
-                        {form?.valid_till && <Text style={[styles.info]}>{moment(form?.valid_till).format('lll')}</Text>}
+                        <Text style={[styles.info1, {color: colors.text}]}>Valid Till</Text>
+                        {form?.valid_till && <Text style={[styles.info, {color: colors.text}]}>{moment(form?.valid_till).format('lll')}</Text>}
                     </View>
                 </View>
             </ScrollView>
             <View style={{padding: 15}}><Solidbutton text="Continue" onPress={e => navigate('payOpt')} /></View>
-            <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />
+            <FocusAwareStatusBar barStyle={'light-content'} backgroundColor={colors.primary} />
         </View>
     )
 }

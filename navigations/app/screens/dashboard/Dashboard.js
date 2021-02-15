@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Ionicons} from '@expo/vector-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import moment from 'moment';
+import * as Updates from 'expo-updates';
 
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import FocusAwareStatusBar from '../../../../components/statusBar';
@@ -12,6 +13,7 @@ import {Header} from '../../../../components/header';
 import ProductList from '../../../../components/policy/quickLinks';
 import { useSelector, useDispatch } from 'react-redux';
 import {retrieveActivitiesAsync} from '../../../../store/reducers/app';
+import { Alert } from 'react-native';
 
 
 export const Dashboard = ({navigation}) => {
@@ -30,14 +32,10 @@ export const Dashboard = ({navigation}) => {
         dispatch(retrieveActivitiesAsync(user?.pk))
         return
     }));
-
-    const ControlledProductList = forwardRef((props, ref) => (
-        <ProductList ref={ref} />
-    ))
     
 
     return (
-        <View style={[styles.container, {backgroundColor: colors.card}]}>
+        <View style={[styles.container, {backgroundColor: dark? colors.background:colors.card}]}>
            <Header name="Home"  
                 onNotClick={_ => navigation.navigate('Notifications')}
            />
@@ -54,7 +52,7 @@ export const Dashboard = ({navigation}) => {
                             <Ionicons name="arrow-forward" size={24} color={colors.primary} />
                         </TouchableOpacity>
                     </View>
-                    <ControlledProductList ref={ref => flatlist = ref} />
+                    <ProductList />
                 </View>
                 <View >
                     <Text style={[styles.headerText, {color: colors.text}]}>Quick Actions</Text>
@@ -86,7 +84,7 @@ export const Dashboard = ({navigation}) => {
                 </View>
                 <Activities />
             </ScrollView>
-            <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
+            <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={ dark? colors.background:colors.card} />
         </View>
     )
 }
@@ -111,14 +109,14 @@ export const Activities = ({}) => {
     const {colors, dark} = useTheme();
 
     const empty = (
-        <View style={{marginVertical: 15, justifyContent: 'center', alignItems: 'center',}}>
+        <View style={{marginVertical: 15, justifyContent: 'center', alignItems: 'center'}}>
             <Image source={require('../../../../assets/empty.png')} style={{width: 100,height: 80}} />
             <Text style={{fontFamily: 'OpenSans_400Regular', marginVertical: 10}}>Nothing to see here</Text>
         </View>
     )
     
     return (
-        <View style={{marginVertical: 20, paddingHorizontal: 15,}}>
+        <View style={{marginVertical: 20, paddingHorizontal: 15}}>
             <Text 
                 style={[styles.headerText, {color: colors.text, paddingLeft: 0, marginBottom: 15}]}
             >
@@ -130,14 +128,15 @@ export const Activities = ({}) => {
 }
 
 export const Activity = ({type, desc, when}) => {
+    const {colors, dark} = useTheme();
     return (
-        <View style={styles.update}>
-            <Text style={styles.updateText}>{type}</Text>
+        <View style={[styles.update, {backgroundColor: colors.card}]}>
+            <Text style={[styles.updateText, {color: colors.text}]}>{type}</Text>
             <View style={styles.apart}>
-                <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular'}]}>{desc}</Text>
+                <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular', color: colors.text}]}>{desc}</Text>
                 <Text style={styles.icon}><MaterialCommunityIcons name="file-cabinet" size={24} color="#fff" /></Text>
             </View>
-            <Text style={{fontFamily: 'OpenSans_400Regular'}}>{moment(when).fromNow()}</Text>
+            <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text}}>{moment(when).fromNow()}</Text>
         </View>
     )
 }

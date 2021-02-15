@@ -131,7 +131,7 @@ export const PaymentOptionView = ({navigation}) => {
 
     return (
         <View style={{flex: 1, backgroundColor: colors.card, padding: 10, alignItems: 'center', justifyContent: 'center'}}>
-            <Text style={styles.info}>
+            <Text style={[styles.info, {color: colors.text}]}>
                 Complete Your transactions using one of the following payment platform
             </Text>
 
@@ -172,7 +172,7 @@ export const PaymentOptionView = ({navigation}) => {
                 visible={showOTP}
                 onRequestClose={_ => setShowOTP(false)}
             >
-                <View style={styles.form}>
+                <View style={[styles.form, {backgroundColor: colors.card}]}>
                     <View style={{flex: 4, justifyContent: 'center'}}>
                         <Text style={[styles.subHeader, {color: colors.danger}]}>{msg}</Text>
                         <CardInputWithIcon 
@@ -189,13 +189,13 @@ export const PaymentOptionView = ({navigation}) => {
                         onPress={validate}
                     >
                         <View style={[styles.action, {backgroundColor: colors.success}]}>
-                            <Text style={styles.actionText}>Submit</Text>
+                            <Text style={[styles.actionText, {color: colors.text}]}>Submit</Text>
                             {processing && <ActivityIndicator size="large" color={colors.card}/>}
                         </View>
                     </TouchableOpacity>
                 </View>
             </Modal>
-            <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />
+            <FocusAwareStatusBar barStyle={'light-content'} backgroundColor={colors.primary} />
         </View>
     )
 }

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "KBL Insurance",
+    "slug": "kbl-insurance",
     "version": "1.0.0",
     "scheme": "kblapp",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/kblicon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,6 +19,7 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.kblinsurance",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page.",
@@ -27,9 +28,17 @@
     },
     "android": {
       "package": "com.kblinsurance",
+      "versionCode": 1,
+      "enableDangerousExperimentalLeanBuilds": true,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyCGSNoqSm7SQ0EzrwDY-CDwlGQvakcCswg"
+        }
       },
       "permissions": [ "CAMERA", "WRITE_EXTERNAL_STORAGE", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "MEDIA_LIBRARY", "MEDIA_LIBRARY_WRITE_ONLY" ]
     },

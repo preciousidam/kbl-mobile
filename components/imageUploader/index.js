@@ -12,7 +12,7 @@ import { Modal } from 'react-native';
 export const ImageUploader = ({image, callback, text}) => {
     
     const { showActionSheetWithOptions } = useActionSheet();
-    const options = ['Camera', 'Gallery', 'Cancel'];
+    const options = ['Gallery', 'Cancel'];
     const {colors, dark} = useTheme();
     const [view, setView] = useState(false);
     const icons = [
@@ -30,11 +30,12 @@ export const ImageUploader = ({image, callback, text}) => {
             return;
             }
         
-            let pickerResult = await ImagePicker.launchImageLibraryAsync();
+            let pickerResult = await ImagePicker.launchImageLibraryAsync({base64: true});
             
             if (pickerResult.cancelled === true) {
                 return;
             }
+            
             callback(pickerResult);
        
     }
@@ -47,13 +48,13 @@ export const ImageUploader = ({image, callback, text}) => {
         useModal: true,
         icons,
     },
-    (buttonIndex) => {
-        if (buttonIndex === 0) {
-            openCameraAsync();
+    async (buttonIndex) => {
+        if (buttonIndex === 1) {
+            await openCameraAsync();
             return;
         }
-        else if(buttonIndex === 1){
-            openImagePickerAsync();
+        else if(buttonIndex === 0){
+            await openImagePickerAsync();
             return;
         } 
         else return;
@@ -76,7 +77,7 @@ export const ImageUploader = ({image, callback, text}) => {
             return;
             }
             
-            let pickerResult = await ImagePicker.launchCameraAsync();
+            let pickerResult = await ImagePicker.launchCameraAsync({base64: true});
             
             if (pickerResult.cancelled === true) {
                 return;
@@ -135,7 +136,7 @@ export const ImageUploader = ({image, callback, text}) => {
             >
                 <View style={styles.imageView}>
                     <Image 
-                        source={{uri: image?.uri || image}} 
+                        source={{uri: `data:image/jpg;base64,${image?.base64}` || image}} 
                         style={styles.fullImage}
                     />
                 </View>

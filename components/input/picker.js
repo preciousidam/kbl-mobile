@@ -46,6 +46,7 @@ export const DynamicPicker = ({style, contProps, pickerStyle, onValueChange, opt
                 style={{...styles.input, ...pickerStyle, color: colors.text}} 
                 onValueChange={onValueChange}
                 {...rest}
+                dropdownIconColor="#fff"
             >
                 {options.map((x,i) => <Item label={x} key={i} value={x} />)}
             </Picker>
@@ -70,6 +71,7 @@ export const DynamicPickerInline = ({pickerStyle, onValueChange, options, value,
             }} 
             onValueChange={onValueChange}
             {...rest}
+            dropdownIconColor="#fff"
         >
             {options.map((x,i) => <Item label={x} key={i} value={x} />)}
         </Picker>

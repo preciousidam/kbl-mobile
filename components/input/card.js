@@ -1,10 +1,6 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {TextInput, View, StyleSheet} from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-
 
 
 export const CardNumberInputWithIcon = ({style, icon, contProps, inputStyle, onChangeText, value, ...rest}) => {
@@ -51,6 +47,7 @@ export const CardNumberInputWithIcon = ({style, icon, contProps, inputStyle, onC
                 onChange={onChangeText}
                 blurOnSubmit={true}
                 keyboardType='numeric'
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
             <View style={styles.icon}>{icon}</View>
@@ -100,6 +97,7 @@ export const CardDateInputWithIcon = ({style, icon, contProps, inputStyle, onCha
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
             <View style={styles.icon}>{icon}</View>
@@ -135,6 +133,7 @@ export const CardInputWithIcon = ({style, icon, contProps, inputStyle, onChangeT
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
             <View style={styles.icon}>{icon}</View>

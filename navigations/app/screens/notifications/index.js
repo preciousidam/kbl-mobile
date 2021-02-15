@@ -15,6 +15,7 @@ const Stack = createStackNavigator();
 
 export default function NotificationNavigator({navigation}){
     const {Navigator, Screen} = Stack;
+    const {colors} = useTheme();
     return (
         <Navigator>
             <Screen 
@@ -26,7 +27,7 @@ export default function NotificationNavigator({navigation}){
                         return (
                             <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
                                 <View style={{marginHorizontal: 15,}}>
-                                    <Ionicons name='ios-menu' size={30} color="#000" />
+                                    <Ionicons name='ios-menu' size={30} color={colors.text} />
                                 </View>
                             </TouchableOpacity>
                         )

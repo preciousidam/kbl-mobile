@@ -33,6 +33,7 @@ export const OutlinedInput = ({style, contProps, inputStyle, onChangeText, value
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -86,6 +87,7 @@ export const EmailOutlinedInput = ({style, contProps, inputStyle, onChangeText, 
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 placeholder="Email"
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -140,6 +142,7 @@ export const EmailOutlinedInputWithIcon = ({style, icon, contProps, inputStyle, 
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 placeholder="Email"
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -193,6 +196,7 @@ export const PasswordOutlinedInputWithIcon = ({style, icon, contProps, inputStyl
                 secureTextEntry={true}
                 textContentType="newPassword"
                 placeholder="Password"
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -228,6 +232,7 @@ export const OutlinedInputWithIcon = ({style, icon, contProps, inputStyle, onCha
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -266,6 +271,7 @@ export const SearchInput = ({style, contProps, inputStyle, onChangeText, value, 
                 style={{...styles.input, color: colors.text, ...inputStyle,}} 
                 onChangeText={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
         </View>
@@ -307,6 +313,7 @@ export const DateInput = ({style, contProps, inputStyle, onChangeText, value, ..
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
             {show && (
@@ -357,6 +364,7 @@ export const TimeInput = ({style, contProps, inputStyle, onChangeText, value, ..
                 style={{...styles.input, color: colors.text, ...inputStyle}} 
                 onChange={onChangeText}
                 blurOnSubmit={true}
+                placeholderTextColor="#c6c6c6"
                 {...rest} 
             />
             {show && (

@@ -92,8 +92,8 @@ export const ClaimsForm = ({ navigation,route}) => {
 
 
     return (
-        <View style={{flex: 1, backgroundColor: colors.card, padding: 15}}>
-            <Text style={styles.mHeader}>Provide your policy number and additional information to enable us assist you</Text>
+        <View style={{flex: 1, backgroundColor: dark? colors.background:colors.card, padding: 15}}>
+            <Text style={[styles.mHeader, {color: colors.text}]}>Provide your policy number and additional information to enable us assist you</Text>
             <View style={styles.form}>
                 <OutlinedInput 
                     style={styles.input}
@@ -107,6 +107,7 @@ export const ClaimsForm = ({ navigation,route}) => {
                     multiline={true}
                     onChangeText={text => setDetails(text)}
                     value={details}
+                    placeholderTextColor="#c6c6c6"
                 />
 
                 <Solidbutton text="Submit" onPress={onPress} style={{marginVertical: 20,}} />

@@ -59,9 +59,9 @@ export const HomeForm = ({}) => {
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
         >
             <View style={[styles.infoView, {borderColor: colors.success}]}>
-                <Text style={styles.infoText}>{'\u2B24'}  Bronze plan -- Sum insured on contents <Money amount="500000.00" /></Text>
-                <Text style={styles.infoText}>{'\u2B24'}  Silver plan -- Sum insured on contents <Money amount="750000.00" /></Text>
-                <Text style={styles.infoText}>{'\u2B24'}  Gold plan -- Sum insured on contents <Money amount="1000000.00" /></Text>
+                <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Bronze plan -- Sum insured on contents <Money amount="500000.00" /></Text>
+                <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Silver plan -- Sum insured on contents <Money amount="750000.00" /></Text>
+                <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Gold plan -- Sum insured on contents <Money amount="1000000.00" /></Text>
             </View>
             <Picker
                 prompt="Select Plan"
@@ -84,7 +84,7 @@ export const HomeForm = ({}) => {
                 onChangeText={({nativeEvent}) => dispatch(edit({...form, address: nativeEvent.text}))}
             />
             {exceeded && <Text style={[styles.error, {color: colors.danger}]}>* Total amount for contents insured for selected plan exceeded</Text>}
-            <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15,}}>Contents</Text>
+            <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15, color: colors.text}}>Contents</Text>
             {form?.items && Object.entries(form.items).map((item,index) => (
                 <Items 
                     key={`item${index}`} 
@@ -95,7 +95,7 @@ export const HomeForm = ({}) => {
         
         <TouchableOpacity onPress={addMore}>
             <View>
-                <Text style={styles.add}><Ionicons name="ios-add-circle" color={colors.info} size={20} />  Add more</Text>
+                <Text style={[styles.add, {color: colors.text}]}><Ionicons name="ios-add-circle" color={colors.info} size={20} />  Add more</Text>
             </View>
         </TouchableOpacity>
         
