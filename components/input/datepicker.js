@@ -4,6 +4,10 @@ import { useTheme } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, onChangeText, value, ...rest}) => {
     
@@ -37,7 +41,7 @@ export const OutlinedDatePicker = ({style, icon, help, contProps, inputStyle, on
         >   
             <TouchableOpacity onPress={_ => setShow(true)}>
                 <View style={styles.icon}>
-                    <Ionicons name="md-calendar" size={24} color={colors.text} />
+                    <Ionicons name="md-calendar" size={wp('4.5%')} color={colors.text} />
                 </View>
             </TouchableOpacity>
             <TextInput 
@@ -94,7 +98,7 @@ export const OutlinedTimePicker = ({style, icon, help, contProps, inputStyle, on
         >   
             <TouchableOpacity onPress={_ => setShow(true)}>
                 <View style={styles.icon}>
-                    <Ionicons name="time" size={24} color={colors.text} />
+                    <Ionicons name="time" size={wp('4.5%')} color={colors.text} />
                 </View>
             </TouchableOpacity>
             <TextInput 
@@ -131,12 +135,13 @@ const styles = StyleSheet.create({
     input: {
         fontFamily: 'Montserrat_400Regular',
         width: '100%',
-        height: 50,
+        height: hp('7%'),
+        fontSize: wp("3.3%"),
     },
     icon: {
         borderRightWidth: 1,
         borderRightColor: '#c6c6c6',
-        paddingHorizontal: 10,
-        marginRight: 10
+        paddingHorizontal: wp("2.6%"),
+        marginRight: wp("2.5%")
     }
 })

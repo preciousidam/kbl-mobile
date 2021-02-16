@@ -6,6 +6,10 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTheme } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import { Modal } from 'react-native';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
@@ -116,7 +120,7 @@ export const ImageUploader = ({image, callback, text}) => {
         return (
             <TouchableOpacity onPress={showOptions}>
                 <View style={[styles.image, {borderColor: colors.primary}]} >
-                    <Ionicons name="ios-images" color={colors.info} size={60} />
+                    <Ionicons name="ios-images" color={colors.info} size={wp("12%")} />
                     <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text}}>{text}</Text>
                 </View>
             </TouchableOpacity>
@@ -151,25 +155,16 @@ export const ImageUploader = ({image, callback, text}) => {
 
 
 const styles = StyleSheet.create({
-    form: {
-        flex: 1,
-        padding: 20,
-    },
-    input: {
-        paddingHorizontal: 15,
-        paddingVertical: 3,
-        borderRadius: 10,
-        marginVertical: 10,
-    },
+    
     image: {
         width: '100%',
-        height: 150,
+        height: hp('15%'),
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 1,
-        borderRadius: 10,
-        marginVertical: 10,
+        borderRadius: wp("2"),
+        marginVertical: hp("1"),
     },
     icon: {
         width: 36,

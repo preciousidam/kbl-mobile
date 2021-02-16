@@ -3,6 +3,10 @@ import { View, StyleSheet, TouchableWithoutFeedback, Text} from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import { useTheme } from '@react-navigation/native';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
@@ -150,7 +154,9 @@ const styles = StyleSheet.create({
         borderColor: '#c6c6c6'
     },
     input: {
-        fontFamily: 'Montserrat_700Bold',
-        width: '100%'
+        fontFamily: 'Montserrat_400Regular',
+        width: '100%',
+        height: hp('7%'),
+        fontSize: wp("3.3%"),
     }
 })

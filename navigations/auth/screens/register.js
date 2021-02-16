@@ -12,7 +12,10 @@ import { signUp } from '../../../store/reducers/auth';
 import { isValidEmail, isValidPassword } from '../../../utility';
 import { showMessage } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-community/async-storage';
-import { wp, hp } from '../../../utility';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
@@ -78,8 +81,7 @@ export const Register = ({navigation}) => {
                         keyboardVerticalOffset={Platform.OS === 'ios' ? hp(100): hp(10)}
                     >
                         <View style={styles.header}>
-                            <Image source={require('../../../assets/logo.png')} />
-                            <Text style={[styles.headerText, {color: colors['primary-dark']}]}>Create Account</Text>
+                            <Image source={require('../../../assets/logo.png')} style={styles.image} />
                         </View>
 
                         <OutlinedInputWithIcon 
@@ -164,20 +166,20 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: "space-between",
     },
+    image: {
+        width: wp("60%"),
+        height: hp("20%"),
+        resizeMode: 'contain',
+    },
     header: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: hp(50),
-    },
-    headerText: {
-        fontFamily: 'Montserrat_700Bold',
-        fontSize: wp(24),
-        marginTop: hp(10),
+        paddingVertical: hp('5%'),
     },
     link: {
         fontFamily: 'OpenSans_400Regular',
-        fontSize: wp(14),
+        fontSize: wp("3%"),
     },
     inner: {
         fontFamily: 'OpenSans_700Bold',
@@ -185,14 +187,15 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        marginVertical: hp(10),
+        marginVertical: hp('1.5%'),
     },
     textInput: {
-        marginVertical: hp(15),
+        marginVertical: hp("1.5%"),
     },
     bottom: {
         justifyContent: 'center',
         alignItems: "center",
+        height: hp("10%"),
     },
     texticon: {
         fontFamily: 'Montserrat_400Regular'

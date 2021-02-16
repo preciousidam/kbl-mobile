@@ -5,16 +5,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
 
 export const Header = ({name, onNotClick}) => {
-    const count = useSelector(state => state.notifications.filter(({read}) => read === false).length);
+    const count = useSelector(state => state.notifications.notifications?.filter(({read}) => read === false).length);
     const {colors} = useTheme();
     const notification = count > 0;
     const {top, bottom} = useSafeAreaInsets();
-    const paddingTop = Platform.OS == 'ios' ? top : 10;
+    const paddingTop = Platform.OS == 'ios' ? top : hp("1.5%");
     const navigation = useNavigation();
     
 
@@ -23,14 +27,14 @@ export const Header = ({name, onNotClick}) => {
             <View style={styles.headerprofile}>
                 <TouchableOpacity onPress={_ => navigation.toggleDrawer()}>
                     <View style={styles.more}>
-                        <Ionicons name='ios-menu' size={30} color={colors.text} />
+                        <Ionicons name='ios-menu' size={wp("7%")} color={colors.text} />
                     </View>
                 </TouchableOpacity>
                 <Text style={[styles.h4, {color: colors.text}]}>{name}</Text>
             </View>
             <TouchableOpacity onPress={onNotClick}>
                 <View>
-                    <Ionicons name='ios-notifications-outline' size={30} color={colors.highlight} />
+                    <Ionicons name='ios-notifications-outline' size={wp("6%")} color={colors.highlight} />
                     {notification && <Badge status='error' containerStyle={{ position: 'absolute', top: 2, right: 1 }} />}
                 </View>
             </TouchableOpacity>
@@ -94,8 +98,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         alignContent: "center",
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingVertical: hp('1%'),
+        paddingHorizontal: wp("2.5%"),
     },
     headerprofile: {
         flexDirection: "row",
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
     },
     h4: {
         fontFamily: 'Montserrat_700Bold',
-        fontSize: 25,
+        fontSize: wp("5%"),
     },
     action: {
         width: 50,
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
     },
     next: {
         elevation: 1,
-        borderRadius: 30,
+        borderRadius: wp("7%"),
         borderWidth: 1,
         borderColor: 'transparent',
         justifyContent: "center",

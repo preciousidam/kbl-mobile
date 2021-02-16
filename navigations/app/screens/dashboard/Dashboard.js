@@ -6,6 +6,10 @@ import {Ionicons} from '@expo/vector-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import moment from 'moment';
 import * as Updates from 'expo-updates';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import FocusAwareStatusBar from '../../../../components/statusBar';
@@ -18,7 +22,6 @@ import { Alert } from 'react-native';
 
 export const Dashboard = ({navigation}) => {
     const {colors, dark} = useTheme();
-    const flatlist = useRef();
     
     const {user} = useSelector(state => state.auth);
     const dispatch = useDispatch();
@@ -41,34 +44,23 @@ export const Dashboard = ({navigation}) => {
            />
             <ScrollView >
                 <View style={{marginTop: 20}}>
-                    <View style={styles.more}>
-                        <Text style={[styles.headerText, {color: colors.text}]}>Products</Text>
-                        <TouchableOpacity 
-                            activeOpacity={.7} 
-                            style={{flexDirection: 'row'}}
-                            onPress={() => console.log(flatlist)}
-                        >
-                            <Text style={{textAlign: 'center', textAlignVertical: 'center', color: colors.text}}>more</Text>
-                            <Ionicons name="arrow-forward" size={24} color={colors.primary} />
-                        </TouchableOpacity>
-                    </View>
                     <ProductList />
                 </View>
                 <View >
                     <Text style={[styles.headerText, {color: colors.text}]}>Quick Actions</Text>
                     <View style={styles.quickAct}>
                         <CardSquare 
-                            icon={<AntDesign name="form" size={28} color="#fff" />} 
+                            icon={<AntDesign name="form" size={wp("7%")} color="#fff" />} 
                             name="Claims"
                             onPress={_ => navigation.navigate("new_claim", { screen: 'new', params:{id: null}})}
                         />
                         <CardSquare 
-                            icon={<MaterialCommunityIcons name="shield-home" size={28} color="#fff" />} 
+                            icon={<MaterialCommunityIcons name="shield-home" size={wp("7%")} color="#fff" />} 
                             name="Policies"
                             onPress={_ => navigation.navigate("new_policy", { screen: 'new', params:{id: null}})}
                         />
                         <CardSquare 
-                            icon={<AntDesign name="customerservice" size={28} color="#fff" />} 
+                            icon={<AntDesign name="customerservice" size={wp("7%")} color="#fff" />} 
                             name="Help"
                             onPress={_ => navigation.navigate("help")}
                         />
@@ -80,7 +72,7 @@ export const Dashboard = ({navigation}) => {
                         Please take a few moment to complete your KYC 
                         required from all our customers.
                     </Text>
-                    <Button onPress={() => navigation.navigate('KYC')} buttonStyle={{width: 150}} title="Update" />
+                    <Button onPress={() => navigation.navigate('KYC')} buttonStyle={{width: wp("40%"), fontSize: wp("2.6%")}} title="Update" />
                 </View>
                 <Activities />
             </ScrollView>
@@ -98,7 +90,7 @@ export const CardSquare = ({icon, name, onPress}) => {
         <TouchableOpacity onPress={onPress} activeOpacity={0.9} >
             <View style={[{...styles.card, backgroundColor: colors.primary}]}>
                 {icon}
-                <Text style={{...styles.text, color: '#ffffff', fontSize: 12}}>{name}</Text> 
+                <Text style={{...styles.text, color: '#ffffff', fontSize: wp('2.7%')}}>{name}</Text> 
             </View>
         </TouchableOpacity>
     )
@@ -134,9 +126,9 @@ export const Activity = ({type, desc, when}) => {
             <Text style={[styles.updateText, {color: colors.text}]}>{type}</Text>
             <View style={styles.apart}>
                 <Text style={[styles.updateText, {fontFamily: 'OpenSans_400Regular', color: colors.text}]}>{desc}</Text>
-                <Text style={styles.icon}><MaterialCommunityIcons name="file-cabinet" size={24} color="#fff" /></Text>
+                <Text style={styles.icon}><MaterialCommunityIcons name="file-cabinet" size={wp("5%")} color="#fff" /></Text>
             </View>
-            <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text}}>{moment(when).fromNow()}</Text>
+            <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text, fontSize: wp("3%")}}>{moment(when).fromNow()}</Text>
         </View>
     )
 }
@@ -152,9 +144,10 @@ const styles = StyleSheet.create({
     },
     callText: {
         textAlign: "center", 
-        marginBottom: 20, 
+        marginBottom: hp("1.7%"), 
         fontFamily: 'OpenSans_400Regular',
         padding: 5,
+        fontSize: wp("3.3%"),
     },
     headerText: {
         fontFamily: 'Montserrat_700Bold',
@@ -170,7 +163,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 10,
         padding: 20,
-        width: 115,
+        width: wp("28%"),
         elevation: 5,
         justifyContent: "center",
         alignItems: "center",
@@ -181,7 +174,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'OpenSans_700Bold',
-        fontSize: 14,
+        fontSize: wp("3.5%"),
         color: '#fff',
     },
     headerprofile: {
@@ -194,7 +187,7 @@ const styles = StyleSheet.create({
     update: {
         padding: 10,
         width: '100%',
-        marginVertical: 10,
+        marginVertical: hp("1%"),
         borderColor: "transparent",
         borderWidth: 1,
         borderRadius: 10,
@@ -203,8 +196,10 @@ const styles = StyleSheet.create({
     },
     updateText: {
         fontFamily: 'Montserrat_700Bold',
-        marginVertical: 5,
+        marginVertical: hp("0.5%"),
         flex: 9,
+        width: "70%",
+        fontSize: wp("3.3%")
     },
     apart: {
         justifyContent: "space-between",
@@ -213,8 +208,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         flex: 1.5,
-        width: 50,
-        height: 50,
+        width: wp("2%"),
+        height: hp("6.5%"),
         backgroundColor: "#a5a5a5",
         borderRadius: 25,
         textAlign: "center",

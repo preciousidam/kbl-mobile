@@ -70,7 +70,7 @@ export const NewPolicy = ({ navigation,route}) => {
                 Icon={() => <Ionicons name="ios-arrow-forward" size={24} color="#fff" />}
                 onPress={onNextClick}
             />
-            <ScrollView>
+            
                 <View style={[styles.opt, {backgroundColor: colors.card}]}>
                     <Text style={{fontFamily: 'OpenSans_700Bold', color: colors.text}}>Product</Text>
                     <Picker 
@@ -85,7 +85,7 @@ export const NewPolicy = ({ navigation,route}) => {
                 <View style={styles.form}>
                     {Form}
                 </View>
-            </ScrollView>
+            
             <ActInd status={processing} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>

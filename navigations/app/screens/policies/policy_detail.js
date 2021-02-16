@@ -2,6 +2,12 @@ import { useTheme } from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import moment from 'moment';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+
 import { Money } from '../../../../components/money';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { CommaFormatted } from '../../../../utility';
@@ -128,12 +134,12 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     premiumText: {
-        fontSize: 11,
+        fontSize: wp('2.9%'),
         color: '#fff',
         fontFamily: 'OpenSans_700Bold'
     },
     premium: {
-        fontSize: 17,
+        fontSize: wp("4.5%"),
         color: '#fff',
         fontFamily: 'Montserrat_700Bold'
     },
@@ -154,12 +160,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     span: {
-        fontSize: 11,
+        fontSize: wp('2.5%'),
         fontFamily: "OpenSans_700Bold",
         color: '#fff'
     },
     p: {
-        fontSize: 14,
+        fontSize: wp('3.3%'),
         color: '#fff',
         fontFamily: 'Montserrat_700Bold'
     },

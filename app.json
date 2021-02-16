@@ -22,7 +22,6 @@
       "bundleIdentifier": "com.kblinsurance",
       "supportsTablet": true,
       "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true,
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page.",
         "NSLocationWhenInUseUsageDescription": "This app needs to access location to show current location on map"
@@ -33,6 +32,7 @@
       "versionCode": 1,
       "enableDangerousExperimentalLeanBuilds": true,
       "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -63,7 +63,6 @@
       "icon": "./assets/kblicon.png",
       "color": "#ffffff",
       "iosDisplayInForeground": true
-    },
-    "androidShowExponentNotificationInShellApp": true
+    }
   }
 }

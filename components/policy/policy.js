@@ -4,6 +4,11 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 import { Money } from '../money';
 import { retrievePolicyAsync } from '../../store/reducers/policy';
 import { isNewPolicy } from '../../utility';
@@ -37,14 +42,14 @@ export const PolicyList = ({ref}) => {
                 data={policies}
                 keyExtractor={(item,i) => item.policy_number+i}
                 renderItem={renderItems}
-                contentContainerStyle={{paddingHorizontal: 15, paddingVertical: 10, paddingBottom: 50,}}
+                contentContainerStyle={{paddingHorizontal: wp('3%'), paddingVertical: hp('1%'), paddingBottom: wp("5%"),}}
                 ListEmptyComponent={Empty}
             />
         </View>
     )
 }
 
-export default forwardRef((props,ref) => <PolicyList ref={ref} {...props} />);
+export default PolicyList;
 
 export const Empty = _  => {
     const {colors, dark} = useTheme();
@@ -69,8 +74,8 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
     const isNew = isNewPolicy(last_modified)
    
 
-    const icn = expired == 0? <MaterialCommunityIcons name="shield-off" size={35} color={indicator[expired]} />:
-        <MaterialCommunityIcons name="shield-check" size={35} color={indicator[expired]} />;
+    const icn = expired == 0? <MaterialCommunityIcons name="shield-off" size={wp('7.5%')} color={indicator[expired]} />:
+        <MaterialCommunityIcons name="shield-check" size={wp('7.5%')} color={indicator[expired]} />;
     return (
         <TouchableOpacity activeOpacity={.8} onPress={onPress}>
             <View style={[styles.update, {backgroundColor: colors.card}]}>
@@ -79,11 +84,11 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
                     <Money style={{...styles.bold, color: colors.text}} amount={parseFloat(premium).toFixed(2)} />
                     {is_active && isNew && <Text style={[styles.new, {backgroundColor: colors.warning}]}>New</Text>}
                 </View>
-                <View style={{marginVertical: 10,}}>
+                <View style={{marginVertical: hp("1%"),}}>
                     <Text style={[styles.bold, {color: colors.text}]}>{policy_number}</Text>
                 </View>
-                {is_active ?<Text style={{color: '#858585', fontSize: 13,}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
-                <Text style={{color: colors.warning, fontSize: 13,}}>In-Active</Text>}
+                {is_active ?<Text style={{color: '#858585', fontSize: wp("3%"),}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
+                <Text style={{color: colors.warning, fontSize: wp("3%"),}}>In-Active</Text>}
                 <Text style={styles.shield}>{icn}</Text>
             </View>
         </TouchableOpacity>
@@ -94,16 +99,16 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
 const styles = StyleSheet.create({
     container:{
         width: '100%',
-        marginVertical: 20,
-        marginTop: 10,
+        marginVertical: hp("2%"),
+        marginTop: hp("1%"),
     },
     update: {
         padding: 15,
         width: '100%',
-        marginVertical: 5,
+        marginVertical: hp('0.7%'),
         borderColor: "transparent",
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: wp("2%"),
         elevation: 2,
         position: "relative",
     },
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingVertical: 2,
         fontFamily: 'Montserrat_700Bold',
-        fontSize: 11,
+        fontSize: wp("2.5%"),
         borderRadius: 5,
         color: '#fff',
     },

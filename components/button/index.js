@@ -3,7 +3,10 @@ import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import { hp, wp } from '../../utility';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 export const Outlinedbutton = ({text, onPress, style, textStyle}) =>{
@@ -115,11 +118,12 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'Montserrat_700Bold',
-        color: '#ffffff'
+        color: '#ffffff',
+        fontSize: wp("3.5%")
     },
     grad: {
         width: '100%',
-        padding: wp(15),
+        padding: wp("3.5%"),
         borderWidth: 1,
         borderColor: 'transparent',
         borderRadius: wp(10),
@@ -128,10 +132,10 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     outlined: {
-        padding: wp(15),
+        padding: wp("3.5%"),
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: wp(10),
+        borderRadius: wp("5%"),
         justifyContent: "center",
         alignItems: 'center',
         borderRadius: wp(30),
@@ -151,8 +155,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 8,
         backgroundColor: '#000000',
-        padding: hp(10),
+        padding: wp("2.5%"),
         borderWidth: 1,
-        borderRadius: wp(20),
+        borderRadius: wp("5%"),
     },
 })

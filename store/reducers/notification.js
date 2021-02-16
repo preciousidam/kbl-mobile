@@ -1,29 +1,166 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {notifications} from '../../constants';
+import { Alert } from "react-native";
+import { showMessage } from "react-native-flash-message";
+import getLoginClient from "../../apiAuth/loggedInClient";
+import { logout } from "./auth";
+
 
 
 export const notificationSlice = createSlice({
     name: 'notification',
-    initialState: notifications,
+    initialState: {
+        notifications: [],
+        processing: false,
+        error: false,
+    },
     reducers: {
-        update(state, action){
-            const {notifications} =  action.payload;
-            return [
+        all(state, action){
+            const notifications = action.payload;
+            return {
                 ...state,
-                ...notifications
-            ];
+                notifications,
+                processing: false,
+                error: false
+            }
+        },
+        update(state, action){
+            const notification = action.payload;
+            let data = state.notifications.filter(({id}) => id != notification.id)
+            return {
+                ...state,
+                notifications: [...data, notification],
+            }
+        },
+        processing(state, action){
+            const process = action.payload;
+            return {
+                ...state,
+                processing: process,
+            }
+        },
+        error(state, action){
+            const error = action.payload;
+            return {
+                ...state,
+                error, 
+                processing: false,
+            }
         },
     }
 });
 
-export const {update} = notificationSlice.actions;
+export const {all, processing, error, update} = notificationSlice.actions;
 
 export default notificationSlice.reducer;
 
-export const updateAsync = _ => async dispatch => {
+export const updateNotificationAsync = user => async dispatch => {
+    dispatch(processing(true))
+   
+    const client = await getLoginClient();
     try{
+        const {data, status} = await client.get(`notifications/?user=${user}`);
         
-    }catch{
-
+        if (status === 200 || status === 201){
+            dispatch(all(data));
+            return;
+        }
+        await dispatch(error(true));
+        if(status === 401){
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(logout());
+            return;
+        }
+        
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
+        
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: item.toUpperCase(),
+                description: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+        
+        return;
+    }catch (err){
+        console.error(err)
+        dispatch(error(true));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
     }
+}
+
+export const readNotificationAsync = details => async dispatch => {
+    dispatch(processing(true))
+   
+    const client = await getLoginClient();
+    try{
+        const {data, status} = await client.patch(`notifications/${details?.id}/`, {details});
+        
+        if (status === 200 || status === 201){
+            dispatch(update(data));
+            return;
+        }
+        await dispatch(error(true));
+        if(status === 401){
+            Alert.alert('Token Expired', 'Please login again to continue.')
+            dispatch(logout());
+            return;
+        }
+
+        if(status === 500){
+            showMessage({
+                type: "danger",
+                message: "Something happened cannot process your request at the moment.",
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+            return;
+        }
+        
+        
+        for (let item in data){
+            showMessage({
+                type: 'danger',
+                message: item.toUpperCase(),
+                description: data[item],
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            })
+        }
+        
+        return;
+    }catch (err){
+        console.error(err)
+        dispatch(error(true));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
+    }
+    
 }

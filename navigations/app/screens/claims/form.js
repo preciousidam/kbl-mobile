@@ -1,10 +1,15 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import {Text, StyleSheet, View, ScrollView, Platform, Modal, TextInput} from 'react-native';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 import FocusAwareStatusBar from '../../../../components/statusBar';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { OutlinedInput } from '../../../../components/input';
+import { EmailOutlinedInput, OutlinedInput } from '../../../../components/input';
 import { Solidbutton } from '../../../../components/button';
 import { ActInd } from '../../../../components/activityIndicator';
 import getLoginClient from '../../../../apiAuth/loggedInClient';
@@ -17,6 +22,8 @@ export const ClaimsForm = ({ navigation,route}) => {
     const {user} = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const [policy, setPolicy] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [details, setDetails] = useState('');
     const [processing, setProcessing] = useState(false);       
 
@@ -36,7 +43,7 @@ export const ClaimsForm = ({ navigation,route}) => {
         setProcessing(true);
         client.defaults.headers.post['Content-type'] = 'application/json';
         try{
-            const {data, status} = await client.post(`mail/claims/application/`, {user: user.pk, policy,details})
+            const {data, status} = await client.post(`mail/claims/application/`, {user: user.pk, policy,details, email, phone})
             setProcessing(false);
             if (status === 200 || status === 201){
                 showMessage({
@@ -92,7 +99,7 @@ export const ClaimsForm = ({ navigation,route}) => {
 
 
     return (
-        <View style={{flex: 1, backgroundColor: dark? colors.background:colors.card, padding: 15}}>
+        <View style={{flex: 1, backgroundColor: dark? colors.background:colors.card, padding: wp('3%')}}>
             <Text style={[styles.mHeader, {color: colors.text}]}>Provide your policy number and additional information to enable us assist you</Text>
             <View style={styles.form}>
                 <OutlinedInput 
@@ -101,16 +108,32 @@ export const ClaimsForm = ({ navigation,route}) => {
                     onChangeText={({nativeEvent}) => setPolicy(nativeEvent?.text)}
                     value={policy}
                 />
+                <EmailOutlinedInput
+                    style={styles.input}
+                    placeholder="Email Address"
+                    onChangeText={({nativeEvent}) => setEmail(nativeEvent?.text)}
+                    value={email}
+                    textContentType="telephoneNumber"
+                />
+                <OutlinedInput 
+                    style={styles.input}
+                    placeholder="Phone Number"
+                    onChangeText={({nativeEvent}) => setPhone(nativeEvent?.text)}
+                    value={phone}
+                    keyboardType="phone-pad"
+                    textContentType="emailAddress"
+                />
                 <TextInput 
-                    style={[styles.input, styles.message]}
+                    style={[styles.input, styles.message, {color: colors.text}]}
                     placeholder="Addition Information"
                     multiline={true}
                     onChangeText={text => setDetails(text)}
                     value={details}
                     placeholderTextColor="#c6c6c6"
+                    color="#fff"
                 />
 
-                <Solidbutton text="Submit" onPress={onPress} style={{marginVertical: 20,}} />
+                <Solidbutton text="Submit" onPress={onPress} style={{marginVertical: hp('2%'),}} />
             </View>
             <ActInd status={processing} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
@@ -135,13 +158,13 @@ const styles = StyleSheet.create({
     },
     mHeader: {
         fontFamily: 'Montserrat_400Regular',
-        fontSize: 14,
+        fontSize: wp("3.3%"),
         textAlign: 'center',
         marginVertical: 15,
     },
     tButton: {
-        paddingHorizontal: 15,
-        paddingVertical: 15,
+        paddingHorizontal: wp("2%"),
+        paddingVertical: hp("1%"),
         fontFamily: 'OpenSans_700Bold',
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(0,0,0,.3)'
@@ -153,7 +176,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     message: {
-        height: 150,
+        height: hp("15%"),
         borderWidth: 1,
         borderColor: '#c6c6c6',
         textAlignVertical: 'top',

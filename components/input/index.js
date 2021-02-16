@@ -4,6 +4,10 @@ import { useTheme } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export const OutlinedInput = ({style, contProps, inputStyle, onChangeText, value, ...rest}) => {
     
@@ -383,21 +387,22 @@ export const TimeInput = ({style, contProps, inputStyle, onChangeText, value, ..
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        padding: 15,
+        padding: wp("1%"),
         borderWidth: 1,
-        borderRadius: 20,
+        borderRadius: wp("5%"),
         flexDirection: "row",
         alignItems: "center",
     },
     input: {
         fontFamily: 'Montserrat_400Regular',
         width: '100%',
-        height: 50,
+        height: hp('6%'),
+        fontSize: wp("3.3%"),
     },
     icon: {
         borderRightWidth: 1,
         borderRightColor: '#c6c6c6',
-        paddingHorizontal: 10,
-        marginRight: 10
+        paddingHorizontal: wp("2.6%"),
+        marginRight: wp("2.5%")
     }
 })

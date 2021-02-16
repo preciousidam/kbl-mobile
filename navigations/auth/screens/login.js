@@ -7,7 +7,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useDispatch, useSelector } from 'react-redux';
 import { isAvailableAsync, getItemAsync } from 'expo-secure-store';
-import { wp, hp } from '../../../utility';
+//import { wp, hp } from '../../../utility';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 import { Solidbutton } from '../../../components/button';
@@ -72,13 +76,13 @@ export const Login = ({navigation}) => {
                 <View style={styles.view}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios'? "padding": "position"}
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? hp(100): hp(10)}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
                     >
                         <View style={styles.header}>
-                            <Image source={require('../../../assets/logo.png')} />
+                            <Image source={require('../../../assets/logo.png')} style={styles.image} />
                         </View>
                         <EmailOutlinedInputWithIcon
-                            icon={<MaterialIcons name="mail-outline" color={colors.primary} size={24} />}
+                            icon={<MaterialIcons name="mail-outline" color={colors.primary} size={wp("5%")} />}
                             contProps={styles.textInput}
                             value={username} 
                             onChangeText={({nativeEvent}) => setUsername(nativeEvent.text)}
@@ -140,15 +144,20 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: "space-between",
     },
+    image: {
+        width: wp("60%"),
+        height: hp("20%"),
+        resizeMode: 'contain',
+    },
     header: {
         flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: hp(100),
+        paddingVertical: hp('7%'),
     },
     link: {
         fontFamily: 'OpenSans_400Regular',
-        fontSize: wp(14),
+        fontSize: wp("3%"),
     },
     inner: {
         fontFamily: 'OpenSans_700Bold',
@@ -156,14 +165,15 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        marginVertical: hp(10),
+        marginVertical: hp('1.5%'),
     },
     textInput: {
-        marginVertical: hp(15),
+        marginVertical: hp("1.5%"),
     },
     bottom: {
         justifyContent: 'center',
         alignItems: "center",
+        height: hp("10%"),
     },
     forgotCont: {
         flexDirection: "row",
@@ -172,7 +182,8 @@ const styles = StyleSheet.create({
     },
     forgot: {
         fontFamily: 'Montserrat_400Regular',
-        marginVertical: hp(10),
+        marginVertical: hp('1.5%'),
+        fontSize: wp("3%")
     },
     modal: {
         flex: 1,
@@ -180,8 +191,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     indicator: {
-        width: wp(65),
-        height: hp(65),
+        width: 65,
+        height: 65,
         padding: 5,
         borderWidth: 1,
         borderColor: 'transparent',

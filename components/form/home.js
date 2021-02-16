@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
@@ -9,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { edit } from '../../store/reducers/policy';
 import { showMessage } from 'react-native-flash-message';
 import { Money } from '../money';
+import { ScrollView } from 'react-native';
+import { colors } from 'react-native-elements';
 
 
 const buildingType = ['Flat', 'Detached Bungalow', 'Detached Duplex', 
@@ -52,12 +58,14 @@ export const HomeForm = ({}) => {
     }
 
 
-    return (<View style={styles.form}>
+    return (
 
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios'? "padding": "position"}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 100: 10}
-        >
+            style={styles.form}
+        >   
+        <ScrollView>
             <View style={[styles.infoView, {borderColor: colors.success}]}>
                 <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Bronze plan -- Sum insured on contents <Money amount="500000.00" /></Text>
                 <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Silver plan -- Sum insured on contents <Money amount="750000.00" /></Text>
@@ -84,32 +92,35 @@ export const HomeForm = ({}) => {
                 onChangeText={({nativeEvent}) => dispatch(edit({...form, address: nativeEvent.text}))}
             />
             {exceeded && <Text style={[styles.error, {color: colors.danger}]}>* Total amount for contents insured for selected plan exceeded</Text>}
-            <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15, color: colors.text}}>Contents</Text>
+            <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15, color: colors.text}}>Household Contents</Text>
             {form?.items && Object.entries(form.items).map((item,index) => (
                 <Items 
                     key={`item${index}`} 
                     index={index} 
                 />
             ))}
+            <TouchableOpacity onPress={addMore}>
+                <View>
+                    <Text style={[styles.add, {color: colors.text}]}><Ionicons name="ios-add-circle" color={colors.info} size={20} />  Add more</Text>
+                </View>
+            </TouchableOpacity>
+            </ScrollView>
         </KeyboardAvoidingView>
         
-        <TouchableOpacity onPress={addMore}>
-            <View>
-                <Text style={[styles.add, {color: colors.text}]}><Ionicons name="ios-add-circle" color={colors.info} size={20} />  Add more</Text>
-            </View>
-        </TouchableOpacity>
         
-    </View>);
+        
+    );
 }
 
 export const Items = ({index, onItemChange}) => {
     
     const {form} = useSelector(state => state.policies);
     const dispatch = useDispatch();
+    const {colors} = useTheme();
     
 
     return (<View>
-        <Text style={{fontFamily: "OpenSans_400Regular"}}>Item #{index+1}</Text>
+        <Text style={{fontFamily: "OpenSans_400Regular", color: colors.text}}>Item #{index+1}</Text>
         <OutlinedInput
             placeholder="Item"
             style={styles.input}
@@ -145,7 +156,7 @@ export const Items = ({index, onItemChange}) => {
 const styles = StyleSheet.create({
     form: {
         flex: 1,
-        padding: 20,
+        padding: wp("2%"),
     },
     input: {
         paddingHorizontal: 15,

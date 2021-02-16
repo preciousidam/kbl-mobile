@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-navigation/drawer';
 import {View, Alert, StyleSheet} from 'react-native';
 import {Avatar, Text} from 'react-native-elements';
@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import {logout} from '../../store/reducers/auth';
-//import { Picker } from '@react-native-community/picker';
+import {updateNotificationAsync} from '../../store/reducers/notification';
 
 export default function DrawerCustom(props){
     const {colors} = useTheme();
@@ -16,6 +16,10 @@ export default function DrawerCustom(props){
     const signOut = _ => {
         dispatch(logout());
     }
+
+    useEffect(() => {
+        dispatch(updateNotificationAsync(user?.pk));
+    },[user?.pk])
     
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={{height: '100%'}}>
@@ -28,8 +32,8 @@ export default function DrawerCustom(props){
                         containerStyle={{backgroundColor: colors.primary, marginTop: 10, marginLeft: 20,}} 
                     />
                     <View style={{flexDirection: "column", padding: 10}}>
-                        <Text style={styles.h4}>{user?.first_name}</Text>
-                        <Text>{user?.email}</Text>
+                        <Text style={[styles.h4, {color: colors.text}]}>{user?.first_name}</Text>
+                        <Text style={[{color: colors.text}]}>{user?.email}</Text>
                     </View>
                 </View>
             </View>

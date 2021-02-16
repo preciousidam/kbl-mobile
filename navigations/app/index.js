@@ -20,7 +20,7 @@ const Drawer = createDrawerNavigator();
 export const AppNavigator = ({}) => {
 
     const {Navigator, Screen} = Drawer;
-    const count = useSelector(state => state.notifications.filter(({read}) => read === false).length);
+    const count = useSelector(state => state.notifications.notifications?.filter(({read}) => read === false).length);
 
     return (
         <Navigator drawerContent={props => <DrawerCustom {...props} />} >
@@ -44,7 +44,7 @@ export const AppNavigator = ({}) => {
                 name="products"
                 component={Products}
                 options={{
-                    title: 'Products',
+                    title: 'Products Infomation',
                     drawerIcon: ({color, size}) => <AntDesign name="shoppingcart" size={size} color={color} />
                 }}
             />
