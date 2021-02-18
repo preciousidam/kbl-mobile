@@ -49,6 +49,23 @@ export const PolicyDetails = ({navigation, route}) => {
         
     }
 
+    useEffect(() => {
+        totalPaid(policy)
+    },[policy])
+
+    const totalPaid = pol => {
+        const startDate = pol.created_at
+        const payments = pol.payments?.filter(({start}) => new Date(start) >= new Date(startDate))
+        
+        let total = 0
+        for (let pay of payments){
+            
+            total += pay.amount;
+        }
+        
+        return parseFloat(total).toFixed(2);
+    }
+
     const view_cert = _ => {
         if(policy.is_active) {
             Linking.openURL(policy?.certificate[policy?.certificate?.length -1].certificate)
@@ -67,6 +84,16 @@ export const PolicyDetails = ({navigation, route}) => {
             <Header navigation={navigation} data={policy} />
             <View style={[styles.body, {backgroundColor: colors.card}]}>
                 <ScrollView>
+                    <View style={[styles.payment, {borderColor: colors.success}]}>
+                        <View style={[styles.info]}>
+                            <Text style={[styles.span, styles.paymentSpan]}>Payment Plan</Text>
+                            <Text style={[styles.p, styles.paymentP]}>{policy?.duration}</Text>
+                        </View>
+                        <View style={styles.info}>
+                            <Text style={[styles.span, styles.paymentSpan]}>Total Paid</Text>
+                            <Money style={[styles.p, styles.paymentP]} amount={totalPaid(policy)} />
+                        </View>
+                    </View>
                     {product?.category === 'Motor'?
                         <MotorDetails pn={policy.policy_number} />:
                         <HomeDetails pn={policy.policy_number} />}
@@ -128,6 +155,24 @@ export default PolicyDetails;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    payment: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        marginBottom: hp('3%'),
+        borderWidth: 1,
+        paddingVertical: hp("1.5%"),
+        paddingHorizontal: wp('2%'),
+        borderRadius: wp('2%')
+    },
+    paymentSpan: {
+        fontSize: wp('3.2%'),
+        fontFamily: 'Montserrat_700Bold'
+    },
+    paymentP: {
+        fontSize: wp('3.2%'),
+        fontFamily: 'OpenSans_400Regular'
     },
     header: {
         width: '100%',

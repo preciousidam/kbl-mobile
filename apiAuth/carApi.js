@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {apiConfig} from '../settings/config';
 
 export const carApi = axios.create({
-    baseURL: 'https://parseapi.back4app.com/',
+    baseURL: apiConfig.baseUrl,
     headers: {
         'X-Parse-Application-Id': 'naUbaTv5GbjFQmZvUvt38gJflOTrbhJrppHDwumy', // This is your app's application id
         'X-Parse-REST-API-Key': 'djjnol0BKpumY7ZKPPyFY9Mr6SlQaspL0YEZgB3i', // This is your app's REST API key

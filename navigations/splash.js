@@ -8,6 +8,10 @@ import {loadFonts} from '../styles/fonts';
 import { restore } from '../store/reducers/auth';
 import {retrieveProductsAsync,bootstrap} from '../store/reducers/app';
 import FocusAwareStatusBar from '../components/statusBar';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
@@ -34,13 +38,15 @@ export function SplashScreen({theme}){
     },[])
 
     return (
-        fontLoaded && (<View style={{...styles.container, backgroundColor: colors['primary']}}>
-            <Image 
-                source={require('../assets/logo.png')}
-                style={styles.image}
-            />
-            <Text style={{...styles.subText, color: colors['primary-dark'], fontFamily: "OpenSans_700Bold"}}>KBL Insurance App</Text>
-            <FocusAwareStatusBar barStyle={dark? 'dark-content': 'light-content'} backgroundColor={colors.primary} />
+        fontLoaded && (<View style={{...styles.container, backgroundColor: !dark ? colors.primary: colors.card}}>
+            <View style={styles.imageBack}>
+                <Image 
+                    source={require('../assets/logo.png')}
+                    style={styles.image}
+                />
+            </View>
+            <Text style={{...styles.subText, color: dark? colors.primary :colors['primary-dark'], fontFamily: "OpenSans_700Bold"}}>KBL Insurance App</Text>
+            <FocusAwareStatusBar barStyle='light-content' backgroundColor={dark ? colors.card : colors.primary} />
         </View>)
     );
 }
@@ -54,22 +60,24 @@ const styles = StyleSheet.create({
         height: '100%', 
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 10,
-    },
-    text: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 30
+        paddingVertical: hp('2%'),
     },
     subText: {
         position: "absolute",
-        bottom: 20,
+        bottom: hp('2.5%'),
     },
     image: {
+        resizeMode: 'contain',
+        width: wp('55%'),
+        height: hp('15%')
+    },
+    imageBack: {
+        width: wp('55%'),
+        height: hp('15%'),
+        borderRadius: wp('2%'),
         backgroundColor: '#fff',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: "transparent",
-        paddingVertical: 10, 
+        paddingVertical: hp('0.3%'),
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

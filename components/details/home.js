@@ -60,8 +60,8 @@ export const HomeDetails = ({pn}) => {
     
     return (
         <View>
-            {!data?.is_active && <Text style={[styles.error,{color: colors.danger}]}>
-                * {data?.valid_till == null?'This policy is inactive as you did not complete payment. click payment button to activate.':
+            {data.is_active === false && <Text style={[styles.error,{color: colors.danger}]}>
+                * {data.valid_till == null ? 'This policy is inactive as you did not complete payment. click payment button to activate.':
                     "This policy has expired. click renew button to activate."}
             </Text>}
             <Text style={[styles.bodyHeader, {color: colors.text}]}>Policy Information</Text>

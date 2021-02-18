@@ -42,7 +42,7 @@ export const PolicyList = ({ref}) => {
                 data={policies}
                 keyExtractor={(item,i) => item.policy_number+i}
                 renderItem={renderItems}
-                contentContainerStyle={{paddingHorizontal: wp('3%'), paddingVertical: hp('1%'), paddingBottom: wp("5%"),}}
+                contentContainerStyle={{paddingHorizontal: wp('3%'), paddingVertical: hp('1%'), paddingBottom: wp("15%"),}}
                 ListEmptyComponent={Empty}
             />
         </View>

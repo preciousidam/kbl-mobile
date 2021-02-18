@@ -28,17 +28,17 @@ export const MotorForm = ({}) => {
     
 
     const cars = async _ => {
-        const {data:{results}} = await carApi.get('classes/Carmodels_Car_Model_List?limit=100');
+        const {data} = await carApi.get('vehicles/models/');
         
-        setCars(results);
-        let make = results.map(veh => `${veh.Make}`).sort();
+        setCars(data);
+        let make = data.map(veh => `${veh.make}`).sort();
         let set = new Set(make)
         setCarMakes(['Select Vehicle Make',...set]);
     }
 
     useEffect(() => {
-        const filtered = allCars.filter(({Make}) => Make == form?.vehicle_make);
-        let models = filtered.map(veh => `${veh.Model}`).sort();
+        const filtered = allCars.filter(({make}) => make == form?.vehicle_make);
+        let models = filtered.map(veh => `${veh.model}`).sort();
         let hold = new Set(models)
         setCarModels(['Select Vehicle Model',...hold]);
         
@@ -82,6 +82,12 @@ export const MotorForm = ({}) => {
                     style={styles.input}
                     value={form.vehicle_color}
                     onChangeText={({nativeEvent}) => dispatch(edit({...form, vehicle_color: nativeEvent.text}))}
+                />
+                <Picker
+                    options={['Select Duration', 'Half Yearly', 'Quarterly', 'Yearly']} 
+                    style={{padding: 0, marginVertical: 10,}}
+                    value={form.duration||'Select Duration'}
+                    onValueChange={(item,i) => dispatch(edit({...form, duration: item}))}
                 />
                 <Picker
                     prompt="Vehicle Class"
