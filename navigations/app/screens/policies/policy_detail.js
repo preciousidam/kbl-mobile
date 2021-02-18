@@ -86,12 +86,12 @@ export const PolicyDetails = ({navigation, route}) => {
                 <ScrollView>
                     <View style={[styles.payment, {borderColor: colors.success}]}>
                         <View style={[styles.info]}>
-                            <Text style={[styles.span, styles.paymentSpan]}>Payment Plan</Text>
-                            <Text style={[styles.p, styles.paymentP]}>{policy?.duration}</Text>
+                            <Text style={[styles.span, styles.paymentSpan, {color: colors.text}]}>Payment Plan</Text>
+                            <Text style={[styles.p, styles.paymentP, {color: colors.text}]}>{policy?.duration}</Text>
                         </View>
                         <View style={styles.info}>
-                            <Text style={[styles.span, styles.paymentSpan]}>Total Paid</Text>
-                            <Money style={[styles.p, styles.paymentP]} amount={totalPaid(policy)} />
+                            <Text style={[styles.span, styles.paymentSpan, {color: colors.text}]}>Total Paid</Text>
+                            <Money style={[styles.p, styles.paymentP, {color: colors.text}]} amount={totalPaid(policy)} />
                         </View>
                     </View>
                     {product?.category === 'Motor'?
