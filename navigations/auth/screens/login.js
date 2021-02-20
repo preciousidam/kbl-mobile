@@ -51,7 +51,10 @@ export const Login = ({navigation}) => {
                 if (secureStore){
                     let username = await getItemAsync('username');
                     let password = await getItemAsync('password');
-                    dispatch(signIn({username,password}));
+                    if (username && password)
+                        dispatch(signIn({username,password}));
+                    else
+                        Alert.alert("Authentication", "Sorry you have to login at least once with your email and password to use this feature.")
                 }
                 else Alert.alert('Error', 'This device does not support Biometric authentication');
             }

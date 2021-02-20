@@ -1,10 +1,10 @@
 import { useTheme } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { View, StyleSheet, Image, KeyboardAvoidingView, Text, ScrollView, Modal, ActivityIndicator } from 'react-native';
-import {Ionicons, MaterialIcons} from '@expo/vector-icons';
+import { MaterialIcons} from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Solidbutton } from '../../../components/button';
-import { EmailOutlinedInputWithIcon, OutlinedInput, OutlinedInputWithIcon, PasswordOutlinedInputWithIcon } from '../../../components/input';
+import { EmailOutlinedInputWithIcon, OutlinedInputWithIcon, PasswordOutlinedInputWithIcon } from '../../../components/input';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FocusAwareStatusBar from '../../../components/statusBar';

@@ -130,7 +130,7 @@ export const ClaimsForm = ({ navigation,route}) => {
                     onChangeText={text => setDetails(text)}
                     value={details}
                     placeholderTextColor="#c6c6c6"
-                    color="#fff"
+                    color={colors.text}
                 />
 
                 <Solidbutton text="Submit" onPress={onPress} style={{marginVertical: hp('2%'),}} />
