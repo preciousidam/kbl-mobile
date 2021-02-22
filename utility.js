@@ -85,13 +85,16 @@ const validUri = image => {
 
 const get_file_name = uri => {
   	let filename = uri.split('/').pop();
+	protocol = uri.split(':')[0];
+	if (protocol === 'https' || protocol === 'http')
+		filename += '.jpg';
 	return filename;
 }
 
 
 const get_file_type = image => {
 	let match = /\.(\w+)$/.exec(image);
-  	let type = match ? `image/${match[1]}` : `image`;
+  	let type = match ? `image/${match[1]}` : `image/jpg`;
 	return type;
 }
 
@@ -104,6 +107,11 @@ const image_from_base64 = async (image, name, type) => {
 }
 
 export const motorFormData = async body => {
+	const fields = [
+		'registration_number', 'engine_number', 'chasis_number',
+		'vehicle_class', 'vehicle_model', 'vehicle_make', 'vehicle_year',
+		'vehicle_color', 'user', 'product', 'value', 'duration',
+	]
 	let formData = new FormData();
 
 	if (body?.back_image){
@@ -135,11 +143,10 @@ export const motorFormData = async body => {
 		formData.append("proof_of_ownership", {name,type,uri})
 	}
     
-    for ( let key in body ) {
-        if (key != "back_image" && key != "proof_of_ownership" && key != "vehicle_license" && key != "front_image" )
-            formData.append(key, body[key]);
+    for ( let key of fields ) {
+        formData.append(key, body[key]);
 	}
-	console.log('formdata', formData)
+	
 	return formData;
 }
 

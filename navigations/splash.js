@@ -28,7 +28,6 @@ export function SplashScreen({theme}){
        
 
         dispatch(bootstrap(JSON.parse(app)));
-        dispatch(retrieveProductsAsync());
         dispatch(restore({user: JSON.parse(user)}));
         //dispatch(restore({user: null}));
     }

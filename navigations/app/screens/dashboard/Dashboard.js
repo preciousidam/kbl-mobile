@@ -16,7 +16,7 @@ import FocusAwareStatusBar from '../../../../components/statusBar';
 import {Header} from '../../../../components/header';
 import ProductList from '../../../../components/policy/quickLinks';
 import { useSelector, useDispatch } from 'react-redux';
-import {retrieveActivitiesAsync} from '../../../../store/reducers/app';
+import {retrieveActivitiesAsync, retrieveProductsAsync} from '../../../../store/reducers/app';
 import { Alert } from 'react-native';
 
 
@@ -27,6 +27,7 @@ export const Dashboard = ({navigation}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(retrieveProductsAsync());
         dispatch(retrieveActivitiesAsync(user?.pk));
         return;
     }, []);

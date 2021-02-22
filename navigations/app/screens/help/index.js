@@ -4,6 +4,12 @@ import { View, Text, StyleSheet, Linking, TouchableOpacity, TextInput, ScrollVie
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Foundation, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { OutlinedInput } from '../../../../components/input';
 import getLoginClient from '../../../../apiAuth/loggedInClient';
@@ -89,19 +95,19 @@ export const Help = ({navigation}) => {
                     style={[styles.top, {backgroundColor: colors['primary-transparent']}]}
                 >
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Ionicons name="location-sharp" size={30} color="#fff" /></View>
+                        <View style={styles.fst}><Ionicons name="location-sharp" size={wp(6)} color="#fff" /></View>
                         <View style={styles.snd}>
                             <Text style={styles.text}>BLOCK 138 PLOT 5 GABRIEL OLUSANYA STR. BY ELF BUS-STOP LEKKI, LAGOS</Text>
                         </View>
                     </View>
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Ionicons name="mail" size={30} color="#fff" /></View>
+                        <View style={styles.fst}><Ionicons name="mail" size={wp(6)} color="#fff" /></View>
                         <View style={styles.snd}>
                             <Text style={styles.text}>info@kblinsurance.com</Text>
                         </View>
                     </View>
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Foundation name="telephone" size={30} color="#fff" /></View>
+                        <View style={styles.fst}><Foundation name="telephone" size={wp(6)} color="#fff" /></View>
                         <View style={styles.snd}>
                             <Text onPress={_ => Linking.openURL(`tel:07032358685`)} style={[styles.text, {marginRight: 15}]}>07032358685</Text>
                             <Text onPress={_ => Linking.openURL(`tel:08090512127`)} style={[styles.text]}>08090512127</Text>
@@ -109,7 +115,7 @@ export const Help = ({navigation}) => {
                     </View>
 
                     <View style={styles.shared}>
-                        <View style={styles.fst}><Ionicons name="md-logo-whatsapp" size={30} color="#fff" /></View>
+                        <View style={styles.fst}><Ionicons name="md-logo-whatsapp" size={wp(6)} color="#fff" /></View>
                         <View style={styles.snd}>
                             <TouchableOpacity
                                 activeOpacity={.7}
@@ -161,7 +167,7 @@ export const Help = ({navigation}) => {
                                 onPress={send_mail}
                                 style={[styles.circle, {backgroundColor: colors.success}]}
                             >
-                                <FontAwesome name="send" size={18} color="#fff" />
+                                <FontAwesome name="send" size={wp(4)} color="#fff" />
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -178,13 +184,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     top: {
-        padding: 15,
+        padding: hp(1.3),
     },
     shared:{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: hp(2.5),
     },
     fst: {
         flex: 1,
@@ -195,31 +201,33 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'OpenSans_400Regular',
-        color: '#fff'
+        color: '#fff',
+        fontSize: wp(3.3)
     },
     bottom: {
         padding: 15,
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
+        borderBottomLeftRadius: wp(7),
+        borderBottomRightRadius: wp(7),
     },
     header: {
         fontFamily: 'Montserrat_700Bold',
         textAlign: 'center',
         textAlignVertical: 'center',
-        marginVertical: 15,
+        marginVertical: hp(1.6),
+        fontSize: wp(3.6)
     },
     input: {
-        paddingHorizontal: 15,
-        paddingVertical: 3,
-        borderRadius: 10,
-        marginVertical: 10,
+        paddingHorizontal: wp(3),
+        paddingVertical: hp(.3),
+        borderRadius: wp(2),
+        marginVertical: hp(1.2),
     },
     message: {
-        height: 120,
+        height: hp(15),
         borderWidth: 1,
         borderColor: '#c6c6c6',
         textAlignVertical: 'top',
-        paddingVertical: 15,
+        paddingVertical: hp(1.3),
     },
     send: {
         flexDirection: 'row',
@@ -229,8 +237,8 @@ const styles = StyleSheet.create({
     },
     sendText:{
         fontFamily: 'Montserrat_700Bold',
-        fontSize: 12,
-        marginRight: 15
+        fontSize: wp(2.9),
+        marginRight: wp(3)
     },
     circle: {
         padding: 10,

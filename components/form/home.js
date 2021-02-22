@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
+import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity, useWindowDimensions} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import HTML from "react-native-render-html";
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
@@ -15,12 +16,14 @@ import { showMessage } from 'react-native-flash-message';
 import { Money } from '../money';
 import { ScrollView } from 'react-native';
 import { colors } from 'react-native-elements';
+import { Pressable } from 'react-native';
+import { Modal } from 'react-native';
 
 
 const buildingType = ['Flat', 'Detached Bungalow', 'Detached Duplex', 
     'Terrace Bungalow', 'Detached Duplex', 'Semi-detached Duplex']
 
-export const HomeForm = ({}) => {
+export const HomeForm = ({productInfo}) => {
 
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
@@ -29,6 +32,7 @@ export const HomeForm = ({}) => {
     const {form} = useSelector(state => state.policies);
     const dispatch = useDispatch();
     const [exceeded, setExceeded] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     const totalValue = _ => {
         let val = 0;
@@ -37,6 +41,7 @@ export const HomeForm = ({}) => {
         }
         return val;
     }
+    const contentWidth = useWindowDimensions().width;
 
     const addMore = _ => {
         if(totalValue()  >= plan[form.plan]){
@@ -66,6 +71,9 @@ export const HomeForm = ({}) => {
             style={styles.form}
         >   
         <ScrollView>
+            <Pressable onPress={_ => setShowInfo(true)}>
+                <Text style={[styles.info, {color: colors.success}]}>More information about this product</Text>
+            </Pressable>
             <View style={[styles.infoView, {borderColor: colors.success}]}>
                 <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Bronze plan -- Sum insured on contents <Money amount="500000.00" /></Text>
                 <Text style={[styles.infoText, {color: colors.text}]}>{'\u2B24'}  Silver plan -- Sum insured on contents <Money amount="750000.00" /></Text>
@@ -105,6 +113,18 @@ export const HomeForm = ({}) => {
                 </View>
             </TouchableOpacity>
             </ScrollView>
+            <Modal
+                visible={showInfo}
+                onRequestClose={_ => setShowInfo(false)}
+                transparent={false}
+            >
+                <ScrollView style={{ flex: 1 }}>
+                    <HTML
+                        source={{html: `<div style="padding: 20px;">${productInfo}</div>`}}
+                        contentWidth={contentWidth}
+                    />
+                </ScrollView>
+            </Modal>
         </KeyboardAvoidingView>
         
         
@@ -192,5 +212,11 @@ const styles = StyleSheet.create({
     error: {
         fontFamily: 'OpenSans_700Bold',
         fontSize: 10,
+    },
+    info: {
+        marginVertical: hp(1),
+        fontFamily: 'Montserrat_400Regular',
+        fontSize: wp(3),
+        textDecorationLine: 'underline',
     }
 })

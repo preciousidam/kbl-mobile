@@ -16,11 +16,11 @@ import {
 export const ImageUploader = ({image, callback, text}) => {
     
     const { showActionSheetWithOptions } = useActionSheet();
-    const options = ['Gallery', 'Cancel'];
+    const options = ['Camera', 'Gallery', 'Cancel'];
     const {colors, dark} = useTheme();
     const [view, setView] = useState(false);
     const icons = [
-        /*<Image source={require('../../assets/photo.png')} style={styles.icon} />,*/
+        <Image source={require('../../assets/photo.png')} style={styles.icon} />,
         <Image source={require('../../assets/gallery.png')} style={styles.icon} />,
         <Image source={require('../../assets/x-button.png')} style={styles.icon} />,
     ]
@@ -57,11 +57,11 @@ export const ImageUploader = ({image, callback, text}) => {
         titleTextStyle: {color: colors.text}
     },
     async (buttonIndex) => {
-        if (buttonIndex === 1) {
+        if (buttonIndex === 0) {
             await openCameraAsync();
             return;
         }
-        else if(buttonIndex === 0){
+        else if(buttonIndex === 1){
             await openImagePickerAsync();
             return;
         } 

@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, RefreshControl} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +16,7 @@ import ReadNotificationScreen from './read';
 import { TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Empty } from '../../../../components/policy/policy';
+import { updateNotificationAsync } from '../../../../store/reducers/notification';
 
 const Stack = createStackNavigator();
 
@@ -54,15 +55,14 @@ export default function NotificationNavigator({navigation}){
 export function NotificationScreen({navigation}){
 
     const {notifications, processing} = useSelector(state => state.notifications);
+    const {user} = useSelector(state => state.auth);
     const onPress = val => navigation.navigate('Read', {id: val})
     const {colors, dark} = useTheme();
 
     const dispatch = useDispatch();
     
-    const {navigate} = navigation;
-    
     const refresh = () => {
-        dispatch(retrievePolicyAsync(user.pk));
+        dispatch(updateNotificationAsync());
     }
     
     const renderItems = ({item, index}) => (
@@ -75,6 +75,10 @@ export function NotificationScreen({navigation}){
     return (
         <View style={{flex: 1}}>
             <FlatList
+                refreshControl={
+                    <RefreshControl enabled={true} refreshing={processing}
+                    onRefresh={refresh} />
+                }
                 refreshing={processing}
                 onRefresh={refresh}
                 data={notifications}
@@ -93,9 +97,9 @@ export const Notification = ({id, title, body, time, read, onPress}) => {
     return (
         <Pressable onPress={onPress}>
             <View style={styles.view}>
-                <Text style={[styles.title, {color: read? "#c6c6c6": colors.text}]}>{title}</Text>
-                <Text style={[styles.body, {color: read? "#c6c6c6": colors.text}]}>{body}</Text>
-                <Text style={[styles.time, {color: read? "#c6c6c6": colors.text}]}>{moment(time).fromNow()}</Text>
+                <Text style={[styles.title, {color: read? "#a3a3a3": colors.text}]}>{title}</Text>
+                <Text style={[styles.body, {color: read? "#a3a3a3": colors.text}]}>{body}</Text>
+                <Text style={[styles.time, {color: read? "#a3a3a3": colors.text}]}>{moment(time).fromNow()}</Text>
             </View>
         </Pressable>
     )

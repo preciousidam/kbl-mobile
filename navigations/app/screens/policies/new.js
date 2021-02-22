@@ -13,7 +13,7 @@ import {HomeForm } from '../../../../components/form/home';
 import { ActInd } from '../../../../components/activityIndicator';
 
 
-const forms = {Motor: <MotorForm />, Home: <HomeForm />,}
+
    
 const Picker = Platform.OS === 'ios' ? DynamicPickerInlineIOS: DynamicPickerInline;
 
@@ -26,16 +26,17 @@ export const NewPolicy = ({ navigation,route}) => {
     const {colors, dark} = useTheme();
     
     const [selected, setSelected] = useState(pid||products[0]?.id);
-    const [Form, setForm] = useState();
+    const [category, setCategory] = useState(null);
+    const [productInfo, setProductInfo] = useState('');
     const dispatch = useDispatch();
     
 
     useEffect(() => {
-        const category = products.find(({id}) => id === selected)?.category
-        setForm(forms[category]);
+        const {category, description} = products.find(({id}) => id === selected)
+        setCategory(category);
+        setProductInfo(description);
     }, [selected]);
 
-    
 
     const totalValue = _ => {
         let val = 0;
@@ -62,6 +63,7 @@ export const NewPolicy = ({ navigation,route}) => {
         setSelected(value.id);
     }
 
+    
 
     return (
         <View style={{flex: 1, backgroundColor: dark ? colors.background:colors.card}}>
@@ -83,7 +85,8 @@ export const NewPolicy = ({ navigation,route}) => {
                     />
                 </View>
                 <View style={styles.form}>
-                    {Form}
+                    {category === 'Motor' && <MotorForm productInfo={productInfo} />}
+                    {category === 'Home' && <HomeForm productInfo={productInfo} />}
                 </View>
             
             <ActInd status={processing} />

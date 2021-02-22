@@ -53,13 +53,13 @@ export const {all, processing, error, update} = notificationSlice.actions;
 
 export default notificationSlice.reducer;
 
-export const updateNotificationAsync = user => async dispatch => {
+export const updateNotificationAsync = _ => async dispatch => {
     dispatch(processing(true))
    
     const client = await getLoginClient();
     try{
-        const {data, status} = await client.get(`notifications/?user=${user}`);
-        
+        const {data, status} = await client.get(`notifications/`);
+        dispatch(processing(false))
         if (status === 200 || status === 201){
             dispatch(all(data));
             return;
@@ -110,11 +110,13 @@ export const updateNotificationAsync = user => async dispatch => {
 
 export const readNotificationAsync = details => async dispatch => {
     dispatch(processing(true))
-   
+    console.log(details)
     const client = await getLoginClient();
+    client.defaults.headers.patch['Content-Type'] = 'application/json';
     try{
         const {data, status} = await client.patch(`notifications/${details?.id}/`, {details});
-        
+        dispatch(processing(false))
+        console.log(data)
         if (status === 200 || status === 201){
             dispatch(update(data));
             return;

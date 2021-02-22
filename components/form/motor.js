@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image} from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Text, Platform, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, useWindowDimensions} from 'react-native';
+import { useFocusEffect, useTheme } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import HTML from "react-native-render-html";
 
 import { OutlinedInput } from '../input';
 import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
@@ -13,20 +14,24 @@ import { carApi } from '../../apiAuth/carApi';
 import {edit} from '../../store/reducers/policy';
 import { ImageUploader } from '../imageUploader';
 import { ScrollView } from 'react-native';
+import { Pressable } from 'react-native';
+import { Modal } from 'react-native';
 
 
-export const MotorForm = ({}) => {
+export const MotorForm = ({productInfo}) => {
     
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
     const [carMakes, setCarMakes] = useState([]);
     const [carModels, setCarModels] = useState([]);
+    const [showInfo, setShowInfo] = useState(false);
     
     const {form} = useSelector(state => state.policies);
     const [allCars, setCars] = useState([]);
     const dispatch = useDispatch();
+    const contentWidth = useWindowDimensions().width;
     
-
+    
     const cars = async _ => {
         const {data} = await carApi.get('vehicles/models/');
         
@@ -56,6 +61,9 @@ export const MotorForm = ({}) => {
             style={styles.form}
         >
             <ScrollView>
+                <Pressable onPress={_ => setShowInfo(true)}>
+                    <Text style={[styles.info, {color: colors.success}]}>More information about this product</Text>
+                </Pressable>
                 <Picker
                     
                     options={carMakes} 
@@ -133,6 +141,18 @@ export const MotorForm = ({}) => {
                 <ImageUploader image={form.vehicle_license} callback={image => dispatch(edit({...form, vehicle_license: image}))} text="Upload vehicle license"  />
                 <ImageUploader image={form.proof_of_ownership} callback={image => dispatch(edit({...form, proof_of_ownership: image}))} text="Upload Proof of ownership"  />
             </ScrollView>
+            <Modal
+                visible={showInfo}
+                onRequestClose={_ => setShowInfo(false)}
+                transparent={false}
+            >
+                <ScrollView style={{ flex: 1 }}>
+                    <HTML
+                        source={{html: `<div style="padding: 20px;">${productInfo}</div>`}}
+                        contentWidth={contentWidth}
+                    />
+                </ScrollView>
+            </Modal>
         </KeyboardAvoidingView>
         
    );
@@ -160,5 +180,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         marginVertical: 10,
+    },
+    info: {
+        marginVertical: hp(1),
+        fontFamily: 'Montserrat_400Regular',
+        fontSize: wp(3),
+        textDecorationLine: 'underline',
     }
 })
