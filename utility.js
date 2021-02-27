@@ -79,11 +79,11 @@ export const isNewPolicy = created_at => {
 	return mins <= 30 ? true : false;
 }
 
-const validUri = image => {
+export const validUri = image => {
 	return typeof image !== 'object'? image : Platform.OS === "android" ? image?.uri : image?.uri.replace("file://", ""); 
 }
 
-const get_file_name = uri => {
+export const get_file_name = uri => {
   	let filename = uri.split('/').pop();
 	protocol = uri.split(':')[0];
 	if (protocol === 'https' || protocol === 'http')
@@ -92,7 +92,7 @@ const get_file_name = uri => {
 }
 
 
-const get_file_type = image => {
+export const get_file_type = image => {
 	let match = /\.(\w+)$/.exec(image);
   	let type = match ? `image/${match[1]}` : `image/jpg`;
 	return type;

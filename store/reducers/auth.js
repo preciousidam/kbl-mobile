@@ -6,7 +6,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { isAvailableAsync, setItemAsync } from 'expo-secure-store';
 import { Alert } from "react-native";
 import getLoginClient from "../../apiAuth/loggedInClient";
-import { colors } from "react-native-elements";
+import { get_file_name, get_file_type, validUri } from "../../utility";
 
 
 
@@ -150,6 +150,54 @@ export const signUp = details => async dispatch => {
         if (status === 201 || status === 200 ){
             
             dispatch(signIn({email: data.email, password: details.password, username: data.email}));
+            return
+        }
+
+        if (status === 400){
+            for (let item in data){
+                showMessage({
+                    type: 'danger',
+                    message: item.toUpperCase(),
+                    description: data[item][0],
+                    icon: 'auto',
+                    duration: 3000,
+                    hideStatusBar: true,
+                })
+            }
+        }
+        if(status === 500) throw 'Someone happen please check back later or contact support'
+        
+        return
+    }catch (err){
+        console.log(err)
+        dispatch(processing({loading: false}));
+        showMessage({
+            type: 'danger',
+            message: "Something happened",
+            description: err.message,
+            icon: 'auto',
+            duration: 3000,
+            hideStatusBar: true,
+        })
+    }
+}
+
+export const uploadProfileImage = (user, img) => async dispatch => {
+    const client = await getLoginClient();
+    client.defaults.headers.patch = {};
+    const image = new FormData();
+    const uri = validUri(img);
+    image.append('profile_image', {type: get_file_type(uri), name: get_file_name(uri), uri });
+    console.log(image)
+
+    try{ 
+        dispatch(processing({loading: true}));
+        
+        const {data, status} = await client.patch(`users/${user}/`, {profile_image: image});
+        dispatch(processing({loading: false}));
+        console.log(data)
+        if (status === 201 || status === 200 ){
+            dispatch(restore({user: data}));
             return
         }
 

@@ -11,6 +11,7 @@ import { PasswordOutlinedInputWithIcon } from '../../../../components/input';
 import { Image } from 'react-native';
 import { changePassword, logout } from '../../../../store/reducers/auth';
 import { Solidbutton } from '../../../../components/button';
+import { ProfileImageUploader } from '../../../../components/imageUploader/profile';
 
 
 
@@ -129,7 +130,7 @@ export const Profile = ({navigation}) => {
     return (
         <View style={styles.container}>
             <View style={[styles.header, {backgroundColor: colors.card}]}>
-                <Avatar icon={{name:"person"}} size="medium" rounded containerStyle={{backgroundColor: '#c6c6c6', marginRight: 12,}} />
+                <ProfileImageUploader />
                 <View>
                     <Text style={[styles.text, {color: colors.text}]}>{`${user?.first_name} ${user?.last_name}`}</Text>
                     <Text style={[styles.text, {color: colors.text}]}>{user?.email}</Text>

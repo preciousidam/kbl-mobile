@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
-import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Image} from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTheme } from '@react-navigation/native';
-import { Modal } from 'react-native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { useDispatch, useSelector } from 'react-redux';
+import { Avatar } from 'react-native-elements';
+import { Pressable } from 'react-native';
+import { uploadProfileImage } from '../../store/reducers/auth';
 
 
 
-export const ImageUploader = ({image, callback, text}) => {
+export const ProfileImageUploader = ({image, callback, text}) => {
     
     const { showActionSheetWithOptions } = useActionSheet();
     const options = ['Camera', 'Gallery', 'Cancel'];
     const {colors, dark} = useTheme();
-    const [view, setView] = useState(false);
+    const dispatch =  useDispatch();
+    const {user} = useSelector(state => state.auth);
     const icons = [
         <Image source={require('../../assets/photo.png')} style={styles.icon} />,
         <Image source={require('../../assets/gallery.png')} style={styles.icon} />,
@@ -39,7 +42,7 @@ export const ImageUploader = ({image, callback, text}) => {
                 return;
             }
             
-            callback(pickerResult);
+            dispatch(uploadProfileImage(user?.pk, pickerResult));
        
     }
 
@@ -67,88 +70,56 @@ export const ImageUploader = ({image, callback, text}) => {
         else return;
     })
 
-    const clearImage = _ => {
-        callback(null);
-    }
-
-    const changeImage = _ => {
-        showOptions()
-    }
 
     let openCameraAsync = async () => {
         
-            let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    
+        if (permissionResult.granted === false) {
+        alert("Permission to access camera roll is required!");
+        return;
+        }
         
-            if (permissionResult.granted === false) {
-            alert("Permission to access camera roll is required!");
+        let pickerResult = await ImagePicker.launchCameraAsync({base64: true});
+        
+        if (pickerResult.cancelled === true) {
             return;
-            }
-            
-            let pickerResult = await ImagePicker.launchCameraAsync({base64: true});
-            
-            if (pickerResult.cancelled === true) {
-                return;
-            }
-            
-            callback(pickerResult);
+        }
+        
+        dispatch(uploadProfileImage(user?.pk, pickerResult.uri));
       
     }
 
     
 
-    const change = (
-        <TouchableOpacity onPress={changeImage}>
-            <View style={styles.actionBtn}>
-                <Ionicons name="pencil" size={24} color={colors.primary} />
-                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular', color: colors.text}}>Change</Text>
-            </View>
-        </TouchableOpacity>
-    )
-
-    const clear = (
-        <TouchableOpacity onPress={clearImage}>
-            <View style={styles.actionBtn}>
-                <Ionicons name="close" size={24} color={colors.danger} />
-                <Text style={{fontSize: 10, fontFamily: 'OpenSans_400Regular', color: colors.text}}>Clear</Text>
-            </View>
-        </TouchableOpacity>
-    )
-    
-
-    if (!image){
+    if (user?.image === null || user?.image === undefined || user?.image === ''){
         return (
-            <TouchableOpacity onPress={showOptions}>
-                <View style={[styles.image, {borderColor: colors.primary}]} >
-                    <Ionicons name="ios-images" color={colors.info} size={wp("12%")} />
-                    <Text style={{fontFamily: 'OpenSans_400Regular', color: colors.text}}>{text}</Text>
-                </View>
-            </TouchableOpacity>
+            <Pressable onPress={showOptions}>
+                <Avatar
+                    icon={{name:"person"}} 
+                    size="medium" 
+                    rounded 
+                    containerStyle={{
+                        backgroundColor: '#c6c6c6', 
+                        marginRight: 12,
+                    }} 
+                />
+            </Pressable>
         )
     }
 
     return (
-        <View style={[styles.image, {borderColor: colors.primary, flexDirection: 'row'}]}>
-            <TouchableOpacity onPress={_ => setView(true)}>
-                <Image source={{uri: image?.uri || image}} style={{width: 150, height: 100, marginRight: 20,}} />
-            </TouchableOpacity>
-            
-            <View style={styles.actionBtn}>
-                {change}
-                {clear}
-            </View>
-            <Modal
-                transparent={false}
-                visible={view}
-                onRequestClose={_ => setView(false)}
-            >
-                <View style={styles.imageView}>
-                    <Image 
-                        source={{uri: `data:image/jpg;base64,${image?.base64}` || image}} 
-                        style={styles.fullImage}
-                    />
-                </View>
-            </Modal>
-        </View>
+        <Pressable onPress={showOptions}>
+            <Avatar
+                source={{ uri: user?.image }} 
+                size="medium" 
+                rounded 
+                containerStyle={{
+                    backgroundColor: '#c6c6c6', 
+                    marginRight: 12,
+                }} 
+            />
+        </Pressable>
     )
 }
 
