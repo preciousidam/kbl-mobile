@@ -137,7 +137,7 @@ export const PaymentOptionView = ({navigation}) => {
 
             <View style={styles.container}>
                 <SolidbuttonWithIcon 
-                    text="FlutterWave" icon={<FontAwesome name="money" size={16} color="#fff" />}
+                    text="Continue" icon={<FontAwesome name="money" size={16} color="#fff" />}
                     onPress={_ => onClick("FlutterWave")}
                 />
                 {/*<Divider />
@@ -146,10 +146,10 @@ export const PaymentOptionView = ({navigation}) => {
                     text="Paystack" gradColors={['#63E7F9','#00AFED' ]} icon={<FontAwesome name="money" size={16} color="#fff" />} 
                 />*/}
                 <Divider />
-                <SolidbuttonWithIcon 
+                {/*<SolidbuttonWithIcon 
                     onPress={_ => onClick("QuickTeller")} 
                     text="Quickteller" gradColors={['#5DA6E8','#004FB4' ]} icon={<FontAwesome name="money" size={16} color="#fff" />} 
-                />
+                />*/}
                 
             </View>
             <Modal
