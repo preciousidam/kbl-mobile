@@ -99,13 +99,9 @@ export const MotorForm = ({productInfo}) => {
                 />
                 <Picker
                     prompt="Vehicle Class"
-                    options={['Buses, Omnibus','Commercial', 
-                                'Company, Taxi, Car Hire',
+                    options={[
                                 'Motorcycle/Tricycle',
                                 'Private Vehicle / Car',
-                                'Stage Carriage 8 - 15 persons',
-                                'Stage Carriage over 15 persons',
-                                'Tractor & Equipment', 
                             ]} 
                     style={{padding: 0, marginVertical: 10,}}
                     value={form.vehicle_class||'Vehicle Class'}

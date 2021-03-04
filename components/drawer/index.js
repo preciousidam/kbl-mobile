@@ -27,7 +27,8 @@ export default function DrawerCustom(props){
                 <View style={styles.headerprofile}>
                     <Avatar 
                         rounded 
-                        size="medium" 
+                        size="medium"
+                        source={{uri: user?.profile_image}}
                         icon={{name: 'person', type: 'ionicons', color: '#fff'}} 
                         containerStyle={{backgroundColor: colors.primary, marginTop: 10, marginLeft: 20,}} 
                     />

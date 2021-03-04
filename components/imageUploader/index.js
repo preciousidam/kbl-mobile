@@ -33,7 +33,7 @@ export const ImageUploader = ({image, callback, text}) => {
             return;
             }
         
-            let pickerResult = await ImagePicker.launchImageLibraryAsync({base64: true});
+            let pickerResult = await ImagePicker.launchImageLibraryAsync({quality: .4});
             
             if (pickerResult.cancelled === true) {
                 return;
@@ -84,7 +84,7 @@ export const ImageUploader = ({image, callback, text}) => {
             return;
             }
             
-            let pickerResult = await ImagePicker.launchCameraAsync({base64: true});
+            let pickerResult = await ImagePicker.launchCameraAsync({quality: .4});
             
             if (pickerResult.cancelled === true) {
                 return;

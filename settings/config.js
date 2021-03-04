@@ -5,5 +5,5 @@ const api = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts
   : `kblinsuranceng.com`;
 
 export const apiConfig = {
-    baseUrl: `https://kblinsuranceng.com/api/v1/`,
+    baseUrl: `http://${api}/api/v1/`,
 }

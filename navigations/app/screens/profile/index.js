@@ -12,6 +12,7 @@ import { Image } from 'react-native';
 import { changePassword, logout } from '../../../../store/reducers/auth';
 import { Solidbutton } from '../../../../components/button';
 import { ProfileImageUploader } from '../../../../components/imageUploader/profile';
+import { ActInd } from '../../../../components/activityIndicator';
 
 
 
@@ -120,7 +121,7 @@ const ResetPasswordButton = ({ children }) => {
 };
 
 export const Profile = ({navigation}) => {
-    const {user} = useSelector(state => state.auth);
+    const {user, isLoading} = useSelector(state => state.auth);
     const {colors, dark} = useTheme();
     const dispatch = useDispatch();
     const signOut = _ => {
@@ -153,6 +154,7 @@ export const Profile = ({navigation}) => {
                     </View>
                 </TouchableOpacity>
             </View>
+            <ActInd status={isLoading} />
             <FocusAwareStatusBar barStyle={dark? 'light-content': 'dark-content' } backgroundColor={colors.card} />
         </View>
     )

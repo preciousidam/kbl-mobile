@@ -14,13 +14,14 @@ import { uploadProfileImage } from '../../store/reducers/auth';
 
 
 
-export const ProfileImageUploader = ({image, callback, text}) => {
+export const ProfileImageUploader = () => {
     
     const { showActionSheetWithOptions } = useActionSheet();
     const options = ['Camera', 'Gallery', 'Cancel'];
     const {colors, dark} = useTheme();
     const dispatch =  useDispatch();
     const {user} = useSelector(state => state.auth);
+    console.log(user)
     const icons = [
         <Image source={require('../../assets/photo.png')} style={styles.icon} />,
         <Image source={require('../../assets/gallery.png')} style={styles.icon} />,
@@ -36,7 +37,7 @@ export const ProfileImageUploader = ({image, callback, text}) => {
             return;
             }
         
-            let pickerResult = await ImagePicker.launchImageLibraryAsync({base64: true});
+            let pickerResult = await ImagePicker.launchImageLibraryAsync({quality: .4});
             
             if (pickerResult.cancelled === true) {
                 return;
@@ -80,7 +81,7 @@ export const ProfileImageUploader = ({image, callback, text}) => {
         return;
         }
         
-        let pickerResult = await ImagePicker.launchCameraAsync({base64: true});
+        let pickerResult = await ImagePicker.launchCameraAsync({quality: .4});
         
         if (pickerResult.cancelled === true) {
             return;
@@ -92,11 +93,11 @@ export const ProfileImageUploader = ({image, callback, text}) => {
 
     
 
-    if (user?.image === null || user?.image === undefined || user?.image === ''){
+    if (!user?.profile_image){
         return (
             <Pressable onPress={showOptions}>
                 <Avatar
-                    icon={{name:"person"}} 
+                    icon={{name:"person"}}
                     size="medium" 
                     rounded 
                     containerStyle={{
@@ -111,7 +112,7 @@ export const ProfileImageUploader = ({image, callback, text}) => {
     return (
         <Pressable onPress={showOptions}>
             <Avatar
-                source={{ uri: user?.image }} 
+                source={{ uri: user?.profile_image }} 
                 size="medium" 
                 rounded 
                 containerStyle={{

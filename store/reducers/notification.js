@@ -112,9 +112,9 @@ export const readNotificationAsync = details => async dispatch => {
     dispatch(processing(true))
     console.log(details)
     const client = await getLoginClient();
-    client.defaults.headers.patch['Content-Type'] = 'application/json';
+    
     try{
-        const {data, status} = await client.patch(`notifications/${details?.id}/`, {details});
+        const {data, status} = await client.put(`notifications/${details?.id}/`, details);
         dispatch(processing(false))
         console.log(data)
         if (status === 200 || status === 201){

@@ -11,6 +11,7 @@ import FocusAwareStatusBar from '../../../../components/statusBar';
 import { MotorForm } from '../../../../components/form/motor';
 import {HomeForm } from '../../../../components/form/home';
 import { ActInd } from '../../../../components/activityIndicator';
+import { showMessage } from 'react-native-flash-message';
 
 
 
@@ -21,6 +22,7 @@ export const NewPolicy = ({ navigation,route}) => {
 
     
     const {products} = useSelector(state => state.app)
+    const {kyc} = useSelector(state => state.kyc);
     const {pid} = route?.params;
     const options = products.map(({name}) => name);
     const {colors, dark} = useTheme();
@@ -29,6 +31,7 @@ export const NewPolicy = ({ navigation,route}) => {
     const [category, setCategory] = useState(null);
     const [productInfo, setProductInfo] = useState('');
     const dispatch = useDispatch();
+    
     
 
     useEffect(() => {
@@ -54,6 +57,20 @@ export const NewPolicy = ({ navigation,route}) => {
     const onNextClick = async _ => {
         const product = products.find(({id}) => id === selected)
         const value = product?.category == 'Home' ? totalValue() : form.value;
+
+        if(!kyc?.email && !kyc?.name && !kyc?.phone){
+            showMessage({
+                type: 'warning',
+                message: 'KYC Update',
+                description: 'Please note you have to fill your KYC before you can proceed.',
+                icon: 'auto',
+                duration: 3000,
+                hideStatusBar: true,
+            });
+
+            return;
+        }
+
         dispatch(savePolicyAsync(product,{...form, user: user.pk, product: product?.id, value}, navigation));
     }
 

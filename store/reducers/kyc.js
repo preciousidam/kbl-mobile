@@ -148,14 +148,7 @@ export const fetchKYCAsync = email => async dispatch => {
         }
         
         if(status === 404){
-            showMessage({
-                type: 'info',
-                description: "Enter your details",
-                message: 'Notice',
-                icon: 'auto',
-                duration: 3000,
-                hideStatusBar: true,
-            })
+            
             return;
         }
 

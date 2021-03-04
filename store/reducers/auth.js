@@ -183,21 +183,23 @@ export const signUp = details => async dispatch => {
 }
 
 export const uploadProfileImage = (user, img) => async dispatch => {
+    dispatch(processing({loading: false}));
     const client = await getLoginClient();
-    client.defaults.headers.patch = {};
+    
     const image = new FormData();
     const uri = validUri(img);
     image.append('profile_image', {type: get_file_type(uri), name: get_file_name(uri), uri });
-    console.log(image)
+    
 
     try{ 
         dispatch(processing({loading: true}));
         
-        const {data, status} = await client.patch(`users/${user}/`, {profile_image: image});
+        const {data, status} = await client.put(`users/${user}/`, image);
         dispatch(processing({loading: false}));
-        console.log(data)
+        
         if (status === 201 || status === 200 ){
             dispatch(restore({user: data}));
+            AsyncStorage.setItem('user', JSON.stringify(data));
             return
         }
 
