@@ -28,17 +28,17 @@ export const Agree = ({navigation}) => {
             <View style={styles.first}>
                 <Text style={[styles.headerText, {color: colors["primary"]}]}>Welcome to KBL Insurance app</Text>
                 <Text 
-                    style={styles.text}
+                    style={[styles.text, {color: colors.text}]}
                 >
                     It is simple and easy; insure your assets on the go.
                 </Text>
             </View>
-            <View style={styles.second}>
+            <View style={[styles.second, {color: colors.text}]}>
                 <Text
-                    style={styles.terms}
+                    style={[styles.terms, {color: colors.text}]}
                 >
                     To continue, read and agree to the
-                    <Text style={styles.inner} onPress={() => onPressTermPolicy('Policy')}> Terms of Service and Data Protection </Text>
+                    <Text style={[styles.inner, {color: colors.text}]} onPress={() => onPressTermPolicy('Policy')}> Terms of Service and Data Protection </Text>
                 </Text>
                 <Solidbutton 
                     text="Agree" 

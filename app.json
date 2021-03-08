@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.kblinsurance",
-      "versionCode": 3,
+      "versionCode": 4,
       "enableDangerousExperimentalLeanBuilds": true,
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,

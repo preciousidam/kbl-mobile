@@ -144,7 +144,7 @@ export const PaymentOptionView = ({navigation}) => {
                 <SolidbuttonWithIcon
                     onPress={_ => onClick("PayStack")}
                     text="Paystack" gradColors={['#63E7F9','#00AFED' ]} icon={<FontAwesome name="money" size={16} color="#fff" />} 
-                />*/}
+                />
                 <Divider />
                 {/*<SolidbuttonWithIcon 
                     onPress={_ => onClick("QuickTeller")} 

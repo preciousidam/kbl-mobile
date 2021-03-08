@@ -18,7 +18,7 @@ export const Policy = props => {
         <View>
             <PDFReader
                 source={{
-                uri: 'https://kblinsurance.com/wp-content/uploads/2020/05/KBL-Insurance-Data-Privacy-Policy.pdf',
+                    uri: 'https://kblinsurance.com/wp-content/uploads/2020/05/KBL-Insurance-Data-Privacy-Policy.pdf',
                 }}
                 onLoadStart={onLoad}
                 onLoadEnd={onLoad}
