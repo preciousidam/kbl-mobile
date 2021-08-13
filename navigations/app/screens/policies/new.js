@@ -115,8 +115,9 @@ export const NewPolicy = ({ navigation,route}) => {
                     />
                 </View>
                 <View style={styles.form}>
-                    {category === 'Motor' && <MotorForm productInfo={productInfo} pName={pName} />}
-                    {category === 'Home' && <HomeForm productInfo={productInfo} />}
+                    {pName === 'Motor Comprehensive' && <MotorForm productInfo={productInfo} pName={pName} />}
+                    {pName === 'Motor Third-Party' && <MotorForm productInfo={productInfo} pName={pName} />}
+                    {category === 'Home Xtra' && <HomeForm productInfo={productInfo} />}
                 </View>
             
             <ActInd status={processing} />

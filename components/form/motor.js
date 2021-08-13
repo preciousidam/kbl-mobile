@@ -51,6 +51,13 @@ export const MotorForm = ({productInfo, pName}) => {
 
 
     useEffect(() => {
+        dispatch(edit({
+            vehicle_model: 'Audi Q3(2020)',
+            vehicle_class: 'Private Vehicle / Car',
+            plan: 'Bronze',
+            building_type: 'Flat',
+            duration: 'Yearly',
+        }));
         cars();
     },[])
 
