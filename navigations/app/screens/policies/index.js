@@ -1,11 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
-import {View, Text} from 'react-native';
-import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import { PolicyListView } from './list';
 import NewPolicy from './new';
-import { KYCForm } from './kyc';
 import {SummaryView} from './summary';
 import { PaymentOptionView } from './payment';
 import PolicyDetails from './policy_detail';
@@ -22,13 +18,6 @@ export default function PolicyNavigator({navigation}){
             <Screen 
                 component={NewPolicy}
                 name="new"
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <Screen 
-                component={KYCForm}
-                name="confirmKYC"
                 options={{
                     headerShown: false,
                 }}

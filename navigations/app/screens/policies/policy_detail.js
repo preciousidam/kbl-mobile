@@ -20,15 +20,6 @@ import { edit } from '../../../../store/reducers/policy';
 import { Linking } from 'react-native';
 import { ScrollView } from 'react-native';
 
-const vInfo = {
-    'Value': '5000000.00',
-    'Vehicle Model': 'Bentley',
-    'Vehicle Make': 'Another Bentley',
-    'Registration Number': 123456789,
-    'Engine Number': 123456,
-    'Chassis Number': 234567,
-    'Vehicle Class': 'Private Vehicle / Car',
-}
 
 export const PolicyDetails = ({navigation, route}) => {
     const {colors, dark} = useTheme();
@@ -40,7 +31,7 @@ export const PolicyDetails = ({navigation, route}) => {
     const product = useSelector(state => state.app?.products?.find(({id}) => id === policy?.product))
 
     const renew = _ => {
-        if (policy.is_active)
+        if (policy?.is_active)
             Alert.alert('Renewal', 'Can not renew policy! policy still active')
         else{
             dispatch(edit({...policy}));
@@ -50,12 +41,12 @@ export const PolicyDetails = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        totalPaid(policy)
+        totalPaid(policy);
     },[policy])
 
     const totalPaid = pol => {
-        const startDate = pol.created_at
-        const payments = pol.payments?.filter(({start}) => new Date(start) >= new Date(startDate))
+        const startDate = pol?.created_at
+        const payments = pol?.payments?.filter(({start}) => new Date(start) >= new Date(startDate))
         
         let total = 0
         for (let pay of payments){
@@ -63,11 +54,11 @@ export const PolicyDetails = ({navigation, route}) => {
             total += pay.amount;
         }
         
-        return parseFloat(total).toFixed(2);
+        return parseFloat(total).toFixed(2) || '0.00';
     }
 
     const view_cert = _ => {
-        if(policy.is_active) {
+        if(policy?.is_active) {
             Linking.openURL(policy?.certificate[policy?.certificate?.length -1].certificate)
             .catch((err) =>{
                 console.log(err)
@@ -94,9 +85,8 @@ export const PolicyDetails = ({navigation, route}) => {
                             <Money style={[styles.p, styles.paymentP, {color: colors.text}]} amount={totalPaid(policy)} />
                         </View>
                     </View>
-                    {product?.category === 'Motor'?
-                        <MotorDetails pn={policy.policy_number} />:
-                        <HomeDetails pn={policy.policy_number} />}
+                    {product?.category === 'Motor' && <MotorDetails pn={policy?.policy_number} />}
+                    {product?.category === 'Home' && <HomeDetails pn={policy?.policy_number} />}
                 </ScrollView>
             </View>
             <View style={[styles.footer]}>
@@ -107,7 +97,7 @@ export const PolicyDetails = ({navigation, route}) => {
                     />
                 </View>
                 <View style={{flex: 1, paddingLeft: 5}}>
-                    <Outlinedbutton onPress={renew} text={policy.valid_till == null?"Payment": "Renew"} style={{width: '100%'}} textStyle={{color: colors.primary}} />
+                    <Outlinedbutton onPress={renew} text={policy?.valid_till == null?"Payment": "Renew"} style={{width: '100%'}} textStyle={{color: colors.primary}} />
                 </View>
             </View>
             <FocusAwareStatusBar barStyle={!dark? 'light-content': 'dark-content' } backgroundColor={colors.primary} />

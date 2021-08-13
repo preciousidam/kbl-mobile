@@ -87,7 +87,7 @@ export const Activity = ({icon, premium, policy_number, valid_till, onPress, is_
                 <View style={{marginVertical: hp("1%"),}}>
                     <Text style={[styles.bold, {color: colors.text}]}>{policy_number}</Text>
                 </View>
-                {is_active ?<Text style={{color: '#858585', fontSize: wp("3%"),}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
+                {is_active ?<Text style={{color: colors.warning, fontSize: wp("3%"),}}>Valid Till: {moment(valid_till).format('lll')}</Text>:
                 <Text style={{color: colors.warning, fontSize: wp("3%"),}}>In-Active</Text>}
                 <Text style={styles.shield}>{icn}</Text>
             </View>

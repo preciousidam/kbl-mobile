@@ -59,6 +59,7 @@ export const updateNotificationAsync = _ => async dispatch => {
     const client = await getLoginClient();
     try{
         const {data, status} = await client.get(`notifications/`);
+        console.log(data)
         dispatch(processing(false))
         if (status === 200 || status === 201){
             dispatch(all(data));

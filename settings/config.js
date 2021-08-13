@@ -2,8 +2,8 @@ import Constants  from 'expo-constants';
 const { manifest } = Constants;
 const api = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
   ? manifest.debuggerHost.split(`:`).shift().concat(`:8000`)
-  : `kblinsuranceng.com`;
+  : `kblinsurancebiz.com`;
 
 export const apiConfig = {
-    baseUrl: `http://${api}/api/v1/`,
+    baseUrl: `https://kblinsurancebiz.com/api/v1/`,
 }

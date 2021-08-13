@@ -16,6 +16,7 @@ export const policySlice = createSlice({
             vehicle_class: 'Private Vehicle / Car',
             plan: 'Bronze',
             building_type: 'Flat',
+            duration: 'Yearly',
         },
         processing: false,
         error: false,
@@ -69,6 +70,7 @@ export const policySlice = createSlice({
                     vehicle_class: 'Private Vehicle / Car',
                     plan: 'Bronze',
                     building_type: 'Flat',
+                    duration: 'Yearly',
                 }
             }
         }

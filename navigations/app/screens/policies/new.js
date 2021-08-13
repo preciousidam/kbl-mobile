@@ -1,17 +1,22 @@
-import { useFocusEffect, useTheme } from '@react-navigation/native';
-import React, { useState, useEffect, useCallback } from 'react';
-import {Text, StyleSheet, View, ScrollView, Platform, Modal, ActivityIndicator } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import {Text, StyleSheet, View, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {DynamicPickerInline, DynamicPickerInlineIOS} from '../../../../components/input/picker';
 import { useDispatch, useSelector } from 'react-redux';
-import {edit, savePolicyAsync, reset} from '../../../../store/reducers/policy'
+import {edit, savePolicyAsync} from '../../../../store/reducers/policy'
 
 import { FormHeader } from '../../../../components/header';
 import FocusAwareStatusBar from '../../../../components/statusBar';
 import { MotorForm } from '../../../../components/form/motor';
 import {HomeForm } from '../../../../components/form/home';
 import { ActInd } from '../../../../components/activityIndicator';
-import { showMessage } from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { Outlinedbutton } from '../../../../components/button';
+import {
+	widthPercentageToDP as wp,
+	heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 
 
@@ -29,15 +34,17 @@ export const NewPolicy = ({ navigation,route}) => {
     
     const [selected, setSelected] = useState(pid||products[0]?.id);
     const [category, setCategory] = useState(null);
+    const [pName, setPName] = useState('');
     const [productInfo, setProductInfo] = useState('');
     const dispatch = useDispatch();
     
     
 
     useEffect(() => {
-        const {category, description} = products.find(({id}) => id === selected)
+        const {category, description, name} = products.find(({id}) => id === selected)
         setCategory(category);
         setProductInfo(description);
+        setPName(name);
     }, [selected]);
 
 
@@ -62,15 +69,21 @@ export const NewPolicy = ({ navigation,route}) => {
             showMessage({
                 type: 'warning',
                 message: 'KYC Update',
-                description: 'Please note you have to fill your KYC before you can proceed.',
                 icon: 'auto',
-                duration: 3000,
                 hideStatusBar: true,
+                autoHide: false,
+                renderCustomContent: () => <ActionMessage
+                    message="Please note you have to fill your KYC before you can proceed."
+                    positive={() => {
+                        navigation.navigate('KYC', {screen: 'updateKYC'});
+                        hideMessage();
+                    }}
+                    negative={() => hideMessage()}
+                />
             });
 
             return;
         }
-
         dispatch(savePolicyAsync(product,{...form, user: user.pk, product: product?.id, value}, navigation));
     }
 
@@ -102,7 +115,7 @@ export const NewPolicy = ({ navigation,route}) => {
                     />
                 </View>
                 <View style={styles.form}>
-                    {category === 'Motor' && <MotorForm productInfo={productInfo} />}
+                    {category === 'Motor' && <MotorForm productInfo={productInfo} pName={pName} />}
                     {category === 'Home' && <HomeForm productInfo={productInfo} />}
                 </View>
             
@@ -114,6 +127,23 @@ export const NewPolicy = ({ navigation,route}) => {
 
 export default NewPolicy;
 
+export const ActionMessage = ({message, positive, negative}) => {
+    
+    return (
+        <View style={styles.message}>
+            <Text style={[styles.messageText, {color: '#fff'}]}>{message}</Text>
+            <View style={styles.actions}>
+                <View style={{width: wp('40%')}}>
+                    <Outlinedbutton text="Dismiss" onPress={negative} style={styles.btn} />
+                </View>
+                <View style={{width: wp('40%')}}>
+                    <Outlinedbutton text="Update" onPress={positive} style={styles.btn} />
+                </View>
+            </View>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     form: {
         flex: 1,
@@ -124,5 +154,23 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center",
         elevation: 2,
+    },
+    message: {
+
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: hp(2)
+    },
+    messageText: {
+        fontFamily: 'OpenSans_400Regular',
+        fontSize: wp('3.2%'),
+    },
+    btn: {
+        borderColor: '#fff',
+        borderRadius: wp(2),
+        paddingVertical: hp(1.3)
     }
 });

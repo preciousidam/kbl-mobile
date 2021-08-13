@@ -99,6 +99,12 @@ export const HomeForm = ({productInfo}) => {
                 value={form.address}
                 onChangeText={({nativeEvent}) => dispatch(edit({...form, address: nativeEvent.text}))}
             />
+            <OutlinedInput 
+                placeholder="Referrer if any?."
+                style={styles.input}
+                value={form?.referrer}
+                onChangeText={({nativeEvent}) => dispatch(edit({...form, referrer: nativeEvent.text}))}
+            />
             {exceeded && <Text style={[styles.error, {color: colors.danger}]}>* Total amount for contents insured for selected plan exceeded</Text>}
             <Text style={{fontFamily: 'Montserrat_700Bold', marginVertical: 15, color: colors.text}}>Household Contents</Text>
             {form?.items && Object.entries(form.items).map((item,index) => (

@@ -18,7 +18,7 @@ import { Pressable } from 'react-native';
 import { Modal } from 'react-native';
 
 
-export const MotorForm = ({productInfo}) => {
+export const MotorForm = ({productInfo, pName}) => {
     
     const Picker = Platform.OS === 'ios' ? DynamicPickerIOS: DynamicPicker;
     const {colors, dark} = useTheme();
@@ -91,12 +91,12 @@ export const MotorForm = ({productInfo}) => {
                     value={form.vehicle_color}
                     onChangeText={({nativeEvent}) => dispatch(edit({...form, vehicle_color: nativeEvent.text}))}
                 />
-                <Picker
-                    options={['Select Duration', 'Half Yearly', 'Quarterly', 'Yearly']} 
+                {pName=== 'Motor Comprehensive'&&<Picker
+                    options={['Select Insurance Duration', 'Half Yearly', 'Quarterly', 'Yearly']} 
                     style={{padding: 0, marginVertical: 10,}}
                     value={form.duration||'Select Duration'}
                     onValueChange={(item,i) => dispatch(edit({...form, duration: item}))}
-                />
+                />}
                 <Picker
                     prompt="Vehicle Class"
                     options={[
@@ -131,6 +131,12 @@ export const MotorForm = ({productInfo}) => {
                     value={form.value}
                     onChangeText={({nativeEvent}) => dispatch(edit({...form, value: nativeEvent.text}))}
                     keyboardType="numeric"
+                />
+                <OutlinedInput 
+                    placeholder="Referrer if any?."
+                    style={styles.input}
+                    value={form?.referrer}
+                    onChangeText={({nativeEvent}) => dispatch(edit({...form, referrer: nativeEvent.text}))}
                 />
                 <ImageUploader image={form.front_image} callback={image => dispatch(edit({...form, front_image: image}))} text="Upload front image of Vehicle" />
                 <ImageUploader image={form.back_image} callback={image => dispatch(edit({...form, back_image: image}))}  text="Upload back image of Vehicle" />

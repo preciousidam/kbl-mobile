@@ -13,7 +13,7 @@ import { showMessage } from 'react-native-flash-message';
 import { CardInputWithIcon } from '../../../../components/input/card';
 import { validateCard } from '../../../../utility';
 import { ActivityIndicator } from 'react-native';
-import { reset } from '../../../../store/reducers/policy';
+import { reset, retrievePolicyAsync } from '../../../../store/reducers/policy';
 
 export const PaymentOptionView = ({navigation}) => {
     const {colors, dark} = useTheme();
@@ -98,7 +98,6 @@ export const PaymentOptionView = ({navigation}) => {
         
         if(status === 201 || status === 200){
             if(data.code === '00'){
-                
                 setShowOTP(false);
                 setMsg('');
                 setProcessing(false);
@@ -132,7 +131,7 @@ export const PaymentOptionView = ({navigation}) => {
     return (
         <View style={{flex: 1, backgroundColor: colors.card, padding: 10, alignItems: 'center', justifyContent: 'center'}}>
             <Text style={[styles.info, {color: colors.text}]}>
-                Complete Your transactions using one of the following payment platform
+                Click continue to proceed to payment.
             </Text>
 
             <View style={styles.container}>

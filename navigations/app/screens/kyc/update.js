@@ -12,7 +12,7 @@ import { fetchKYCAsync, saveKYCAsync } from '../../../../store/reducers/kyc';
 import { ActInd } from '../../../../components/activityIndicator';
 
 
-export const UpdateKYC = ({}) => {
+export const UpdateKYC = ({navigation}) => {
     const {colors, dark} = useTheme();
     const dispatch = useDispatch();
     const {kyc, processing, error} = useSelector(state => state.kyc);
@@ -21,11 +21,13 @@ export const UpdateKYC = ({}) => {
         dispatch(fetchKYCAsync(user?.email));
     },[]);
 
-    const submit = _ => {
+    const callback = _ => navigation.navigate('Home', {screen: 'TabNav', params: {screen: 'Home'}});
+
+    const submit = async _ => {
      
-        dispatch(saveKYCAsync({...kyc, email: user?.email, name: `${user?.first_name} ${user?.last_name}`}));
+        dispatch(saveKYCAsync({...kyc, email: user?.email, name: `${user?.first_name} ${user?.last_name}`}, callback));
         
-    }
+    }   
 
     return (
         <View style={[styles.container, {backgroundColor: dark? colors.background:colors.card}]}>

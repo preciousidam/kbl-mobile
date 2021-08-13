@@ -1,8 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import { View, Platform, StyleSheet, KeyboardAvoidingView, Text, TouchableOpacity } from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -12,7 +10,6 @@ import {DynamicPicker, DynamicPickerIOS} from '../input/picker';
 import { OutlinedDatePicker } from '../input/datepicker';
 import {edit} from '../../store/reducers/kyc';
 import {ImageUploader} from '../imageUploader';
-import { colors } from 'react-native-elements';
 
 
 export const KYCIndividualForm = ({}) => {

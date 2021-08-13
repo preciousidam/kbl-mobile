@@ -110,7 +110,7 @@ export const motorFormData = async body => {
 	const fields = [
 		'registration_number', 'engine_number', 'chasis_number',
 		'vehicle_class', 'vehicle_model', 'vehicle_make', 'vehicle_year',
-		'vehicle_color', 'user', 'product', 'value', 'duration',
+		'vehicle_color', 'user', 'product', 'value', 'duration', 'referrer',
 	]
 	let formData = new FormData();
 
@@ -209,7 +209,7 @@ export const validateCard = ({cardno,cvv,pin,expiryyear, expirymonth}) => {
 export const filterData = (category, body)=> {
 	let data;
 	if (category === 'Home'){
-		data = {address: body.address, plan: body.plan, building_type: body.building_type, user: body.user, product: body.product, value: body.value}
+		data = {address: body.address, plan: body.plan, building_type: body.building_type, user: body.user, product: body.product, value: body.value, referrer: body.referrer}
 
 		if ('items' in body){
 			let hold = {}

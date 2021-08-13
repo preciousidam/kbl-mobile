@@ -67,7 +67,7 @@ const removeCopField = body => {
     return hold;
 }
 
-export const saveKYCAsync = body => async dispatch => {
+export const saveKYCAsync = (body, callback) => async dispatch => {
 
     dispatch(processing(true))
 
@@ -89,6 +89,7 @@ export const saveKYCAsync = body => async dispatch => {
                 duration: 3000,
                 hideStatusBar: true,
             })
+            callback()
             return;
         }
         await dispatch(error(true));
